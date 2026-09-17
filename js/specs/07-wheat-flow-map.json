@@ -1,0 +1,692 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 470,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "Where the wheat goes",
+    "subtitle": "Australia's twelve largest wheat markets in 2024, as great-circle routes. Arc width is tonnage; the twelve take 87.5% of exports.",
+    "subtitleLimit": 760
+  },
+  "projection": {
+    "type": "naturalEarth1",
+    "rotate": [
+      -105,
+      0
+    ],
+    "scale": {
+      "expr": "min(width/4.9, height/1.62)"
+    },
+    "translate": {
+      "expr": "[width*0.50, height*0.47]"
+    }
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/countries-110m.json",
+        "format": {
+          "type": "topojson",
+          "feature": "countries"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eaece8",
+        "stroke": "#fbfaf6",
+        "strokeWidth": 0.5
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_arcs.csv"
+      },
+      "params": [
+        {
+          "name": "hover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "destination"
+            ],
+            "on": "mouseover",
+            "clear": "mouseout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "interpolate": "linear",
+        "strokeCap": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "order": {
+          "field": "step",
+          "type": "quantitative"
+        },
+        "detail": {
+          "field": "destination",
+          "type": "nominal"
+        },
+        "strokeWidth": {
+          "field": "quantity_kt",
+          "type": "quantitative",
+          "legend": null,
+          "scale": {
+            "type": "sqrt",
+            "range": [
+              1.2,
+              11
+            ]
+          }
+        },
+        "color": {
+          "value": "#0f3f39"
+        },
+        "opacity": {
+          "condition": {
+            "param": "hover",
+            "empty": true,
+            "value": 0.45
+          },
+          "value": 0.1
+        },
+        "tooltip": [
+          {
+            "field": "destination",
+            "type": "nominal",
+            "title": "Destination"
+          },
+          {
+            "field": "quantity_kt",
+            "type": "quantitative",
+            "title": "Wheat (kt)",
+            "format": ","
+          },
+          {
+            "field": "share_pct",
+            "type": "quantitative",
+            "title": "Share of wheat exports (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "mark": {
+        "type": "circle",
+        "stroke": "#fbfaf6",
+        "strokeWidth": 1.2,
+        "opacity": 0.95
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "quantity_kt",
+          "type": "quantitative",
+          "legend": null,
+          "scale": {
+            "type": "sqrt",
+            "range": [
+              30,
+              340
+            ]
+          }
+        },
+        "color": {
+          "value": "#9c6114"
+        },
+        "tooltip": [
+          {
+            "field": "destination",
+            "type": "nominal",
+            "title": "Destination"
+          },
+          {
+            "field": "quantity_kt",
+            "type": "quantitative",
+            "title": "Wheat (kt)",
+            "format": ","
+          },
+          {
+            "field": "share_pct",
+            "type": "quantitative",
+            "title": "Share of wheat exports (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 134.376,
+            "lat": -25.561,
+            "t": "AUSTRALIA"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "fill": "#57625b",
+        "dy": 30,
+        "align": "center"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['China'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "right",
+        "dx": -13,
+        "dy": -9
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Yemen'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "right",
+        "dx": -13,
+        "dy": -3
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Vietnam'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "right",
+        "dx": -13,
+        "dy": 5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Thailand'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "right",
+        "dx": -13,
+        "dy": 20
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Indonesia'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "right",
+        "dx": -13,
+        "dy": 17
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['South Korea'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 14,
+        "dy": -11
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Philippines'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 14,
+        "dy": -3
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Malaysia'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 14,
+        "dy": 5
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Japan'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 14,
+        "dy": 15
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['Kuwait'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 14,
+        "dy": -9
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/wheat_export_flows.csv"
+      },
+      "transform": [
+        {
+          "filter": "indexof(['New Zealand','South Africa'], datum.destination) >= 0"
+        },
+        {
+          "calculate": "datum.destination + '  ' + format(datum.quantity_kt/1000, '.2f') + ' Mt'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 14,
+        "dy": 3
+      },
+      "encoding": {
+        "longitude": {
+          "field": "dest_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "dest_lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,476 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 340,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "Ten years of the national water account, on one frame",
+    "subtitle": "Each line is a year across four measures, every axis scaled from its own ten-year low to high. The driest and wettest years are picked out.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 5,
+    "top": 5,
+    "bottom": 5,
+    "right": 76
+  },
+  "data": {
+    "url": "data/water_account_national.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "area_average_rainfall_mm": "number",
+        "total_water_consumption_GL": "number",
+        "average_household_water_use_kL": "number",
+        "industry_water_intensity_ML_per_AUD_m_GVA": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "fold": [
+        "area_average_rainfall_mm",
+        "total_water_consumption_GL",
+        "average_household_water_use_kL",
+        "industry_water_intensity_ML_per_AUD_m_GVA"
+      ],
+      "as": [
+        "metric",
+        "raw"
+      ]
+    },
+    {
+      "joinaggregate": [
+        {
+          "op": "min",
+          "field": "raw",
+          "as": "lo"
+        },
+        {
+          "op": "max",
+          "field": "raw",
+          "as": "hi"
+        }
+      ],
+      "groupby": [
+        "metric"
+      ]
+    },
+    {
+      "calculate": "(datum.raw - datum.lo) / (datum.hi - datum.lo)",
+      "as": "norm"
+    },
+    {
+      "calculate": "{'area_average_rainfall_mm':'Rainfall','total_water_consumption_GL':'Water used','average_household_water_use_kL':'Household','industry_water_intensity_ML_per_AUD_m_GVA':'Intensity'}[datum.metric]",
+      "as": "axis"
+    },
+    {
+      "calculate": "datum.year === '2019-20' ? 'low' : datum.year === '2022-23' ? 'wet' : 'rest'",
+      "as": "emph"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "stroke": "#d9ded6",
+        "strokeWidth": 1
+      },
+      "encoding": {
+        "x": {
+          "field": "axis",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Rainfall",
+            "Water used",
+            "Household",
+            "Intensity"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 8,
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": {
+            "expr": "height"
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.emph === 'rest'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 1.6,
+        "opacity": 0.9,
+        "point": {
+          "filled": true,
+          "size": 30
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "axis",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Rainfall",
+            "Water used",
+            "Household",
+            "Intensity"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 8,
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "norm",
+          "type": "quantitative",
+          "title": null,
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false
+          }
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "low",
+              "wet",
+              "rest"
+            ],
+            "range": [
+              "#9c6114",
+              "#0f3f39",
+              "#c3cac5"
+            ]
+          }
+        },
+        "detail": {
+          "field": "year",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "axis",
+            "type": "nominal",
+            "title": "Measure"
+          },
+          {
+            "field": "raw",
+            "type": "quantitative",
+            "title": "Value",
+            "format": ",.2f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.emph !== 'rest'"
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3,
+        "point": {
+          "filled": true,
+          "size": 70
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "axis",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Rainfall",
+            "Water used",
+            "Household",
+            "Intensity"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 8,
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "norm",
+          "type": "quantitative",
+          "title": null,
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false
+          }
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "low",
+              "wet",
+              "rest"
+            ],
+            "range": [
+              "#9c6114",
+              "#0f3f39",
+              "#c3cac5"
+            ]
+          }
+        },
+        "detail": {
+          "field": "year",
+          "type": "nominal"
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Year"
+          },
+          {
+            "field": "axis",
+            "type": "nominal",
+            "title": "Measure"
+          },
+          {
+            "field": "raw",
+            "type": "quantitative",
+            "title": "Value",
+            "format": ",.2f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.emph !== 'rest' && datum.axis === 'Intensity'"
+        },
+        {
+          "calculate": "datum.year + (datum.emph === 'low' ? '  lowest water use' : '  wettest year')",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 11
+      },
+      "encoding": {
+        "x": {
+          "field": "axis",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Rainfall",
+            "Water used",
+            "Household",
+            "Intensity"
+          ],
+          "axis": {
+            "labelFontSize": 12,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelPadding": 8,
+            "labelAngle": 0
+          }
+        },
+        "y": {
+          "field": "norm",
+          "type": "quantitative",
+          "title": null,
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false
+          }
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "low",
+              "wet"
+            ],
+            "range": [
+              "#84520f",
+              "#0f3f39"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "y": 1,
+            "t": "ten-year high"
+          },
+          {
+            "y": 0,
+            "t": "ten-year low"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 400,
+        "fill": "#57625b",
+        "align": "left",
+        "x": 2,
+        "dy": -8
+      },
+      "encoding": {
+        "y": {
+          "field": "y",
+          "type": "quantitative",
+          "axis": null,
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}

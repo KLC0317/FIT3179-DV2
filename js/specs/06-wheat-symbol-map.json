@@ -1,0 +1,371 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 390,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "...and how much wheat that actually adds up to",
+    "subtitle": "Circle area is proportional to tonnes sold. Totals belong on symbols, never on a choropleth.",
+    "subtitleLimit": 760
+  },
+  "params": [
+    {
+      "name": "season",
+      "value": "2024_25",
+      "bind": {
+        "input": "radio",
+        "options": [
+          "2022_23",
+          "2023_24",
+          "2024_25"
+        ],
+        "labels": [
+          "2022-23  ",
+          "2023-24  ",
+          "2024-25"
+        ],
+        "name": "Season  "
+      }
+    }
+  ],
+  "projection": {
+    "type": "conicEqualArea",
+    "rotate": [
+      -133,
+      0
+    ],
+    "parallels": [
+      -18,
+      -36
+    ]
+  },
+  "layer": [
+    {
+      "data": {
+        "url": "data/au-states.geojson",
+        "format": {
+          "type": "json",
+          "property": "features"
+        }
+      },
+      "mark": {
+        "type": "geoshape",
+        "fill": "#eaece8",
+        "stroke": "#fbfaf6",
+        "strokeWidth": 1
+      }
+    },
+    {
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "datum['kt_' + season]",
+          "as": "kt"
+        },
+        {
+          "filter": "datum.kt !== '' && isValid(datum.kt) && datum.kt > 0"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "stroke": "#fbfaf6",
+        "strokeWidth": 1.4,
+        "opacity": 0.92
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "size": {
+          "field": "kt",
+          "type": "quantitative",
+          "title": "Wheat sold (kt)",
+          "scale": {
+            "type": "sqrt",
+            "domain": [
+              0,
+              13100
+            ],
+            "range": [
+              0,
+              5200
+            ]
+          },
+          "legend": {
+            "direction": "horizontal",
+            "orient": "top",
+            "values": [
+              1000,
+              5000,
+              12000
+            ],
+            "format": ",.0f",
+            "symbolFillColor": "#0f3f39",
+            "symbolStrokeColor": "#fbfaf6",
+            "titleLimit": 340,
+            "clipHeight": 84
+          }
+        },
+        "color": {
+          "value": "#0f3f39"
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "type": "nominal",
+            "title": "State"
+          },
+          {
+            "field": "kt",
+            "type": "quantitative",
+            "title": "Wheat sold (kt)",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "datum['kt_' + season]",
+          "as": "kt"
+        },
+        {
+          "filter": "datum.kt !== '' && isValid(datum.kt) && datum.kt > 2500"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "fill": "#ffffff",
+        "dy": 1
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "kt",
+          "type": "quantitative",
+          "format": ",.0f"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "datum['kt_' + season]",
+          "as": "kt"
+        },
+        {
+          "filter": "datum.kt !== '' && isValid(datum.kt) && datum.kt > 0 && datum.kt <= 2500"
+        },
+        {
+          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state] + '  ' + format(datum.kt, ',.0f')",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "dx": 20,
+        "dy": 2
+      },
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "padding": {
+    "left": 5,
+    "top": 5,
+    "bottom": 5,
+    "right": 22
+  }
+}

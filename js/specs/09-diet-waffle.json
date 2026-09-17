@@ -1,0 +1,166 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "spacing": 26,
+  "title": {
+    "text": "How many Australians eat the recommended amount",
+    "subtitle": "Each icon is one person in a hundred, 2023. A filled icon met the guideline for that food group; a faint one did not.",
+    "subtitleLimit": 760
+  },
+  "data": {
+    "url": "data/diet_waffle.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "met": "number",
+        "col": "number",
+        "row": "number",
+        "met_pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.short + '  ' + format(datum.met_pct/100, '.1%')",
+      "as": "panel"
+    },
+    {
+      "calculate": "{'Vegetables':'\ud83e\udd66','Lean meat':'\ud83e\udd69','Fruit':'\ud83c\udf4e','Grains':'\ud83c\udf3e'}[datum.short]",
+      "as": "icon"
+    }
+  ],
+  "columns": 2,
+  "facet": {
+    "field": "panel",
+    "type": "nominal",
+    "title": null,
+    "sort": [
+      "Vegetables  4.3%",
+      "Lean meat  20.6%",
+      "Fruit  23.1%",
+      "Grains  27.8%"
+    ],
+    "header": {
+      "labelFont": "Noto Serif",
+      "labelFontSize": 13,
+      "labelFontWeight": 600,
+      "labelColor": "#161f1b",
+      "labelAnchor": "start",
+      "labelPadding": 6,
+      "title": null
+    }
+  },
+  "spec": {
+    "width": 220,
+    "height": 232,
+    "mark": {
+      "type": "text",
+      "baseline": "middle",
+      "align": "center"
+    },
+    "encoding": {
+      "x": {
+        "field": "col",
+        "type": "ordinal",
+        "axis": null,
+        "scale": {
+          "padding": 0
+        }
+      },
+      "y": {
+        "field": "row",
+        "type": "ordinal",
+        "axis": null,
+        "sort": "descending",
+        "scale": {
+          "padding": 0
+        }
+      },
+      "text": {
+        "field": "icon",
+        "type": "nominal"
+      },
+      "opacity": {
+        "condition": {
+          "test": "datum.met == 1",
+          "value": 1
+        },
+        "value": 0.15
+      },
+      "tooltip": [
+        {
+          "field": "food_group",
+          "type": "nominal",
+          "title": "Food group"
+        },
+        {
+          "field": "met_pct",
+          "type": "quantitative",
+          "title": "Met the guideline (%)",
+          "format": ".1f"
+        }
+      ]
+    }
+  }
+}

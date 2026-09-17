@@ -1,0 +1,256 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 327,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": true,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "How far a harvest can move in a single year",
+    "subtitle": "Year-on-year change, 1962-2024. The box spans the middle half of years; dots are individual extreme seasons.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 16,
+    "top": 5,
+    "bottom": 5,
+    "right": 5
+  },
+  "data": {
+    "url": "data/crop_production_long.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "production_kt": "number",
+        "year": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "lag",
+          "field": "production_kt",
+          "as": "prev"
+        }
+      ],
+      "groupby": [
+        "crop"
+      ],
+      "sort": [
+        {
+          "field": "year",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "filter": "datum.prev > 150"
+    },
+    {
+      "calculate": "100 * (datum.production_kt - datum.prev) / datum.prev",
+      "as": "pct"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "stroke": "#a0a9a3",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          3
+        ]
+      },
+      "encoding": {
+        "x": {
+          "datum": 0,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "boxplot",
+        "extent": 1.5,
+        "size": 18,
+        "median": {
+          "color": "#fbfaf6",
+          "strokeWidth": 2
+        },
+        "outliers": {
+          "size": 26,
+          "opacity": 0.5,
+          "filled": true
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative",
+          "title": "Change on the previous year (%)",
+          "scale": {
+            "domain": [
+              -80,
+              140
+            ]
+          },
+          "axis": {
+            "format": "+d",
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas",
+            "Soybeans"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelFontWeight": 500,
+            "labelColor": "#333e38"
+          }
+        },
+        "color": {
+          "field": "crop",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Wheat",
+              "Barley",
+              "Canola",
+              "Sugar cane",
+              "Maize",
+              "Dry peas",
+              "Soybeans"
+            ],
+            "range": [
+              "#0f3f39",
+              "#33887c",
+              "#bc801d",
+              "#9c6114",
+              "#a0a9a3",
+              "#a0a9a3",
+              "#a0a9a3"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "pct": 138,
+            "crop": "Sugar cane",
+            "t": "irrigated, so it barely moves"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 400,
+        "fill": "#84520f",
+        "align": "right",
+        "dy": 0,
+        "limit": 210
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas",
+            "Soybeans"
+          ]
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

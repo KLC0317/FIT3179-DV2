@@ -1,0 +1,9 @@
+id,parent,name,group,value,period,indicator
+root,,Agriculture's footprint,,,,
+i0,root,GDP,Economy,2.2,2024-25,Agriculture share of Australian GDP
+i1,root,Jobs,Economy,2.1,2024-25,Agriculture share of national employment
+i2,root,Rural jobs,Economy,5.6,2024-25,Agriculture share of rural employment
+i3,root,Exports,Economy,12.4,2024-25,Agriculture share of goods and services exports
+i4,root,Water used,Natural resources,68.3,2023-24,Agriculture share of national water consumption
+i5,root,Land,Natural resources,57.1,December 2023,Agricultural land-use share
+i6,root,Output exported,Trade,71.0,2022-23 to 2024-25,Agricultural production exported by volume

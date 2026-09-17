@@ -1,0 +1,214 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 260,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "Discretionary food is losing ground, slowly",
+    "subtitle": "Share of daily energy from confectionery, soft drink, pastries and alcohol. People aged 2 and over.",
+    "subtitleLimit": 760
+  },
+  "data": {
+    "url": "data/food_consumption_indicators.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "value": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.indicator === 'Energy from discretionary foods'"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 3,
+        "color": "#9c6114",
+        "point": {
+          "filled": true,
+          "size": 140,
+          "color": "#9c6114"
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "labelFontSize": 13,
+            "labelFontWeight": 600,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "labelColor": "#161f1b"
+          }
+        },
+        "y": {
+          "field": "value",
+          "type": "quantitative",
+          "title": "Share of daily energy (%)",
+          "scale": {
+            "domain": [
+              28,
+              38
+            ]
+          },
+          "axis": {
+            "grid": true
+          }
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "ordinal",
+            "title": "Survey"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Share (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 14,
+        "fontWeight": 700,
+        "fill": "#84520f",
+        "dy": -20,
+        "align": "center"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "labelFontSize": 13,
+            "labelFontWeight": 600,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "labelColor": "#161f1b"
+          }
+        },
+        "y": {
+          "field": "value",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "value",
+          "type": "quantitative",
+          "format": ".1f"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "down 4.1 percentage points in 11 years"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 400,
+        "fill": "#57625b",
+        "align": "center",
+        "x": {
+          "expr": "width/2"
+        },
+        "y": 16
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

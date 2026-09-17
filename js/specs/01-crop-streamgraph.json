@@ -1,0 +1,483 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 360,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "Grain and oilseed harvest, 1961-2024",
+    "subtitle": "Band thickness is tonnes harvested, stacked around a centre line. Bands are labelled at the right edge; sugar cane is excluded.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 5,
+    "top": 46,
+    "bottom": 5,
+    "right": 52
+  },
+  "data": {
+    "url": "data/crop_production_long.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "production_kt": "number",
+        "year": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.crop !== 'Sugar cane'"
+    },
+    {
+      "calculate": "indexof(['Wheat','Barley','Canola'], datum.crop) >= 0 ? datum.crop : 'Other grains and oilseeds'",
+      "as": "group"
+    },
+    {
+      "calculate": "indexof(['Wheat','Barley','Canola','Other grains and oilseeds'], datum.group)",
+      "as": "ord"
+    },
+    {
+      "aggregate": [
+        {
+          "op": "sum",
+          "field": "production_kt",
+          "as": "kt"
+        }
+      ],
+      "groupby": [
+        "year",
+        "group",
+        "ord"
+      ]
+    },
+    {
+      "stack": "kt",
+      "groupby": [
+        "year"
+      ],
+      "sort": [
+        {
+          "field": "ord",
+          "order": "ascending"
+        }
+      ],
+      "offset": "center",
+      "as": [
+        "lo",
+        "hi"
+      ]
+    },
+    {
+      "calculate": "(datum.lo + datum.hi) / 2",
+      "as": "mid"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "area",
+        "interpolate": "monotone"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "axis": {
+            "format": "d",
+            "grid": false,
+            "values": [
+              1961,
+              1970,
+              1980,
+              1990,
+              2000,
+              2010,
+              2020,
+              2024
+            ]
+          }
+        },
+        "y": {
+          "field": "lo",
+          "type": "quantitative",
+          "axis": null,
+          "title": null
+        },
+        "y2": {
+          "field": "hi"
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Wheat",
+              "Barley",
+              "Canola",
+              "Other grains and oilseeds"
+            ],
+            "range": [
+              "#0f3f39",
+              "#33887c",
+              "#bc801d",
+              "#c3cac5"
+            ]
+          }
+        },
+        "order": {
+          "field": "ord",
+          "type": "quantitative"
+        },
+        "tooltip": [
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "group",
+            "type": "nominal",
+            "title": "Crop"
+          },
+          {
+            "field": "kt",
+            "type": "quantitative",
+            "title": "Tonnes harvested",
+            "format": ",.0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === 2024 && datum.group !== 'Other grains and oilseeds'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 8,
+        "dy": -6
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "axis": {
+            "format": "d",
+            "grid": false,
+            "values": [
+              1961,
+              1970,
+              1980,
+              1990,
+              2000,
+              2010,
+              2020,
+              2024
+            ]
+          }
+        },
+        "y": {
+          "field": "mid",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "group",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Wheat",
+              "Barley",
+              "Canola",
+              "Other grains and oilseeds"
+            ],
+            "range": [
+              "#0f3f39",
+              "#17554c",
+              "#84520f",
+              "#57625b"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.year === 2024 && datum.group !== 'Other grains and oilseeds'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 400,
+        "fill": "#57625b",
+        "align": "left",
+        "dx": 8,
+        "dy": 10
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "quantitative",
+          "title": null,
+          "axis": {
+            "format": "d",
+            "grid": false,
+            "values": [
+              1961,
+              1970,
+              1980,
+              1990,
+              2000,
+              2010,
+              2020,
+              2024
+            ]
+          }
+        },
+        "y": {
+          "field": "mid",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "kt",
+          "type": "quantitative",
+          "format": ",.0f"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2002,
+            "label": "2002 and 2006 droughts",
+            "sub": "both halved the wheat crop",
+            "side": 1
+          },
+          {
+            "year": 2022,
+            "label": "2022 record",
+            "sub": "41.2 Mt of wheat",
+            "side": -1
+          }
+        ]
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "rule",
+            "stroke": "#7a857e",
+            "strokeWidth": 1,
+            "strokeDash": [
+              2,
+              3
+            ],
+            "opacity": 0.7
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.side > 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter",
+            "fontSize": 12,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "align": "left",
+            "dx": 8,
+            "dy": -186,
+            "limit": 168
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.side > 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter",
+            "fontSize": 12,
+            "fontWeight": 400,
+            "fill": "#57625b",
+            "align": "left",
+            "dx": 8,
+            "dy": -169,
+            "limit": 168
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "sub",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.side < 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter",
+            "fontSize": 12,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "align": "right",
+            "dx": -8,
+            "dy": -186,
+            "limit": 168
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.side < 0"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "Inter",
+            "fontSize": 12,
+            "fontWeight": 400,
+            "fill": "#57625b",
+            "align": "right",
+            "dx": -8,
+            "dy": -169,
+            "limit": 168
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "sub",
+              "type": "nominal"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}

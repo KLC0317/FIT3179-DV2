@@ -1,0 +1,298 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 230,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "Every harvest since 1961, against its own recent normal",
+    "subtitle": "Deviation from each crop's eleven-year rolling median. Ochre is a short year, teal a surplus; irrigated sugar cane barely moves.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 16,
+    "top": 5,
+    "bottom": 5,
+    "right": 5
+  },
+  "data": {
+    "url": "data/crop_production_long.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "production_kt": "number",
+        "year": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "window": [
+        {
+          "op": "median",
+          "field": "production_kt",
+          "as": "baseline"
+        }
+      ],
+      "frame": [
+        -5,
+        5
+      ],
+      "groupby": [
+        "crop"
+      ],
+      "sort": [
+        {
+          "field": "year",
+          "order": "ascending"
+        }
+      ]
+    },
+    {
+      "filter": "datum.baseline > 0 && datum.production_kt > 0"
+    },
+    {
+      "calculate": "100 * (datum.production_kt / datum.baseline - 1)",
+      "as": "dev"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rect"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal",
+          "title": null,
+          "axis": {
+            "values": [
+              1965,
+              1975,
+              1985,
+              1995,
+              2005,
+              2015,
+              2024
+            ],
+            "labelAngle": 0,
+            "grid": false,
+            "ticks": false,
+            "domain": false
+          }
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas",
+            "Soybeans"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelFontWeight": 500,
+            "labelColor": "#333e38"
+          }
+        },
+        "color": {
+          "field": "dev",
+          "type": "quantitative",
+          "title": "Harvest vs its eleven-year normal (%)",
+          "scale": {
+            "type": "threshold",
+            "domain": [
+              -40,
+              -15,
+              15,
+              40
+            ],
+            "range": [
+              "#84520f",
+              "#d6a248",
+              "#efeee7",
+              "#5ba79b",
+              "#0f3f39"
+            ]
+          },
+          "legend": {
+            "direction": "horizontal",
+            "orient": "top",
+            "symbolType": "square",
+            "symbolSize": 160,
+            "format": "+d",
+            "titleLimit": 360
+          }
+        },
+        "tooltip": [
+          {
+            "field": "crop",
+            "type": "nominal",
+            "title": "Crop"
+          },
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "production_kt",
+            "type": "quantitative",
+            "title": "Tonnes harvested",
+            "format": ",.0f"
+          },
+          {
+            "field": "baseline",
+            "type": "quantitative",
+            "title": "Eleven-year normal",
+            "format": ",.0f"
+          },
+          {
+            "field": "dev",
+            "type": "quantitative",
+            "title": "vs normal (%)",
+            "format": "+.0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2006
+          }
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "stroke": "#161f1b",
+        "strokeWidth": 1,
+        "strokeDash": [
+          2,
+          2
+        ],
+        "opacity": 0.55
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 2006,
+            "crop": "Wheat",
+            "t": "2006: worst multi-crop drought"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 8,
+        "dy": -8,
+        "limit": 210
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas",
+            "Soybeans"
+          ]
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

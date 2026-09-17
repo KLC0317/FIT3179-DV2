@@ -1,0 +1,22 @@
+# Test-only dependency, installed on demand with:
+#   npm install --no-save puppeteer-core
+node_modules/
+
+# Screenshots and crops produced by tools/check_page.js
+tools/*.png
+
+# Unit materials — reference only, not part of the deliverable. Keeping these
+# out of the repository keeps it well inside the "a few megabytes" limit.
+*.pdf
+!5DS/*.pdf
+
+# Python bytecode
+__pycache__/
+*.pyc
+
+sketch.html
+
+tools/
+tools
+
+README_2.md

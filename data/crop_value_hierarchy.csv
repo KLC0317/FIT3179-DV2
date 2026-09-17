@@ -1,0 +1,14 @@
+id,parent,name,crop_type,value_AUD_m
+root,,Australian broadacre crops,,
+cereal,root,Cereal,,
+oilseed,root,Oilseed,,
+pulse,root,Pulse,,
+wheat,cereal,Wheat,Cereal,10129
+barley,cereal,Barley,Cereal,3674
+oats,cereal,Oats,Cereal,433
+canola,oilseed,Canola,Oilseed,4863
+chickpeas,pulse,Chickpeas,Pulse,1741
+lentils,pulse,Lentils,Pulse,870
+faba_beans,pulse,Faba beans,Pulse,386
+lupins,pulse,Lupins,Pulse,297
+field_peas,pulse,Field peas,Pulse,63

@@ -1,0 +1,449 @@
+crop,year,production_kt
+Barley,1961,941.3
+Barley,1962,897.7
+Barley,1963,984.2
+Barley,1964,1118.5
+Barley,1965,948.8
+Barley,1966,1396.8
+Barley,1967,834.6
+Barley,1968,1646.3
+Barley,1969,1698.7
+Barley,1970,2351.0
+Barley,1971,3065.0
+Barley,1972,1727.0
+Barley,1973,2397.0
+Barley,1974,2515.0
+Barley,1975,3179.0
+Barley,1976,2846.9
+Barley,1977,2383.4
+Barley,1978,4006.0
+Barley,1979,3703.4
+Barley,1980,2682.0
+Barley,1981,3450.0
+Barley,1982,1938.8
+Barley,1983,4889.5
+Barley,1984,5554.3
+Barley,1985,4801.0
+Barley,1986,3548.0
+Barley,1987,3417.0
+Barley,1988,3241.6
+Barley,1989,4044.2
+Barley,1990,4107.8
+Barley,1991,4529.8
+Barley,1992,5396.7
+Barley,1993,6668.2
+Barley,1994,2913.2
+Barley,1995,5822.7
+Barley,1996,6696.1
+Barley,1997,6482.0
+Barley,1998,5987.0
+Barley,1999,5043.0
+Barley,2000,6743.0
+Barley,2001,8279.8
+Barley,2002,3864.8
+Barley,2003,10381.8
+Barley,2004,7739.8
+Barley,2005,9481.7
+Barley,2006,4257.0
+Barley,2007,7160.2
+Barley,2008,7996.5
+Barley,2009,7864.6
+Barley,2010,7994.7
+Barley,2011,8220.9
+Barley,2012,7471.6
+Barley,2013,9174.4
+Barley,2014,8646.3
+Barley,2015,8992.3
+Barley,2016,13506.0
+Barley,2017,9253.9
+Barley,2018,8818.9
+Barley,2019,10127.2
+Barley,2020,14648.6
+Barley,2021,14377.3
+Barley,2022,13491.4
+Barley,2023,10961.9
+Barley,2024,13265.0
+Canola,1961,0.0
+Canola,1962,0.0
+Canola,1963,0.0
+Canola,1964,0.0
+Canola,1965,0.0
+Canola,1966,0.0
+Canola,1967,0.0
+Canola,1968,0.5
+Canola,1969,4.5
+Canola,1970,33.6
+Canola,1971,54.6
+Canola,1972,25.0
+Canola,1973,10.6
+Canola,1974,8.5
+Canola,1975,11.9
+Canola,1976,8.5
+Canola,1977,15.7
+Canola,1978,23.4
+Canola,1979,41.1
+Canola,1980,17.2
+Canola,1981,14.5
+Canola,1982,6.7
+Canola,1983,17.2
+Canola,1984,32.4
+Canola,1985,87.0
+Canola,1986,76.5
+Canola,1987,65.9
+Canola,1988,58.3
+Canola,1989,78.2
+Canola,1990,98.4
+Canola,1991,170.4
+Canola,1992,177.9
+Canola,1993,305.0
+Canola,1994,263.9
+Canola,1995,557.1
+Canola,1996,623.2
+Canola,1997,855.0
+Canola,1998,1690.0
+Canola,1999,2426.0
+Canola,2000,1775.0
+Canola,2001,1755.9
+Canola,2002,870.8
+Canola,2003,1703.1
+Canola,2004,1542.3
+Canola,2005,1418.9
+Canola,2006,573.3
+Canola,2007,1214.4
+Canola,2008,1844.2
+Canola,2009,1907.3
+Canola,2010,2358.7
+Canola,2011,3427.3
+Canola,2012,4141.7
+Canola,2013,3832.0
+Canola,2014,3540.0
+Canola,2015,2775.5
+Canola,2016,4313.2
+Canola,2017,3893.1
+Canola,2018,2365.8
+Canola,2019,2298.5
+Canola,2020,4756.4
+Canola,2021,6820.3
+Canola,2022,8917.9
+Canola,2023,7504.7
+Canola,2024,6396.0
+Dry peas,1961,21.2
+Dry peas,1962,22.3
+Dry peas,1963,20.9
+Dry peas,1964,20.8
+Dry peas,1965,13.6
+Dry peas,1966,19.1
+Dry peas,1967,8.6
+Dry peas,1968,24.0
+Dry peas,1969,26.6
+Dry peas,1970,33.1
+Dry peas,1971,39.0
+Dry peas,1972,15.3
+Dry peas,1973,18.4
+Dry peas,1974,20.1
+Dry peas,1975,18.3
+Dry peas,1976,14.9
+Dry peas,1977,15.1
+Dry peas,1978,43.9
+Dry peas,1979,53.5
+Dry peas,1980,66.3
+Dry peas,1981,110.5
+Dry peas,1982,33.2
+Dry peas,1983,133.4
+Dry peas,1984,164.1
+Dry peas,1985,240.7
+Dry peas,1986,512.6
+Dry peas,1987,486.8
+Dry peas,1988,517.3
+Dry peas,1989,389.4
+Dry peas,1990,318.1
+Dry peas,1991,472.6
+Dry peas,1992,456.3
+Dry peas,1993,558.5
+Dry peas,1994,240.4
+Dry peas,1995,529.9
+Dry peas,1996,454.2
+Dry peas,1997,315.7
+Dry peas,1998,298.0
+Dry peas,1999,357.3
+Dry peas,2000,456.0
+Dry peas,2001,512.0
+Dry peas,2002,178.3
+Dry peas,2003,487.4
+Dry peas,2004,289.4
+Dry peas,2005,585.0
+Dry peas,2006,140.0
+Dry peas,2007,268.0
+Dry peas,2008,238.1
+Dry peas,2009,356.0
+Dry peas,2010,394.7
+Dry peas,2011,342.5
+Dry peas,2012,319.7
+Dry peas,2013,342.1
+Dry peas,2014,342.1
+Dry peas,2015,290.4
+Dry peas,2016,204.5
+Dry peas,2017,415.2
+Dry peas,2018,317.2
+Dry peas,2019,159.6
+Dry peas,2020,210.5
+Dry peas,2021,399.3
+Dry peas,2022,261.1
+Dry peas,2023,313.8
+Dry peas,2024,228.0
+Maize,1961,158.6
+Maize,1962,185.6
+Maize,1963,189.4
+Maize,1964,170.7
+Maize,1965,174.7
+Maize,1966,124.9
+Maize,1967,190.3
+Maize,1968,181.2
+Maize,1969,149.0
+Maize,1970,191.6
+Maize,1971,212.0
+Maize,1972,213.9
+Maize,1973,138.8
+Maize,1974,105.8
+Maize,1975,133.3
+Maize,1976,131.5
+Maize,1977,144.2
+Maize,1978,130.1
+Maize,1979,168.8
+Maize,1980,150.9
+Maize,1981,172.8
+Maize,1982,212.4
+Maize,1983,139.1
+Maize,1984,238.2
+Maize,1985,291.4
+Maize,1986,277.7
+Maize,1987,206.4
+Maize,1988,208.2
+Maize,1989,216.7
+Maize,1990,218.7
+Maize,1991,193.7
+Maize,1992,268.9
+Maize,1993,198.8
+Maize,1994,204.1
+Maize,1995,242.4
+Maize,1996,325.0
+Maize,1997,398.0
+Maize,1998,271.0
+Maize,1999,338.0
+Maize,2000,406.0
+Maize,2001,344.9
+Maize,2002,453.9
+Maize,2003,310.0
+Maize,2004,395.0
+Maize,2005,419.7
+Maize,2006,362.0
+Maize,2007,239.9
+Maize,2008,387.0
+Maize,2009,375.7
+Maize,2010,328.0
+Maize,2011,356.9
+Maize,2012,450.5
+Maize,2013,506.7
+Maize,2014,390.4
+Maize,2015,494.6
+Maize,2016,400.0
+Maize,2017,436.2
+Maize,2018,387.2
+Maize,2019,327.2
+Maize,2020,267.6
+Maize,2021,305.7
+Maize,2022,430.0
+Maize,2023,386.5
+Maize,2024,447.0
+Soybeans,1961,0.2
+Soybeans,1962,0.3
+Soybeans,1963,0.6
+Soybeans,1964,0.7
+Soybeans,1965,1.1
+Soybeans,1966,0.8
+Soybeans,1967,0.8
+Soybeans,1968,0.9
+Soybeans,1969,1.7
+Soybeans,1970,5.0
+Soybeans,1971,9.2
+Soybeans,1972,33.6
+Soybeans,1973,37.9
+Soybeans,1974,62.5
+Soybeans,1975,73.7
+Soybeans,1976,44.6
+Soybeans,1977,55.2
+Soybeans,1978,76.5
+Soybeans,1979,98.7
+Soybeans,1980,82.0
+Soybeans,1981,73.2
+Soybeans,1982,77.1
+Soybeans,1983,53.2
+Soybeans,1984,88.6
+Soybeans,1985,109.8
+Soybeans,1986,105.2
+Soybeans,1987,89.8
+Soybeans,1988,69.0
+Soybeans,1989,129.5
+Soybeans,1990,77.4
+Soybeans,1991,62.0
+Soybeans,1992,62.6
+Soybeans,1993,48.9
+Soybeans,1994,81.3
+Soybeans,1995,27.2
+Soybeans,1996,44.6
+Soybeans,1997,74.0
+Soybeans,1998,54.0
+Soybeans,1999,108.8
+Soybeans,2000,104.8
+Soybeans,2001,48.6
+Soybeans,2002,63.1
+Soybeans,2003,9.2
+Soybeans,2004,59.8
+Soybeans,2005,44.7
+Soybeans,2006,50.1
+Soybeans,2007,25.9
+Soybeans,2008,34.7
+Soybeans,2009,80.1
+Soybeans,2010,59.6
+Soybeans,2011,29.8
+Soybeans,2012,86.1
+Soybeans,2013,91.8
+Soybeans,2014,31.9
+Soybeans,2015,37.4
+Soybeans,2016,29.4
+Soybeans,2017,31.3
+Soybeans,2018,28.9
+Soybeans,2019,15.1
+Soybeans,2020,17.3
+Soybeans,2021,40.2
+Soybeans,2022,57.2
+Soybeans,2023,52.0
+Soybeans,2024,65.3
+Sugar cane,1961,9730.3
+Sugar cane,1962,12940.3
+Sugar cane,1963,12312.6
+Sugar cane,1964,15312.4
+Sugar cane,1965,14382.2
+Sugar cane,1966,16952.7
+Sugar cane,1967,17025.2
+Sugar cane,1968,18708.3
+Sugar cane,1969,15784.4
+Sugar cane,1970,17644.8
+Sugar cane,1971,19390.5
+Sugar cane,1972,18928.3
+Sugar cane,1973,19278.0
+Sugar cane,1974,20417.8
+Sugar cane,1975,21959.0
+Sugar cane,1976,23343.6
+Sugar cane,1977,23493.2
+Sugar cane,1978,21457.0
+Sugar cane,1979,21151.1
+Sugar cane,1980,23975.6
+Sugar cane,1981,25093.8
+Sugar cane,1982,24817.1
+Sugar cane,1983,24191.2
+Sugar cane,1984,25450.3
+Sugar cane,1985,24401.6
+Sugar cane,1986,24742.0
+Sugar cane,1987,24831.7
+Sugar cane,1988,27146.0
+Sugar cane,1989,26940.3
+Sugar cane,1990,24369.9
+Sugar cane,1991,21366.0
+Sugar cane,1992,20641.0
+Sugar cane,1993,27959.0
+Sugar cane,1994,31312.0
+Sugar cane,1995,34943.0
+Sugar cane,1996,37436.0
+Sugar cane,1997,39938.0
+Sugar cane,1998,41064.0
+Sugar cane,1999,39699.0
+Sugar cane,2000,38164.7
+Sugar cane,2001,28117.0
+Sugar cane,2002,31424.4
+Sugar cane,2003,36995.0
+Sugar cane,2004,36993.5
+Sugar cane,2005,37822.2
+Sugar cane,2006,37128.1
+Sugar cane,2007,36397.0
+Sugar cane,2008,32621.1
+Sugar cane,2009,31456.9
+Sugar cane,2010,31234.8
+Sugar cane,2011,25181.8
+Sugar cane,2012,25957.1
+Sugar cane,2013,27136.1
+Sugar cane,2014,30517.7
+Sugar cane,2015,32379.2
+Sugar cane,2016,34403.0
+Sugar cane,2017,36561.5
+Sugar cane,2018,33506.8
+Sugar cane,2019,32415.4
+Sugar cane,2020,30283.5
+Sugar cane,2021,31133.5
+Sugar cane,2022,28669.3
+Sugar cane,2023,32589.4
+Sugar cane,2024,29855.2
+Wheat,1961,6727.2
+Wheat,1962,8352.9
+Wheat,1963,8924.5
+Wheat,1964,10037.0
+Wheat,1965,7067.1
+Wheat,1966,12699.3
+Wheat,1967,7546.7
+Wheat,1968,14804.1
+Wheat,1969,10546.2
+Wheat,1970,7889.9
+Wheat,1971,8606.0
+Wheat,1972,6590.0
+Wheat,1973,11987.0
+Wheat,1974,11357.0
+Wheat,1975,11982.0
+Wheat,1976,11800.0
+Wheat,1977,9370.3
+Wheat,1978,18090.0
+Wheat,1979,16188.0
+Wheat,1980,10856.0
+Wheat,1981,16360.0
+Wheat,1982,8875.6
+Wheat,1983,22016.0
+Wheat,1984,18666.0
+Wheat,1985,15999.0
+Wheat,1986,16119.0
+Wheat,1987,12287.0
+Wheat,1988,13935.0
+Wheat,1989,14214.5
+Wheat,1990,15066.1
+Wheat,1991,10557.4
+Wheat,1992,14738.7
+Wheat,1993,16479.0
+Wheat,1994,8961.0
+Wheat,1995,16504.0
+Wheat,1996,22924.2
+Wheat,1997,19224.0
+Wheat,1998,21464.8
+Wheat,1999,24757.0
+Wheat,2000,22108.0
+Wheat,2001,24299.3
+Wheat,2002,10131.9
+Wheat,2003,26131.9
+Wheat,2004,21905.1
+Wheat,2005,25150.3
+Wheat,2006,10821.6
+Wheat,2007,13569.4
+Wheat,2008,21420.2
+Wheat,2009,21834.0
+Wheat,2010,27410.1
+Wheat,2011,29905.0
+Wheat,2012,22855.6
+Wheat,2013,25303.0
+Wheat,2014,23742.6
+Wheat,2015,22274.5
+Wheat,2016,31818.7
+Wheat,2017,20941.1
+Wheat,2018,17597.6
+Wheat,2019,14480.2
+Wheat,2020,31922.6
+Wheat,2021,36237.5
+Wheat,2022,41199.5
+Wheat,2023,28028.4
+Wheat,2024,34110.0

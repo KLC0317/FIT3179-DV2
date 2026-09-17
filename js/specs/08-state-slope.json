@@ -1,0 +1,290 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 340,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "The same two seasons, state by state",
+    "subtitle": "Wheat sold, 2022-23 against 2024-25. South Australia is highlighted; a national average would hide it.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 5,
+    "top": 26,
+    "bottom": 5,
+    "right": 124
+  },
+  "data": {
+    "url": "data/wheat_state_density.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "kt_2022_23": "number",
+        "kt_2023_24": "number",
+        "kt_2024_25": "number",
+        "tpk_2022_23": "number",
+        "tpk_2023_24": "number",
+        "tpk_2024_25": "number",
+        "area_km2": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.kt_2022_23 !== '' && datum.kt_2024_25 !== '' && datum.kt_2022_23 > 100"
+    },
+    {
+      "fold": [
+        "kt_2022_23",
+        "kt_2024_25"
+      ],
+      "as": [
+        "season",
+        "kt"
+      ]
+    },
+    {
+      "calculate": "datum.season === 'kt_2022_23' ? '2022-23' : '2024-25'",
+      "as": "label"
+    },
+    {
+      "calculate": "datum.state === 'South Australia' ? 'focus' : 'rest'",
+      "as": "emph"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "line",
+        "strokeWidth": 2.4,
+        "point": {
+          "filled": true,
+          "size": 62
+        }
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0.34
+          },
+          "axis": {
+            "labelFontSize": 13,
+            "labelFontWeight": 600,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "labelColor": "#161f1b"
+          }
+        },
+        "y": {
+          "field": "kt",
+          "type": "quantitative",
+          "title": "Wheat sold (kt)",
+          "axis": {
+            "format": ",.0f",
+            "grid": true
+          }
+        },
+        "detail": {
+          "field": "state",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "focus",
+              "rest"
+            ],
+            "range": [
+              "#9c6114",
+              "#a0a9a3"
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "state",
+            "type": "nominal",
+            "title": "State"
+          },
+          {
+            "field": "label",
+            "type": "nominal",
+            "title": "Season"
+          },
+          {
+            "field": "kt",
+            "type": "quantitative",
+            "title": "Wheat sold (kt)",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.label === '2024-25' && datum.kt > 900"
+        },
+        {
+          "calculate": "datum.state + '  ' + format(datum.kt, ',.0f')",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 600,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 11
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0.34
+          },
+          "axis": {
+            "labelFontSize": 13,
+            "labelFontWeight": 600,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "labelColor": "#161f1b"
+          }
+        },
+        "y": {
+          "field": "kt",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "focus",
+              "rest"
+            ],
+            "range": [
+              "#84520f",
+              "#333e38"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "South Australia lost more than half its crop"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 400,
+        "fill": "#84520f",
+        "align": "left",
+        "x": {
+          "expr": "0"
+        },
+        "y": -14,
+        "limit": 300
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}

@@ -1,0 +1,319 @@
+{
+  "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "width": 600,
+  "height": 380,
+  "padding": 0,
+  "background": null,
+  "autosize": {
+    "type": "none",
+    "contains": "padding"
+  },
+  "data": [
+    {
+      "name": "tree",
+      "url": "data/crop_value_hierarchy.csv",
+      "format": {
+        "type": "csv"
+      },
+      "transform": [
+        {
+          "type": "formula",
+          "as": "value",
+          "expr": "datum.value_AUD_m === '' ? null : toNumber(datum.value_AUD_m)"
+        },
+        {
+          "type": "stratify",
+          "key": "id",
+          "parentKey": "parent"
+        },
+        {
+          "type": "treemap",
+          "field": "value",
+          "method": "squarify",
+          "round": true,
+          "paddingInner": 3,
+          "paddingTop": 34,
+          "size": [
+            {
+              "signal": "width"
+            },
+            {
+              "signal": "height"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "leaves",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.depth === 2"
+        }
+      ]
+    },
+    {
+      "name": "group_totals",
+      "source": "leaves",
+      "transform": [
+        {
+          "type": "aggregate",
+          "groupby": [
+            "crop_type"
+          ],
+          "fields": [
+            "value"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "as": [
+            "total"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "groups",
+      "source": "tree",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.depth === 1"
+        },
+        {
+          "type": "lookup",
+          "from": "group_totals",
+          "key": "crop_type",
+          "fields": [
+            "name"
+          ],
+          "values": [
+            "total"
+          ],
+          "as": [
+            "total"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "labelled",
+      "source": "leaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "(datum.x1-datum.x0) > 58 && (datum.y1-datum.y0) > 34"
+        }
+      ]
+    }
+  ],
+  "scales": [],
+  "marks": [
+    {
+      "type": "rect",
+      "from": {
+        "data": "leaves"
+      },
+      "encode": {
+        "enter": {
+          "stroke": {
+            "value": "#fbfaf6"
+          },
+          "strokeWidth": {
+            "value": 2
+          }
+        },
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "signal": "datum.name === 'Wheat' ? '#0f3f39' : datum.name === 'Barley' ? '#33887c' : datum.name === 'Canola' ? '#bc801d' : '#c3cac5'"
+          },
+          "tooltip": {
+            "signal": "{'Crop': datum.name, 'Type': datum.crop_type, 'Local value 2024-25': '$' + format(datum.value, ',.0f') + 'm'}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "labelled"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 10"
+          },
+          "y": {
+            "signal": "datum.y0 + 20"
+          },
+          "text": {
+            "field": "name"
+          },
+          "fill": {
+            "signal": "datum.name === 'Wheat' ? '#ffffff' : '#161f1b'"
+          },
+          "font": {
+            "value": "Inter"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": 600
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 18"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "labelled"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 10"
+          },
+          "y": {
+            "signal": "datum.y0 + 37"
+          },
+          "text": {
+            "signal": "'$' + format(datum.value/1000, '.2f') + 'b'"
+          },
+          "fill": {
+            "signal": "datum.name === 'Wheat' ? '#ffffff' : '#161f1b'"
+          },
+          "fillOpacity": {
+            "value": 0.85
+          },
+          "font": {
+            "value": "Inter"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 18"
+          }
+        }
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "groups"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
+          },
+          "y": {
+            "field": "y0"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "value": "transparent"
+          },
+          "stroke": {
+            "value": "#333e38"
+          },
+          "strokeWidth": {
+            "value": 1.5
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "groups"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y0 + 16"
+          },
+          "text": {
+            "signal": "upper(datum.name)"
+          },
+          "fill": {
+            "value": "#333e38"
+          },
+          "font": {
+            "value": "Inter"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": 700
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 16"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "groups"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y0 + 30"
+          },
+          "text": {
+            "signal": "'$' + format(datum.total/1000, '.2f') + 'b total'"
+          },
+          "fill": {
+            "value": "#57625b"
+          },
+          "font": {
+            "value": "Inter"
+          },
+          "fontSize": {
+            "value": 12
+          },
+          "fontWeight": {
+            "value": 400
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 16"
+          }
+        }
+      }
+    }
+  ]
+}

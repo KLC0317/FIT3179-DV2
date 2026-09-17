@@ -1,0 +1,382 @@
+/* ==========================================================================
+   Australia's food system — FIT3179 Data Visualisation 2
+
+   Colour tokens mirror tools/palette.py exactly; that file is the source of
+   truth and carries the contrast audit. Three semantic families only:
+
+       teal   the supply side  - grain, harvest, land and water resources
+       ochre  the demand side  - exports leaving, households, what people eat
+       slate  context          - everything muted so a highlight can read
+
+   No red-green pairing, no rainbow scale, and every text colour below is
+   audited to at least 4.5:1 against the surface it sits on.
+   ========================================================================== */
+
+:root {
+  /* surfaces */
+  --paper:      #f5f4ef;
+  --card:       #fbfaf6;
+  --rule:       #d9ded6;
+  --rule-firm:  #16201c;
+
+  /* inks — all >= 4.5:1 on paper and card */
+  --ink:        #161f1b;
+  --ink-soft:   #333e38;
+  --muted:      #57625b;
+
+  /* teal: the supply side */
+  --teal-800:   #0f3f39;
+  --teal-700:   #17554c;
+  --teal-500:   #33887c;
+  --teal-200:   #bedfd8;
+  --teal-100:   #ddeeea;
+
+  /* ochre: the demand side, and the single accent */
+  --ochre-700:  #84520f;
+  --ochre-600:  #9c6114;
+  --ochre-200:  #f0dcb4;
+
+  /* slate: context */
+  --slate-500:  #7a857e;
+  --slate-300:  #c3cac5;
+  --slate-100:  #eaece8;
+
+  /* semantic aliases — change a meaning here, not at a use site */
+  --accent:     var(--ochre-600);
+  --accent-ink: var(--ochre-700);
+  --supply:     var(--teal-800);
+
+  /* layout */
+  --gutter:     32px;
+  --page-max:   1200px;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 16.5px;
+  line-height: 1.45;          /* tight enough to read as a set measure */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ---------- containers ---------------------------------------------------- */
+
+.page { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
+
+/* RULES.md: roughly 60 characters per line. At this size 30em lands at 58-62. */
+.measure { max-width: 30em; }
+
+/* ---------- masthead: title and subtitle top-left, per the viewing path ---- */
+
+/* Sections are separated by whitespace, not rule lines — a rule is a sight-line
+   the eye has to reconcile against the grid; a wider gap needs no reconciling. */
+.masthead { padding: 88px 0 56px; }
+
+.kicker {
+  margin: 0 0 22px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--accent-ink);
+}
+
+/* max-width widened so "Australia grows far more food" fits on one line —
+   with the explicit <br> in the markup that gives exactly two rows, not the
+   three it wrapped to at the old, narrower measure. */
+.masthead h1 {
+  margin: 0 0 20px;
+  font-family: "Noto Serif", Georgia, "Times New Roman", serif;
+  font-weight: 600;
+  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  line-height: 1.04;
+  letter-spacing: -0.026em;
+  max-width: 18em;
+}
+.masthead h1 em { font-style: italic; color: var(--supply); }
+
+.standfirst {
+  margin: 0;
+  font-size: 1.12rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+.standfirst strong { font-weight: 600; color: var(--ink); }
+
+/* Author, institution, date and data sources. Lives in the footer — see
+   footer.byline near the end of this file for its layout. */
+.byline b { font-weight: 600; color: var(--ink); }
+
+/* ---------- chapter navigation -------------------------------------------- */
+
+/* A tinted band, not a ruled box: figure-ground (fill) separates this from
+   the masthead instead of a border (line). */
+.contents {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--gutter);
+  padding: 26px var(--gutter);
+  margin: 0 calc(var(--gutter) * -1);
+  background: var(--card);
+}
+.contents a {
+  display: block;
+  text-decoration: none;
+  color: var(--muted);
+  transition: color 0.15s;
+}
+.contents a:hover,
+.contents a:focus-visible { color: var(--ink); }
+.contents .t {
+  display: block;
+  font-family: "Noto Serif", Georgia, serif;
+  font-size: 1.02rem;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 4px;
+}
+.contents .d { display: block; font-size: 0.8rem; line-height: 1.4; }
+
+/* ---------- chapters ------------------------------------------------------ */
+
+.chapter { padding: 80px 0 0; }
+
+.chapter-head {
+  max-width: 40em;
+  margin-bottom: 32px;
+}
+.chapter-head h2 {
+  margin: 0 0 10px;
+  font-family: "Noto Serif", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.55rem, 2.8vw, 2.2rem);
+  line-height: 1.16;
+  letter-spacing: -0.016em;
+}
+.chapter-head p { margin: 0; color: var(--ink-soft); font-size: 1rem; }
+
+/* ---------- chart grid ---------------------------------------------------- */
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 40px var(--gutter);
+  align-items: start;
+}
+
+.card       { grid-column: span 6;  min-width: 0; }
+.card.full  { grid-column: span 12; }
+.card.wide  { grid-column: span 8;  }
+.card.third { grid-column: span 4;  }
+
+/* Hero: the chart that carries the chapter. Sits above the chapter's centre. */
+.card.hero { grid-column: span 12; }
+
+/* Sight-lines (FIT2179 Layout notes): every card's chart must start at the
+   SAME offset from the card's top edge, regardless of how many lines its own
+   heading or subtitle happen to wrap to. Without this, two charts sitting
+   side by side in the grid drift apart the moment one title or subtitle is a
+   few words longer than the other — exactly the "very bad" misalignment this
+   fixes. Reserving a fixed 2-line box for both elements on EVERY card turns
+   that into a single flat sight-line across the whole page, not just within
+   a row. */
+.card h3 {
+  margin: 0 0 5px;
+  min-height: 2.85rem;
+  font-family: "Noto Serif", Georgia, serif;
+  font-weight: 600;
+  font-size: 1.14rem;
+  line-height: 1.24;
+  letter-spacing: -0.008em;
+}
+
+/* One or two sentences. Decodes the encoding, then gets out of the way.
+   Hard-clamped to 2 lines: reserving space only works if content can never
+   exceed it, so this is a safety net on top of keeping the copy itself short. */
+.card .sub {
+  margin: 0 0 14px;
+  min-height: 2.55rem;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--muted);
+  max-width: 44em;
+}
+
+/* Colour keywords replace detached legends. Never bold AND italic AND colour. */
+.k-wheat  { color: var(--teal-800);  font-weight: 600; }
+.k-barley { color: var(--teal-700);  font-weight: 600; }
+.k-canola { color: var(--ochre-700); font-weight: 600; }
+.k-other  { color: var(--muted);     font-weight: 600; }
+
+.viz { width: 100%; min-height: 180px; margin: 0 0 14px; }
+
+/* The finding, not a caption. No marker at all: the bolded figures inside
+   the text and its position right under the chart are enough to identify it. */
+.finding {
+  margin: 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  max-width: 34em;
+}
+.finding b { font-weight: 600; color: var(--ink); }
+
+.howto {
+  display: inline-block;
+  margin: 10px 0 0;
+  font-size: 0.78rem;
+  color: var(--accent-ink);
+  font-weight: 500;
+}
+.howto::before { content: "\21ba  "; }
+
+/* ---------- pull-out statistic -------------------------------------------- */
+
+.aside {
+  grid-column: span 4;
+  align-self: stretch;
+  padding: 24px 22px;
+  background: var(--card);
+}
+.aside h4 {
+  margin: 0 0 8px;
+  font-family: "Noto Serif", Georgia, serif;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.aside p { margin: 0 0 10px; font-size: 0.88rem; color: var(--ink-soft); }
+.aside .stat {
+  display: block;
+  font-family: "Noto Serif", Georgia, serif;
+  font-size: 2.5rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--supply);
+  letter-spacing: -0.02em;
+  margin-bottom: 6px;
+}
+
+/* ---------- closing ------------------------------------------------------- */
+
+.closing { padding: 80px 0 0; }
+.closing h2 {
+  margin: 0 0 16px;
+  font-family: "Noto Serif", Georgia, serif;
+  font-weight: 600;
+  font-size: clamp(1.65rem, 3.2vw, 2.4rem);
+  line-height: 1.14;
+  letter-spacing: -0.02em;
+  max-width: 15em;
+}
+/* Two columns, not one: a single 30em paragraph in an 1136px section left
+   most of the width sitting empty. Splitting the argument's two halves side
+   by side uses the space and matches the page's dominant column rhythm. */
+.closing-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+.closing p { margin: 0; font-size: 1.02rem; color: var(--ink-soft); }
+.closing p strong { font-weight: 600; color: var(--ink); }
+
+@media (max-width: 720px) {
+  .closing-cols { grid-template-columns: 1fr; gap: 14px; }
+}
+
+/* ---------- footer, sources, metadata ------------------------------------- */
+
+/* The credits sit at the foot of the page rather than under the headline, so
+   nothing competes with the story for the top of the page. Two tight rows:
+   attribution, then the dataset URLs the rubric asks to be shown. Kept to a
+   footnote's weight rather than a section of its own. */
+footer {
+  margin: 48px calc(var(--gutter) * -1) 0;
+  padding: 6px var(--gutter) 7px;
+  background: var(--card);
+  color: var(--muted);
+}
+footer .byline {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0 24px;
+  margin: 0;
+  font-size: 0.78rem;
+  line-height: 1.35;
+}
+/* URLs are the link text itself, so the source is readable without hovering.
+   Middle of each path is elided to keep all eight on one row. */
+footer .srcs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 12px;
+  margin: 2px 0 0;
+  /* 0.74rem = 12.2px. Must not go below 12px: the page's own minimum type
+     size applies to the footer too, and shrinking these to fit one row is
+     exactly the shortcut that rule exists to prevent. Two rows it is. */
+  font-size: 0.74rem;
+  line-height: 1.4;
+}
+footer .srcs a {
+  color: var(--slate-500);
+  text-decoration: none;
+}
+footer .srcs a:hover,
+footer .srcs a:focus-visible {
+  color: var(--accent-ink);
+  text-decoration: underline;
+}
+
+.viz-error {
+  margin: 0;
+  padding: 16px 18px;
+  background: var(--slate-100);
+  color: var(--ink-soft);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+.viz-error code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.92em;
+}
+
+/* Vega's bound inputs: make the season radios match the page, not the browser. */
+.viz form.vega-bindings {
+  font-family: "Inter", sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  margin: 2px 0 8px;
+}
+.viz form.vega-bindings .vega-bind { display: inline-block; }
+.viz form.vega-bindings label { margin-right: 4px; }
+.viz form.vega-bindings input[type="radio"] { accent-color: var(--accent); }
+
+/* ---------- narrower screens: collapse to fewer columns, never scroll ----- */
+
+@media (max-width: 1040px) {
+  .card, .card.wide, .card.third, .aside { grid-column: span 12; }
+}
+
+@media (max-width: 720px) {
+  :root { --gutter: 20px; }
+  .contents { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .chapter-head { grid-template-columns: 1fr; gap: 10px; }
+  .masthead { padding-top: 56px; }
+  /* Credits wrap to two lines on a phone, so let the bar grow to fit. */
+  footer .byline { gap: 2px 18px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}

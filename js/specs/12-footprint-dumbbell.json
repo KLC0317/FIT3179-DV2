@@ -1,0 +1,373 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 330,
+  "autosize": {
+    "type": "fit-x",
+    "contains": "padding"
+  },
+  "config": {
+    "background": null,
+    "font": "Inter",
+    "axis": {
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#57625b",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "Inter",
+      "labelFontSize": 12,
+      "labelColor": "#333e38",
+      "titleFont": "Inter",
+      "titleFontSize": 12,
+      "titleFontWeight": 600,
+      "titleColor": "#57625b",
+      "symbolStrokeWidth": 0,
+      "offset": 6,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "Inter",
+      "fontSize": 12
+    },
+    "title": {
+      "font": "Noto Serif",
+      "fontSize": 14,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "Inter",
+      "subtitleFontSize": 12,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 16
+    }
+  },
+  "title": {
+    "text": "How far agriculture's footprint sits from its economic weight",
+    "subtitle": "Each dumbbell runs from agriculture's 2.2% share of GDP to its share of another national total. Natural resources in teal.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 5,
+    "top": 5,
+    "bottom": 5,
+    "right": 60
+  },
+  "data": {
+    "url": "data/farm_footprint_hierarchy.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "value": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.parent === 'root' && datum.name !== 'GDP' && datum.name !== 'Output exported'"
+    },
+    {
+      "calculate": "2.2",
+      "as": "ref"
+    },
+    {
+      "calculate": "datum.value / 2.2",
+      "as": "multiple"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "stroke": "#a0a9a3",
+        "strokeWidth": 1,
+        "strokeDash": [
+          3,
+          3
+        ]
+      },
+      "encoding": {
+        "x": {
+          "datum": 2.2,
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "rule",
+        "strokeWidth": 3,
+        "opacity": 0.4
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 13,
+            "labelFontWeight": 500,
+            "labelColor": "#161f1b",
+            "labelPadding": 8
+          }
+        },
+        "x": {
+          "field": "ref",
+          "type": "quantitative",
+          "title": "Share of the national total (%)",
+          "scale": {
+            "domain": [
+              0,
+              76
+            ]
+          },
+          "axis": {
+            "grid": true,
+            "values": [
+              0,
+              20,
+              40,
+              60
+            ]
+          }
+        },
+        "x2": {
+          "field": "value"
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Natural resources",
+              "Trade",
+              "Economy"
+            ],
+            "range": [
+              "#0f3f39",
+              "#9c6114",
+              "#a0a9a3"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 110,
+        "color": "#a0a9a3"
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 13,
+            "labelFontWeight": 500,
+            "labelColor": "#161f1b",
+            "labelPadding": 8
+          }
+        },
+        "x": {
+          "field": "ref",
+          "type": "quantitative",
+          "title": "Share of the national total (%)",
+          "scale": {
+            "domain": [
+              0,
+              76
+            ]
+          },
+          "axis": {
+            "grid": true,
+            "values": [
+              0,
+              20,
+              40,
+              60
+            ]
+          }
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 200
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 13,
+            "labelFontWeight": 500,
+            "labelColor": "#161f1b",
+            "labelPadding": 8
+          }
+        },
+        "x": {
+          "field": "value",
+          "type": "quantitative"
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Natural resources",
+              "Trade",
+              "Economy"
+            ],
+            "range": [
+              "#0f3f39",
+              "#9c6114",
+              "#a0a9a3"
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "indicator",
+            "type": "nominal",
+            "title": "Measure"
+          },
+          {
+            "field": "value",
+            "type": "quantitative",
+            "title": "Share (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "multiple",
+            "type": "quantitative",
+            "title": "Times its GDP share",
+            "format": ".1f"
+          },
+          {
+            "field": "period",
+            "type": "nominal",
+            "title": "Period"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "calculate": "format(datum.value, '.1f') + '%  (' + format(datum.multiple, '.0f') + '\\u00d7)'",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 700,
+        "fill": "#161f1b",
+        "align": "left",
+        "dx": 15
+      },
+      "encoding": {
+        "y": {
+          "field": "name",
+          "type": "nominal",
+          "title": null,
+          "sort": {
+            "field": "value",
+            "order": "descending"
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelFontSize": 13,
+            "labelFontWeight": 500,
+            "labelColor": "#161f1b",
+            "labelPadding": 8
+          }
+        },
+        "x": {
+          "field": "value",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "agriculture's 2.2% of GDP"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "Inter",
+        "fontSize": 12,
+        "fontWeight": 400,
+        "fill": "#57625b",
+        "align": "left",
+        "x": {
+          "expr": "scale('x', 2.2) + 8"
+        },
+        "y": 10,
+        "limit": 210
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}
