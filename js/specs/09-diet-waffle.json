@@ -4,15 +4,27 @@
     "type": "pad",
     "contains": "padding"
   },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 5
+  },
+  "usermeta": {
+    "grid": [
+      20,
+      5
+    ]
+  },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -28,15 +40,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -45,27 +57,30 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
-  "spacing": 26,
+  "spacing": {
+    "row": 22,
+    "column": 84
+  },
   "title": {
-    "text": "How many Australians eat the recommended amount",
-    "subtitle": "Each icon is one person in a hundred, 2023. A filled icon met the guideline for that food group; a faint one did not.",
+    "text": "Fewer than 5 in 100 Australians eat enough vegetables",
+    "subtitle": "Each figure is one person in a hundred, 2023. A teal figure met the recommended daily serves for that food group; a grey one did not.",
     "subtitleLimit": 760
   },
   "data": {
@@ -82,12 +97,20 @@
   },
   "transform": [
     {
-      "calculate": "datum.short + '  ' + format(datum.met_pct/100, '.1%')",
+      "calculate": "datum.short + ': ' + format(datum.met_pct, '.0f') + ' in 100'",
       "as": "panel"
     },
     {
-      "calculate": "{'Vegetables':'\ud83e\udd66','Lean meat':'\ud83e\udd69','Fruit':'\ud83c\udf4e','Grains':'\ud83c\udf3e'}[datum.short]",
-      "as": "icon"
+      "calculate": "datum.met == 1 ? 'Met the guideline' : 'Did not meet it'",
+      "as": "status"
+    },
+    {
+      "calculate": "datum.cell % 20",
+      "as": "c"
+    },
+    {
+      "calculate": "floor(datum.cell / 20)",
+      "as": "r"
     }
   ],
   "columns": 2,
@@ -96,57 +119,66 @@
     "type": "nominal",
     "title": null,
     "sort": [
-      "Vegetables  4.3%",
-      "Lean meat  20.6%",
-      "Fruit  23.1%",
-      "Grains  27.8%"
+      "Vegetables: 4 in 100",
+      "Lean meat: 21 in 100",
+      "Fruit: 23 in 100",
+      "Grains: 28 in 100"
     ],
     "header": {
-      "labelFont": "Noto Serif",
-      "labelFontSize": 13,
+      "labelFont": "Fraunces, Georgia, serif",
+      "labelFontSize": 19,
       "labelFontWeight": 600,
       "labelColor": "#161f1b",
       "labelAnchor": "start",
-      "labelPadding": 6,
+      "labelPadding": 8,
       "title": null
     }
   },
   "spec": {
-    "width": 220,
-    "height": 232,
+    "width": 500,
+    "height": 125,
     "mark": {
-      "type": "text",
-      "baseline": "middle",
-      "align": "center"
+      "type": "point",
+      "shape": "M0,-0.96 A0.3,0.3 0 1,1 0,-0.36 A0.3,0.3 0 1,1 0,-0.96 Z M-0.48,-0.26 L0.48,-0.26 Q0.62,-0.26 0.62,-0.1 L0.62,0.4 L0.34,0.4 L0.34,1 L-0.34,1 L-0.34,0.4 L-0.62,0.4 L-0.62,-0.1 Q-0.62,-0.26 -0.48,-0.26 Z",
+      "filled": true,
+      "size": 300,
+      "strokeWidth": 0,
+      "opacity": 1
     },
     "encoding": {
       "x": {
-        "field": "col",
+        "field": "c",
         "type": "ordinal",
         "axis": null,
         "scale": {
-          "padding": 0
+          "type": "point",
+          "padding": 0.5
         }
       },
       "y": {
-        "field": "row",
+        "field": "r",
         "type": "ordinal",
         "axis": null,
         "sort": "descending",
         "scale": {
-          "padding": 0
+          "type": "point",
+          "padding": 0.5
         }
       },
-      "text": {
-        "field": "icon",
-        "type": "nominal"
-      },
-      "opacity": {
-        "condition": {
-          "test": "datum.met == 1",
-          "value": 1
-        },
-        "value": 0.15
+      "color": {
+        "field": "status",
+        "type": "nominal",
+        "legend": null,
+        "scale": {
+          "domain": [
+            "Met the guideline",
+            "Did not meet it"
+          ],
+          "range": [
+            "#0f3f39",
+            "#dee2dd"
+          ]
+        }
       },
       "tooltip": [
         {

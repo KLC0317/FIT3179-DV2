@@ -2,7 +2,9 @@
 
 Every file the page reads is in this folder. Nothing is fetched from a third-party
 repository at run time, so the visualisation cannot break because someone else's
-repository moved. Total size is about 820 KB, dominated by the two boundary files.
+repository moved. The page downloads about 340 KB of data in total; the largest
+file is the world base map (270 KB). `au-states.geojson` (650 KB) is kept only as
+the source the derived files were computed from and is not loaded by the page.
 
 ## What each file is, and where it came from
 
@@ -30,7 +32,8 @@ treating them as a low value.
 | `crop_production_long.csv` | FAOSTAT *Crops and Livestock Products* (QCL), Australia only, 1961–2024, seven crops, converted from tonnes to kilotonnes |
 | `wheat_export_flows.csv` | FAOSTAT *Detailed Trade Matrix* (TM), Australian wheat export quantity by partner country, 2024, top twelve partners |
 | `au-states.geojson` | State and territory boundaries, from the `rowanhogan/australian-states` repository, derived from the ABS ASGS |
-| `countries-110m.json` | World country boundaries (TopoJSON), Natural Earth via the TopoJSON project |
+| `au-states.json` | State and territory boundaries as TopoJSON (object `austates`, 25 KB), made from `au-states.geojson` with mapshaper as taught in the week 8 studio: `-simplify 10% keep-shapes -filter-fields STATE_NAME -rename-layers austates -o format=topojson quantization=100000` |
+| `world_ne_110m.topojson` | Natural Earth 1:110m (public domain) in one TopoJSON with three objects: `ne_110m_admin_0_countries`, `ne_110m_graticules_30` and `oceans`. The countries and graticules are the files supplied with the week 8 studio code (`WorldMapWithGraticules.topojson`); the oceans layer is the one used in the week 10 studio (`FIT3179/Vega-Lite`, `7_others/oceans.topojson`). Combined with mapshaper, keeping only the `NAME` field: `combine-files -filter-fields ... -o format=topojson quantization=100000` |
 
 ### Derived here (and how)
 
@@ -52,6 +55,14 @@ overlap they reconcile exactly: both give wheat as 41,199 kilotonnes for 2022–
 barley as 13,491 and canola as 8,918. That is why the long FAO series and the detailed
 ABS tables can sit in the same story without a seam.
 
+**Water use follows the previous year's rain.** Across the ten water-account years,
+rainfall and water use in the same year are only loosely related (correlation 0.52),
+but the previous year's rainfall and this year's water use move closely together
+(0.85, nine pairs): the lowest use, 2019–20, came after two dry years; the highest,
+2023–24, the year after the wettest. Chart 11 is built around that lag. The page
+describes the likely mechanism (rain is used after it has filled dams) as likely, not
+as established.
+
 **The computed areas are right.** Areas calculated from the boundary file agree with
 published state areas to within 0.2% (for example Western Australia: 2,531,465 km²
 computed against 2,526,786 km² published).
@@ -70,7 +81,11 @@ computed against 2,526,786 km² published).
   rather than its all-period median. A single fixed median would make canola look
   spectacular in every recent year simply because the crop barely existed before 1990.
 - Great-circle arcs on the flow map show origin, destination and volume. They are not
-  shipping lanes.
+  shipping lanes. Each route is 29 points drawn in `step` order, so `step` must be parsed
+  as a number; read as text, "10" sorts before "2" and the route folds back on itself.
+- A blank ABS cell means "no figure published". The map specs convert blanks to null
+  explicitly, because Vega-Lite does not apply a CSV `parse` to a lookup table and a
+  blank would otherwise be drawn as zero.
 - The water account has two near-ties worth stating plainly, because the page's wording
   depends on them. **2019–20 and 2018–19 tie as the driest year** at 347 mm, so 2019–20 is
   described as "equal-driest" and identified instead by the thing it holds outright, the
@@ -87,4 +102,5 @@ computed against 2,526,786 km² published).
 - FAOSTAT, Crops and Livestock Products — https://www.fao.org/faostat/en/#data/QCL
 - FAOSTAT, Detailed Trade Matrix — https://www.fao.org/faostat/en/#data/TM
 - Australian state boundaries — https://github.com/rowanhogan/australian-states
-- World Atlas TopoJSON — https://github.com/topojson/world-atlas
+- Natural Earth — https://www.naturalearthdata.com
+- FIT3179 Vega-Lite studio examples (oceans layer) — https://github.com/FIT3179/Vega-Lite

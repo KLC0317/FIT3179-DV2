@@ -1,20 +1,26 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 330,
+  "width": 520,
+  "height": 250,
   "autosize": {
-    "type": "fit-x",
+    "type": "pad",
     "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      78
+    ]
   },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -30,15 +36,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -47,33 +53,33 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
   "title": {
-    "text": "How far agriculture's footprint sits from its economic weight",
+    "text": "Agriculture's footprint is far bigger than its share of the economy",
     "subtitle": "Each dumbbell runs from agriculture's 2.2% share of GDP to its share of another national total. Natural resources in teal.",
     "subtitleLimit": 760
   },
   "padding": {
-    "left": 5,
+    "left": 0,
+    "right": 0,
     "top": 5,
-    "bottom": 5,
-    "right": 60
+    "bottom": 5
   },
   "data": {
     "url": "data/farm_footprint_hierarchy.csv",
@@ -119,7 +125,7 @@
       "mark": {
         "type": "rule",
         "strokeWidth": 3,
-        "opacity": 0.4
+        "opacity": 0.45
       },
       "encoding": {
         "y": {
@@ -133,10 +139,12 @@
           "axis": {
             "ticks": false,
             "domain": false,
-            "labelFontSize": 13,
-            "labelFontWeight": 500,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
             "labelColor": "#161f1b",
-            "labelPadding": 8
+            "labelFontSize": 16
           }
         },
         "x": {
@@ -169,12 +177,10 @@
           "scale": {
             "domain": [
               "Natural resources",
-              "Trade",
               "Economy"
             ],
             "range": [
               "#0f3f39",
-              "#9c6114",
               "#a0a9a3"
             ]
           }
@@ -185,7 +191,8 @@
       "mark": {
         "type": "circle",
         "size": 110,
-        "color": "#a0a9a3"
+        "color": "#a0a9a3",
+        "opacity": 1
       },
       "encoding": {
         "y": {
@@ -199,10 +206,12 @@
           "axis": {
             "ticks": false,
             "domain": false,
-            "labelFontSize": 13,
-            "labelFontWeight": 500,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
             "labelColor": "#161f1b",
-            "labelPadding": 8
+            "labelFontSize": 16
           }
         },
         "x": {
@@ -230,7 +239,8 @@
     {
       "mark": {
         "type": "circle",
-        "size": 200
+        "size": 210,
+        "opacity": 1
       },
       "encoding": {
         "y": {
@@ -244,10 +254,12 @@
           "axis": {
             "ticks": false,
             "domain": false,
-            "labelFontSize": 13,
-            "labelFontWeight": 500,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
             "labelColor": "#161f1b",
-            "labelPadding": 8
+            "labelFontSize": 16
           }
         },
         "x": {
@@ -261,12 +273,10 @@
           "scale": {
             "domain": [
               "Natural resources",
-              "Trade",
               "Economy"
             ],
             "range": [
               "#0f3f39",
-              "#9c6114",
               "#a0a9a3"
             ]
           }
@@ -306,12 +316,11 @@
       ],
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
         "fontWeight": 700,
-        "fill": "#161f1b",
         "align": "left",
-        "dx": 15
+        "dx": 14
       },
       "encoding": {
         "y": {
@@ -325,10 +334,12 @@
           "axis": {
             "ticks": false,
             "domain": false,
-            "labelFontSize": 13,
-            "labelFontWeight": 500,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
             "labelColor": "#161f1b",
-            "labelPadding": 8
+            "labelFontSize": 16
           }
         },
         "x": {
@@ -338,6 +349,21 @@
         "text": {
           "field": "lab",
           "type": "nominal"
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Natural resources",
+              "Economy"
+            ],
+            "range": [
+              "#0f3f39",
+              "#333e38"
+            ]
+          }
         }
       }
     },
@@ -351,8 +377,8 @@
       },
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
         "fontWeight": 400,
         "fill": "#57625b",
         "align": "left",
@@ -368,6 +394,65 @@
           "type": "nominal"
         }
       }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width + 78"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width + 78"
+          }
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
     }
-  ]
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
 }

@@ -1,20 +1,26 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 230,
+  "width": 520,
+  "height": 236,
   "autosize": {
-    "type": "fit-x",
+    "type": "pad",
     "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      78
+    ]
   },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -30,15 +36,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -47,33 +53,33 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
   "title": {
-    "text": "Every harvest since 1961, against its own recent normal",
-    "subtitle": "Deviation from each crop's eleven-year rolling median. Ochre is a short year, teal a surplus; irrigated sugar cane barely moves.",
+    "text": "Droughts cut through the winter crops all at once",
+    "subtitle": "Each cell is one crop in one year against its own eleven-year normal. Ochre is a short year, teal a surplus.",
     "subtitleLimit": 760
   },
   "padding": {
-    "left": 16,
+    "left": 0,
+    "right": 0,
     "top": 5,
-    "bottom": 5,
-    "right": 5
+    "bottom": 5
   },
   "data": {
     "url": "data/crop_production_long.csv",
@@ -128,12 +134,13 @@
           "title": null,
           "axis": {
             "values": [
-              1965,
-              1975,
-              1985,
-              1995,
-              2005,
-              2015,
+              1961,
+              1970,
+              1980,
+              1990,
+              2000,
+              2010,
+              2020,
               2024
             ],
             "labelAngle": 0,
@@ -158,14 +165,18 @@
           "axis": {
             "ticks": false,
             "domain": false,
-            "labelFontWeight": 500,
-            "labelColor": "#333e38"
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
           }
         },
         "color": {
           "field": "dev",
           "type": "quantitative",
-          "title": "Harvest vs its eleven-year normal (%)",
+          "title": "Harvest against its eleven-year normal (%)",
           "scale": {
             "type": "threshold",
             "domain": [
@@ -184,9 +195,11 @@
           },
           "legend": {
             "direction": "horizontal",
-            "orient": "top",
+            "orient": "none",
+            "legendX": -108,
+            "legendY": -92,
             "symbolType": "square",
-            "symbolSize": 160,
+            "symbolSize": 170,
             "format": "+d",
             "titleLimit": 360
           }
@@ -206,7 +219,7 @@
           {
             "field": "production_kt",
             "type": "quantitative",
-            "title": "Tonnes harvested",
+            "title": "Thousand tonnes harvested",
             "format": ",.0f"
           },
           {
@@ -228,47 +241,29 @@
       "data": {
         "values": [
           {
-            "year": 2006
-          }
-        ]
-      },
-      "mark": {
-        "type": "rule",
-        "stroke": "#161f1b",
-        "strokeWidth": 1,
-        "strokeDash": [
-          2,
-          2
-        ],
-        "opacity": 0.55
-      },
-      "encoding": {
-        "x": {
-          "field": "year",
-          "type": "ordinal"
-        }
-      }
-    },
-    {
-      "data": {
-        "values": [
+            "year": 1982
+          },
           {
-            "year": 2006,
-            "crop": "Wheat",
-            "t": "2006: worst multi-crop drought"
+            "year": 1994
+          },
+          {
+            "year": 2002
+          },
+          {
+            "year": 2006
+          },
+          {
+            "year": 2019
           }
         ]
       },
       "mark": {
-        "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
-        "fontWeight": 600,
-        "fill": "#161f1b",
-        "align": "left",
-        "dx": 8,
-        "dy": -8,
-        "limit": 210
+        "type": "point",
+        "shape": "triangle-down",
+        "filled": true,
+        "size": 46,
+        "color": "#9c6114",
+        "opacity": 1
       },
       "encoding": {
         "x": {
@@ -276,21 +271,130 @@
           "type": "ordinal"
         },
         "y": {
-          "field": "crop",
-          "type": "nominal",
-          "sort": [
-            "Wheat",
-            "Barley",
-            "Canola",
-            "Sugar cane",
-            "Maize",
-            "Dry peas",
-            "Soybeans"
-          ]
+          "value": -7
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "year": 1982
+          },
+          {
+            "year": 1994
+          },
+          {
+            "year": 2002
+          },
+          {
+            "year": 2006
+          },
+          {
+            "year": 2019
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#84520f",
+        "align": "center",
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "x": {
+          "field": "year",
+          "type": "ordinal"
         },
+        "y": {
+          "value": -14
+        },
+        "text": {
+          "field": "year",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Drought years:"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#57625b",
+        "align": "left",
+        "baseline": "bottom",
+        "x": -108,
+        "y": -14
+      },
+      "encoding": {
         "text": {
           "field": "t",
           "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width + 78"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width + 78"
+          }
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
         }
       }
     }

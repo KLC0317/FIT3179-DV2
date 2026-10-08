@@ -1,20 +1,26 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 340,
+  "width": 520,
+  "height": 318,
   "autosize": {
-    "type": "fit-x",
+    "type": "pad",
     "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      160
+    ]
   },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -30,15 +36,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -47,33 +53,33 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
   "title": {
-    "text": "The same two seasons, state by state",
-    "subtitle": "Wheat sold, 2022-23 against 2024-25. South Australia is highlighted; a national average would hide it.",
+    "text": "South Australia's harvest more than halved in two seasons",
+    "subtitle": "Wheat sold by each state, 2022–23 against 2024–25. South Australia is highlighted; a national total would hide it.",
     "subtitleLimit": 760
   },
   "padding": {
-    "left": 5,
-    "top": 26,
-    "bottom": 5,
-    "right": 124
+    "left": 0,
+    "right": 0,
+    "top": 30,
+    "bottom": 5
   },
   "data": {
     "url": "data/wheat_state_density.csv",
@@ -92,7 +98,7 @@
   },
   "transform": [
     {
-      "filter": "datum.kt_2022_23 !== '' && datum.kt_2024_25 !== '' && datum.kt_2022_23 > 100"
+      "filter": "isValid(datum.kt_2022_23) && isValid(datum.kt_2024_25) && datum.kt_2022_23 > 100"
     },
     {
       "fold": [
@@ -105,7 +111,7 @@
       ]
     },
     {
-      "calculate": "datum.season === 'kt_2022_23' ? '2022-23' : '2024-25'",
+      "calculate": "datum.season === 'kt_2022_23' ? '2022–23' : '2024–25'",
       "as": "label"
     },
     {
@@ -132,8 +138,8 @@
             "padding": 0.34
           },
           "axis": {
-            "labelFontSize": 13,
-            "labelFontWeight": 600,
+            "labelFontSize": 16,
+            "labelFontWeight": 700,
             "grid": false,
             "domain": false,
             "ticks": false,
@@ -145,10 +151,17 @@
         "y": {
           "field": "kt",
           "type": "quantitative",
-          "title": "Wheat sold (kt)",
           "axis": {
-            "format": ",.0f",
-            "grid": true
+            "title": "Thousand tonnes",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleBaseline": "bottom",
+            "titleX": -108,
+            "titleY": -12,
+            "titleFontWeight": 600,
+            "titleColor": "#333e38",
+            "grid": true,
+            "format": ",.0f"
           }
         },
         "detail": {
@@ -184,7 +197,7 @@
           {
             "field": "kt",
             "type": "quantitative",
-            "title": "Wheat sold (kt)",
+            "title": "Wheat sold (thousand tonnes)",
             "format": ","
           }
         ]
@@ -193,7 +206,7 @@
     {
       "transform": [
         {
-          "filter": "datum.label === '2024-25' && datum.kt > 900"
+          "filter": "datum.label === '2024–25' && datum.kt > 900 && indexof(['New South Wales','South Australia'], datum.state) >= 0"
         },
         {
           "calculate": "datum.state + '  ' + format(datum.kt, ',.0f')",
@@ -202,12 +215,12 @@
       ],
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
         "fontWeight": 600,
-        "fill": "#161f1b",
         "align": "left",
-        "dx": 11
+        "dx": 11,
+        "dy": -9
       },
       "encoding": {
         "x": {
@@ -218,8 +231,134 @@
             "padding": 0.34
           },
           "axis": {
-            "labelFontSize": 13,
-            "labelFontWeight": 600,
+            "labelFontSize": 16,
+            "labelFontWeight": 700,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "labelColor": "#161f1b"
+          }
+        },
+        "y": {
+          "field": "kt",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "focus",
+              "rest"
+            ],
+            "range": [
+              "#84520f",
+              "#333e38"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.label === '2024–25' && datum.kt > 900 && indexof(['Western Australia','Queensland'], datum.state) >= 0"
+        },
+        {
+          "calculate": "datum.state + '  ' + format(datum.kt, ',.0f')",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 600,
+        "align": "left",
+        "dx": 11,
+        "dy": 10
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0.34
+          },
+          "axis": {
+            "labelFontSize": 16,
+            "labelFontWeight": 700,
+            "grid": false,
+            "domain": false,
+            "ticks": false,
+            "labelAngle": 0,
+            "labelPadding": 8,
+            "labelColor": "#161f1b"
+          }
+        },
+        "y": {
+          "field": "kt",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "lab",
+          "type": "nominal"
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "focus",
+              "rest"
+            ],
+            "range": [
+              "#84520f",
+              "#333e38"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.label === '2024–25' && datum.kt > 900 && indexof(['Victoria'], datum.state) >= 0"
+        },
+        {
+          "calculate": "datum.state + '  ' + format(datum.kt, ',.0f')",
+          "as": "lab"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 600,
+        "align": "left",
+        "dx": 11,
+        "dy": -5
+      },
+      "encoding": {
+        "x": {
+          "field": "label",
+          "type": "ordinal",
+          "title": null,
+          "scale": {
+            "padding": 0.34
+          },
+          "axis": {
+            "labelFontSize": 16,
+            "labelFontWeight": 700,
             "grid": false,
             "domain": false,
             "ticks": false,
@@ -257,27 +396,53 @@
       "data": {
         "values": [
           {
-            "t": "South Australia lost more than half its crop"
+            "t": "South Australia: down 58%"
           }
         ]
       },
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
-        "fontWeight": 400,
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 700,
         "fill": "#84520f",
-        "align": "left",
+        "align": "right",
+        "baseline": "bottom",
         "x": {
-          "expr": "0"
+          "expr": "width"
         },
-        "y": -14,
-        "limit": 300
+        "y": -12,
+        "limit": 260
       },
       "encoding": {
         "text": {
           "field": "t",
           "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
         }
       }
     }

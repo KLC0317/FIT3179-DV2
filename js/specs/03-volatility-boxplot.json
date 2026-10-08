@@ -1,20 +1,26 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 327,
+  "width": 520,
+  "height": 325,
   "autosize": {
-    "type": "fit-x",
+    "type": "pad",
     "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      10
+    ]
   },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -30,15 +36,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -47,33 +53,33 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
   "title": {
-    "text": "How far a harvest can move in a single year",
-    "subtitle": "Year-on-year change, 1962-2024. The box spans the middle half of years; dots are individual extreme seasons.",
+    "text": "A wheat crop can halve, then more than double",
+    "subtitle": "Year-on-year change, 1962–2024. The box holds the middle half of years, the line is the typical year, dots are rare extremes.",
     "subtitleLimit": 760
   },
   "padding": {
-    "left": 16,
-    "top": 5,
-    "bottom": 5,
-    "right": 5
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 5
   },
   "data": {
     "url": "data/crop_production_long.csv",
@@ -135,30 +141,36 @@
         "type": "boxplot",
         "extent": 1.5,
         "size": 18,
+        "outliers": false,
         "median": {
-          "color": "#fbfaf6",
+          "color": "#fefdf9",
           "strokeWidth": 2
-        },
-        "outliers": {
-          "size": 26,
-          "opacity": 0.5,
-          "filled": true
         }
       },
       "encoding": {
         "x": {
           "field": "pct",
           "type": "quantitative",
-          "title": "Change on the previous year (%)",
+          "title": "Change on the previous year's harvest (%)",
           "scale": {
             "domain": [
               -80,
-              140
-            ]
+              180
+            ],
+            "nice": false
           },
           "axis": {
             "format": "+d",
-            "grid": true
+            "grid": true,
+            "values": [
+              -80,
+              -40,
+              0,
+              40,
+              80,
+              120,
+              160
+            ]
           }
         },
         "y": {
@@ -171,14 +183,17 @@
             "Canola",
             "Sugar cane",
             "Maize",
-            "Dry peas",
-            "Soybeans"
+            "Dry peas"
           ],
           "axis": {
             "ticks": false,
             "domain": false,
-            "labelFontWeight": 500,
-            "labelColor": "#333e38"
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
           }
         },
         "color": {
@@ -192,15 +207,13 @@
               "Canola",
               "Sugar cane",
               "Maize",
-              "Dry peas",
-              "Soybeans"
+              "Dry peas"
             ],
             "range": [
               "#0f3f39",
-              "#33887c",
-              "#bc801d",
-              "#9c6114",
               "#a0a9a3",
+              "#a0a9a3",
+              "#57625b",
               "#a0a9a3",
               "#a0a9a3"
             ]
@@ -209,24 +222,34 @@
       }
     },
     {
-      "data": {
-        "values": [
-          {
-            "pct": 138,
-            "crop": "Sugar cane",
-            "t": "irrigated, so it barely moves"
-          }
-        ]
-      },
+      "transform": [
+        {
+          "joinaggregate": [
+            {
+              "op": "q1",
+              "field": "pct",
+              "as": "q1"
+            },
+            {
+              "op": "q3",
+              "field": "pct",
+              "as": "q3"
+            }
+          ],
+          "groupby": [
+            "crop"
+          ]
+        },
+        {
+          "filter": "datum.pct < datum.q1 - 1.5 * (datum.q3 - datum.q1) || datum.pct > datum.q3 + 1.5 * (datum.q3 - datum.q1)"
+        }
+      ],
       "mark": {
-        "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
-        "fontWeight": 400,
-        "fill": "#84520f",
-        "align": "right",
-        "dy": 0,
-        "limit": 210
+        "type": "circle",
+        "size": 40,
+        "opacity": 0.85,
+        "stroke": "#fefdf9",
+        "strokeWidth": 0.8
       },
       "encoding": {
         "x": {
@@ -236,19 +259,198 @@
         "y": {
           "field": "crop",
           "type": "nominal",
+          "title": null,
           "sort": [
             "Wheat",
             "Barley",
             "Canola",
             "Sugar cane",
             "Maize",
-            "Dry peas",
-            "Soybeans"
-          ]
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
+        },
+        "color": {
+          "field": "crop",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Wheat",
+              "Barley",
+              "Canola",
+              "Sugar cane",
+              "Maize",
+              "Dry peas"
+            ],
+            "range": [
+              "#0f3f39",
+              "#a0a9a3",
+              "#a0a9a3",
+              "#57625b",
+              "#a0a9a3",
+              "#a0a9a3"
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "crop",
+            "type": "nominal",
+            "title": "Crop"
+          },
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Year",
+            "format": "d"
+          },
+          {
+            "field": "pct",
+            "type": "quantitative",
+            "title": "Change on previous year (%)",
+            "format": "+.0f"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "pct": 158,
+            "crop": "Wheat",
+            "t": "+158% in 2003"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 700,
+        "fill": "#0f3f39",
+        "align": "right",
+        "dx": 4,
+        "dy": -15
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
         },
         "text": {
           "field": "t",
           "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "pct": 44,
+            "crop": "Sugar cane",
+            "t": "irrigated, so it barely moves"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 600,
+        "fill": "#39423d",
+        "align": "left"
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
         }
       }
     }

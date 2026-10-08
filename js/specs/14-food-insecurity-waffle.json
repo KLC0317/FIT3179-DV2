@@ -1,20 +1,26 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 267,
+  "width": 520,
+  "height": 228,
   "autosize": {
-    "type": "fit-x",
+    "type": "pad",
     "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      0,
+      0
+    ]
   },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -30,15 +36,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -47,27 +53,33 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
   "title": {
-    "text": "One in eight households ran short of food",
-    "subtitle": "Each icon is one Australian household in a hundred, 2023.",
+    "text": "More than one in eight households experienced food insecurity",
+    "subtitle": "Each house is one Australian household in a hundred, 2023. Ochre houses experienced food insecurity.",
     "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 26,
+    "bottom": 5
   },
   "data": {
     "url": "data/food_insecurity_waffle.csv",
@@ -75,49 +87,108 @@
       "type": "csv",
       "parse": {
         "affected": "number",
-        "col": "number",
-        "row": "number"
+        "cell": "number"
       }
     }
   },
+  "transform": [
+    {
+      "calculate": "datum.cell % 10",
+      "as": "c"
+    },
+    {
+      "calculate": "floor(datum.cell / 10)",
+      "as": "r"
+    },
+    {
+      "calculate": "datum.affected == 1 ? 'Ran short of food' : 'Did not'",
+      "as": "status"
+    }
+  ],
   "layer": [
     {
       "mark": {
-        "type": "text",
-        "baseline": "middle",
-        "align": "center",
-        "fontSize": 27
+        "type": "point",
+        "shape": "M0,-0.95 L0.95,-0.12 L0.7,-0.12 L0.7,0.95 L0.2,0.95 L0.2,0.38 L-0.2,0.38 L-0.2,0.95 L-0.7,0.95 L-0.7,-0.12 L-0.95,-0.12 Z",
+        "filled": true,
+        "strokeWidth": 0,
+        "opacity": 1,
+        "size": 316
       },
       "encoding": {
         "x": {
-          "field": "col",
+          "field": "c",
           "type": "ordinal",
           "axis": null,
           "scale": {
-            "padding": 0
+            "type": "point",
+            "padding": 0.5,
+            "range": [
+              0,
+              228
+            ]
           }
         },
         "y": {
-          "field": "row",
+          "field": "r",
           "type": "ordinal",
           "axis": null,
-          "sort": "descending",
           "scale": {
-            "padding": 0
+            "type": "point",
+            "padding": 0.5,
+            "range": [
+              0,
+              228
+            ]
           }
         },
+        "color": {
+          "field": "status",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Ran short of food",
+              "Did not"
+            ],
+            "range": [
+              "#9c6114",
+              "#dee2dd"
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "status",
+            "type": "nominal",
+            "title": "Household"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Australian households, 2023"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "bottom",
+        "x": 0,
+        "y": -12
+      },
+      "encoding": {
         "text": {
-          "value": "\ud83c\udfe0"
-        },
-        "opacity": {
-          "condition": {
-            "test": "datum.affected == 1",
-            "value": 1
-          },
-          "value": 0.16
-        },
-        "tooltip": {
-          "value": "13.2% of households experienced food insecurity in 2023"
+          "field": "t",
+          "type": "nominal"
         }
       }
     },
@@ -131,15 +202,14 @@
       },
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 24,
+        "font": "Fraunces, Georgia, serif",
+        "fontSize": 44,
         "fontWeight": 700,
         "fill": "#84520f",
-        "align": "right",
-        "x": {
-          "expr": "width"
-        },
-        "y": 6
+        "align": "left",
+        "baseline": "top",
+        "x": 256,
+        "y": 0
       },
       "encoding": {
         "text": {
@@ -152,21 +222,176 @@
       "data": {
         "values": [
           {
-            "t": "of households"
+            "t": "of Australian households"
           }
         ]
       },
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
         "fontWeight": 400,
-        "fill": "#57625b",
-        "align": "right",
-        "x": {
-          "expr": "width"
-        },
-        "y": 28
+        "fill": "#333e38",
+        "x": 256,
+        "y": 58,
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "experienced food insecurity"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": 256,
+        "y": 80,
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "in 2023: they could not"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": 256,
+        "y": 102,
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "always be sure of having"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": 256,
+        "y": 124,
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "enough food."
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": 256,
+        "y": 146,
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "That is more than one"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 700,
+        "fill": "#161f1b",
+        "x": 256,
+        "y": 184,
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "household in every eight."
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 700,
+        "fill": "#161f1b",
+        "x": 256,
+        "y": 206,
+        "align": "left",
+        "baseline": "top"
       },
       "encoding": {
         "text": {

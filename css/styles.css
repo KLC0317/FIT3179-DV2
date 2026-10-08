@@ -1,67 +1,75 @@
 /* ==========================================================================
-   Australia's food system — FIT3179 Data Visualisation 2
+   Australia's food system - FIT3179 Data Visualisation 2
 
    Colour tokens mirror tools/palette.py exactly; that file is the source of
-   truth and carries the contrast audit. Three semantic families only:
+   truth and carries the contrast and colour-vision audit. Meanings:
 
-       teal   the supply side  - grain, harvest, land and water resources
-       ochre  the demand side  - exports leaving, households, what people eat
-       slate  context          - everything muted so a highlight can read
+       teal    supply - wheat, barley, harvests, water and land, "enough"
+       violet  canola (a crop identity, used only where crops are compared)
+       ochre   the accent - the one thing to notice, always a shortfall
+       slate   context - everything muted so the accent can read
 
-   No red-green pairing, no rainbow scale, and every text colour below is
-   audited to at least 4.5:1 against the surface it sits on.
+   Typography: Fraunces, a soft old-style serif with the feel of a seed
+   catalogue or farm almanac, for headings and headline numbers; Source Sans 3,
+   a humanist sans-serif, for every paragraph, label and chart.
    ========================================================================== */
 
 :root {
-  /* surfaces */
-  --paper:      #f5f4ef;
-  --card:       #fbfaf6;
+  /* surfaces: white cards (figure) on a warm paper (ground) */
+  --paper:      #f0eee6;
+  --card:       #fefdf9;
   --rule:       #d9ded6;
-  --rule-firm:  #16201c;
 
-  /* inks — all >= 4.5:1 on paper and card */
+  /* inks - all >= 4.5:1 on paper and card */
   --ink:        #161f1b;
   --ink-soft:   #333e38;
   --muted:      #57625b;
 
-  /* teal: the supply side */
+  /* teal: supply */
   --teal-800:   #0f3f39;
   --teal-700:   #17554c;
-  --teal-500:   #33887c;
-  --teal-200:   #bedfd8;
+  --teal-500:   #3e9588;
   --teal-100:   #ddeeea;
+  --teal-050:   #eff7f4;
 
-  /* ochre: the demand side, and the single accent */
+  /* violet: canola */
+  --violet-700: #5a4a8a;
+
+  /* ochre: the accent */
   --ochre-700:  #84520f;
   --ochre-600:  #9c6114;
-  --ochre-200:  #f0dcb4;
+  --ochre-100:  #f8eedc;
 
   /* slate: context */
+  --slate-600:  #57625b;
   --slate-500:  #7a857e;
-  --slate-300:  #c3cac5;
   --slate-100:  #eaece8;
 
-  /* semantic aliases — change a meaning here, not at a use site */
-  --accent:     var(--ochre-600);
-  --accent-ink: var(--ochre-700);
-  --supply:     var(--teal-800);
+  /* type */
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans:  "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
 
   /* layout */
   --gutter:     32px;
+  --card-pad:   26px;
   --page-max:   1200px;
 }
 
 *, *::before, *::after { box-sizing: border-box; }
 
-html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+/* Type scale. The root is 18px, so every rem on the page is 18px: the
+   marker marked DV1 down for small paragraph text (about 13-14px) and
+   tolerated Tan's 16px without praise, so reading text here sits well above
+   both - findings, intros, closing and takeaways at about 19px. */
+html { font-size: 18px; scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
   background: var(--paper);
   color: var(--ink);
-  font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-  font-size: 16.5px;
-  line-height: 1.45;          /* tight enough to read as a set measure */
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.5;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -69,281 +77,355 @@ body {
 
 .page { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
 
-/* RULES.md: roughly 60 characters per line. At this size 30em lands at 58-62. */
-.measure { max-width: 30em; }
+/* RULES.md: roughly 60 characters per line. At this size 32em lands at 60-66. */
+.measure { max-width: 32em; }
+
+strong, b { font-weight: 700; }
+
+/* Kicker: a small label that sets each section's question before its heading. */
+.kicker {
+  margin: 0 0 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ochre-700);
+}
 
 /* ---------- masthead: title and subtitle top-left, per the viewing path ---- */
 
-/* Sections are separated by whitespace, not rule lines — a rule is a sight-line
-   the eye has to reconcile against the grid; a wider gap needs no reconciling. */
-.masthead { padding: 88px 0 56px; }
+.masthead { padding: 80px 0 44px; }
 
-.kicker {
-  margin: 0 0 22px;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--accent-ink);
-}
-
-/* max-width widened so "Australia grows far more food" fits on one line —
-   with the explicit <br> in the markup that gives exactly two rows, not the
-   three it wrapped to at the old, narrower measure. */
 .masthead h1 {
-  margin: 0 0 20px;
-  font-family: "Noto Serif", Georgia, "Times New Roman", serif;
-  font-weight: 600;
-  font-size: clamp(2.5rem, 6vw, 4.6rem);
+  margin: 0 0 22px;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-size: clamp(2.4rem, 5.6vw, 4.2rem);
   line-height: 1.04;
-  letter-spacing: -0.026em;
-  max-width: 18em;
+  letter-spacing: -0.022em;
 }
-.masthead h1 em { font-style: italic; color: var(--supply); }
+.masthead h1 em { font-style: italic; font-weight: 500; color: var(--teal-800); }
 
 .standfirst {
   margin: 0;
-  font-size: 1.12rem;
-  line-height: 1.5;
+  font-size: 1.18rem;
+  line-height: 1.55;
   color: var(--ink-soft);
 }
-.standfirst strong { font-weight: 600; color: var(--ink); }
+.standfirst strong { color: var(--ink); }
 
-/* Author, institution, date and data sources. Lives in the footer — see
-   footer.byline near the end of this file for its layout. */
-.byline b { font-weight: 600; color: var(--ink); }
+/* ---------- contents: four chapters, four headline numbers ---------------- */
 
-/* ---------- chapter navigation -------------------------------------------- */
-
-/* A tinted band, not a ruled box: figure-ground (fill) separates this from
-   the masthead instead of a border (line). */
 .contents {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gutter);
-  padding: 26px var(--gutter);
-  margin: 0 calc(var(--gutter) * -1);
-  background: var(--card);
 }
+/* Same inner padding as every chart card, so the figures' text starts on
+   the same vertical line as the card text above and below. */
 .contents a {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  padding: 20px var(--card-pad) 22px;
+  background: var(--card);
+  border-radius: 4px;
   text-decoration: none;
-  color: var(--muted);
-  transition: color 0.15s;
+  color: var(--ink-soft);
+  transition: background-color 0.15s;
 }
 .contents a:hover,
-.contents a:focus-visible { color: var(--ink); }
-.contents .t {
-  display: block;
-  font-family: "Noto Serif", Georgia, serif;
-  font-size: 1.02rem;
-  font-weight: 600;
-  color: var(--ink);
-  margin-bottom: 4px;
+.contents a:focus-visible { background: var(--teal-050); }
+.contents .n {
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
 }
-.contents .d { display: block; font-size: 0.8rem; line-height: 1.4; }
+.contents .fig {
+  margin: 8px 0 4px;
+  font-family: var(--serif);
+  font-size: 2.3rem;
+  font-weight: 650;
+  line-height: 1.05;
+  letter-spacing: -0.015em;
+}
+.contents .d { font-size: 1.06rem; line-height: 1.4; }
 
 /* ---------- chapters ------------------------------------------------------ */
 
-.chapter { padding: 80px 0 0; }
+.chapter { padding: 84px 0 0; }
 
 .chapter-head {
-  max-width: 40em;
-  margin-bottom: 32px;
+  max-width: 44em;
+  margin-bottom: 30px;
 }
 .chapter-head h2 {
-  margin: 0 0 10px;
-  font-family: "Noto Serif", Georgia, serif;
-  font-weight: 600;
-  font-size: clamp(1.55rem, 2.8vw, 2.2rem);
-  line-height: 1.16;
+  margin: 0 0 12px;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+  line-height: 1.14;
   letter-spacing: -0.016em;
 }
-.chapter-head p { margin: 0; color: var(--ink-soft); font-size: 1rem; }
+.chapter-head p.measure { margin: 0; color: var(--ink-soft); font-size: 1.08rem; }
+.chapter-head p.measure strong { color: var(--ink); }
 
 /* ---------- chart grid ---------------------------------------------------- */
 
+/* One column line for the whole page. Every grid on the page - charts, key
+   figures, takeaways, closing text, sources - is either full width or split
+   exactly in half, so the only vertical sight-lines are the two page edges
+   and the centre gutter. (Earlier versions also used quarters, thirds and a
+   two-thirds/one-third split: five column lines where one will do.) */
 .grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  gap: 40px var(--gutter);
-  align-items: start;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: stretch;
 }
 
-.card       { grid-column: span 6;  min-width: 0; }
-.card.full  { grid-column: span 12; }
-.card.wide  { grid-column: span 8;  }
-.card.third { grid-column: span 4;  }
+.card {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  padding: var(--card-pad) var(--card-pad) 24px;
+  background: var(--card);
+  border-radius: 4px;
+}
+.card.full,
+.card.hero { grid-column: 1 / -1; }
 
-/* Hero: the chart that carries the chapter. Sits above the chapter's centre. */
-.card.hero { grid-column: span 12; }
+/* Every card is built from the same four rows: heading, subtitle, chart,
+   finding. With subgrid those rows are shared by the cards beside each
+   other, so headings, subtitles, chart tops and findings line up across a
+   row by construction, whatever the length of any one card's text. Browsers
+   without subgrid fall back to the flex column above, where the reserved
+   heights below keep the chart tops aligned. */
+@supports (grid-template-rows: subgrid) {
+  .grid { row-gap: 0; margin-bottom: calc(var(--gutter) * -1); }
+  .card {
+    display: grid;
+    grid-row: span 4;
+    grid-template-rows: subgrid;
+    row-gap: 0;
+    margin-bottom: var(--gutter);
+  }
+}
 
-/* Sight-lines (FIT2179 Layout notes): every card's chart must start at the
-   SAME offset from the card's top edge, regardless of how many lines its own
-   heading or subtitle happen to wrap to. Without this, two charts sitting
-   side by side in the grid drift apart the moment one title or subtitle is a
-   few words longer than the other — exactly the "very bad" misalignment this
-   fixes. Reserving a fixed 2-line box for both elements on EVERY card turns
-   that into a single flat sight-line across the whole page, not just within
-   a row. */
+/* Sight-lines: every card reserves the same two-line height for its heading
+   and its subtitle, so every chart on the page starts at the same offset from
+   its card's top edge, whatever the length of its own title. */
 .card h3 {
-  margin: 0 0 5px;
-  min-height: 2.85rem;
-  font-family: "Noto Serif", Georgia, serif;
-  font-weight: 600;
-  font-size: 1.14rem;
-  line-height: 1.24;
-  letter-spacing: -0.008em;
+  margin: 0 0 6px;
+  min-height: 2.95rem;          /* two full lines at this size and leading */
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-size: 1.24rem;
+  line-height: 1.18;
+  letter-spacing: -0.006em;
 }
 
-/* One or two sentences. Decodes the encoding, then gets out of the way.
-   Hard-clamped to 2 lines: reserving space only works if content can never
-   exceed it, so this is a safety net on top of keeping the copy itself short. */
+/* Decodes the encoding, then gets out of the way. Hard-clamped to 2 lines:
+   reserving space only works if content can never exceed it. */
 .card .sub {
-  margin: 0 0 14px;
-  min-height: 2.55rem;
+  margin: 0 0 16px;
+  min-height: 2.95rem;          /* two lines reserved on every card */
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  line-clamp: 2;
+  -webkit-line-clamp: 3;        /* a long subtitle may take a third line */
+  line-clamp: 3;
   overflow: hidden;
-  font-size: 0.86rem;
-  line-height: 1.45;
+  font-size: 0.98rem;
+  line-height: 1.5;
   color: var(--muted);
-  max-width: 44em;
+  max-width: 36em;              /* about 65-70 characters a line */
 }
 
-/* Colour keywords replace detached legends. Never bold AND italic AND colour. */
-.k-wheat  { color: var(--teal-800);  font-weight: 600; }
-.k-barley { color: var(--teal-700);  font-weight: 600; }
-.k-canola { color: var(--ochre-700); font-weight: 600; }
-.k-other  { color: var(--muted);     font-weight: 600; }
+/* Colour keywords replace detached legends: the word is set in the colour of
+   the marks it names. Weight only, never weight AND italic. */
+.k-wheat  { color: var(--teal-800);   font-weight: 700; }
+.k-barley { color: var(--teal-700);   font-weight: 700; }
+.k-canola { color: var(--violet-700); font-weight: 700; }
+.k-other  { color: var(--slate-600);  font-weight: 700; }
+.k-supply { color: var(--teal-700);   font-weight: 700; }
+.k-accent { color: var(--ochre-700);  font-weight: 700; }
 
-.viz { width: 100%; min-height: 180px; margin: 0 0 14px; }
+.viz { width: 100%; min-height: 180px; margin: 0 0 16px; }
 
-/* The finding, not a caption. No marker at all: the bolded figures inside
-   the text and its position right under the chart are enough to identify it. */
+/* The finding, not a caption: body-size text directly under the chart, with
+   the numbers that carry it set in bold. */
 .finding {
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 1.06rem;
   line-height: 1.5;
   color: var(--ink-soft);
-  max-width: 34em;
+  max-width: 36em;
 }
-.finding b { font-weight: 600; color: var(--ink); }
+.finding b { color: var(--ink); }
+/* One colour-matched word or number per finding, in the colour of the mark
+   it refers to - text emphasis that also ties the sentence to the chart. */
+.finding .k-wheat  { color: var(--teal-800); }
+.finding .k-supply { color: var(--teal-700); }
+.finding .k-canola { color: var(--violet-700); }
+.finding .k-accent { color: var(--ochre-700); }
 
-.howto {
-  display: inline-block;
-  margin: 10px 0 0;
-  font-size: 0.78rem;
-  color: var(--accent-ink);
-  font-weight: 500;
-}
-.howto::before { content: "\21ba  "; }
+/* ---------- callout card -------------------------------------------------- */
 
-/* ---------- pull-out statistic -------------------------------------------- */
-
-.aside {
-  grid-column: span 4;
-  align-self: stretch;
-  padding: 24px 22px;
-  background: var(--card);
+/* Built from the same four rows as a chart card, so it shares every
+   horizontal line with the chart beside it: its heading and subtitle sit on
+   the chart's heading and subtitle lines, its first figure starts on the
+   chart's top edge, its last figure ends on the chart's bottom edge, and its
+   note starts on the finding line. Tinted, so it reads as commentary rather
+   than as another chart. */
+.card.aside { background: var(--teal-050); }
+.aside .stats {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+  margin: 0 0 16px;
 }
-.aside h4 {
-  margin: 0 0 8px;
-  font-family: "Noto Serif", Georgia, serif;
-  font-size: 1rem;
-  font-weight: 600;
+.aside .stat-block p {
+  margin: 0;
+  font-size: 1.04rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  max-width: 30em;
 }
-.aside p { margin: 0 0 10px; font-size: 0.88rem; color: var(--ink-soft); }
 .aside .stat {
   display: block;
-  font-family: "Noto Serif", Georgia, serif;
-  font-size: 2.5rem;
-  font-weight: 600;
+  margin-bottom: 4px;
+  font-family: var(--serif);
+  font-size: 3rem;
+  font-weight: 650;
   line-height: 1;
-  color: var(--supply);
   letter-spacing: -0.02em;
-  margin-bottom: 6px;
 }
 
 /* ---------- closing ------------------------------------------------------- */
 
-.closing { padding: 80px 0 0; }
+.closing { padding: 92px 0 0; }
 .closing h2 {
-  margin: 0 0 16px;
-  font-family: "Noto Serif", Georgia, serif;
-  font-weight: 600;
-  font-size: clamp(1.65rem, 3.2vw, 2.4rem);
-  line-height: 1.14;
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-optical-sizing: auto;
+  font-weight: 650;
+  font-size: clamp(1.8rem, 3.3vw, 2.6rem);
+  line-height: 1.12;
   letter-spacing: -0.02em;
-  max-width: 15em;
+  max-width: 17em;
 }
-/* Two columns, not one: a single 30em paragraph in an 1136px section left
-   most of the width sitting empty. Splitting the argument's two halves side
-   by side uses the space and matches the page's dominant column rhythm. */
+/* Two columns, matching the page's dominant paired-card rhythm. */
 .closing-cols {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: var(--gutter);
 }
-.closing p { margin: 0; font-size: 1.02rem; color: var(--ink-soft); }
-.closing p strong { font-weight: 600; color: var(--ink); }
+.closing p { margin: 0; font-size: 1.08rem; color: var(--ink-soft); }
+.closing p strong { color: var(--ink); }
 
-@media (max-width: 720px) {
-  .closing-cols { grid-template-columns: 1fr; gap: 14px; }
+/* One takeaway per chapter, in the same 2 x 2 cards and with the same
+   chapter labels as the key figures at the top of the page, so the page
+   opens and closes on one structure. */
+.takeaways {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+  margin: 34px 0 0;
+  padding: 0;
+  list-style: none;
+}
+.takeaways li {
+  padding: 20px var(--card-pad) 22px;
+  background: var(--card);
+  border-radius: 4px;
+  font-size: 1.06rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.takeaways .n {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ochre-700);
+}
+.takeaways b {
+  display: block;
+  margin-bottom: 4px;
+  font-family: var(--serif);
+  font-size: 1.15rem;
+  font-weight: 650;
+  line-height: 1.25;
+  color: var(--ink);
 }
 
-/* ---------- footer, sources, metadata ------------------------------------- */
+/* ---------- sources, metadata, footer ------------------------------------- */
 
-/* The credits sit at the foot of the page rather than under the headline, so
-   nothing competes with the story for the top of the page. Two tight rows:
-   attribution, then the dataset URLs the rubric asks to be shown. Kept to a
-   footnote's weight rather than a section of its own. */
-footer {
-  margin: 48px calc(var(--gutter) * -1) 0;
-  padding: 6px var(--gutter) 7px;
-  background: var(--card);
+.sources { padding: 84px 0 0; }
+.sources h2 {
+  margin: 0 0 18px;
+  font-family: var(--serif);
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+.sources-cols {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+}
+.sources h3 {
+  margin: 0 0 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--muted);
+}
+.sources ul { margin: 0 0 22px; padding: 0; list-style: none; }
+.sources li {
+  margin: 0 0 10px;
+  font-size: 0.94rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.sources li b { color: var(--ink); }
+.sources a {
+  color: var(--teal-700);
+  overflow-wrap: anywhere;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+.sources a:hover, .sources a:focus-visible { color: var(--ochre-700); }
+.sources .notes li { color: var(--muted); }
+
+footer {
+  margin: 28px calc(var(--gutter) * -1) 0;
+  padding: 16px var(--gutter);
+  background: var(--card);
 }
 footer .byline {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
-  gap: 0 24px;
+  gap: 4px 28px;
   margin: 0;
-  font-size: 0.78rem;
-  line-height: 1.35;
+  font-size: 0.94rem;
+  color: var(--muted);
 }
-/* URLs are the link text itself, so the source is readable without hovering.
-   Middle of each path is elided to keep all eight on one row. */
-footer .srcs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0 12px;
-  margin: 2px 0 0;
-  /* 0.74rem = 12.2px. Must not go below 12px: the page's own minimum type
-     size applies to the footer too, and shrinking these to fit one row is
-     exactly the shortcut that rule exists to prevent. Two rows it is. */
-  font-size: 0.74rem;
-  line-height: 1.4;
-}
-footer .srcs a {
-  color: var(--slate-500);
-  text-decoration: none;
-}
-footer .srcs a:hover,
-footer .srcs a:focus-visible {
-  color: var(--accent-ink);
-  text-decoration: underline;
-}
+footer .byline b { color: var(--ink); }
 
 .viz-error {
   margin: 0;
   padding: 16px 18px;
   background: var(--slate-100);
   color: var(--ink-soft);
-  font-size: 0.86rem;
+  font-size: 0.9rem;
   line-height: 1.5;
 }
 .viz-error code {
@@ -353,28 +435,31 @@ footer .srcs a:focus-visible {
 
 /* Vega's bound inputs: make the season radios match the page, not the browser. */
 .viz form.vega-bindings {
-  font-family: "Inter", sans-serif;
-  font-size: 0.8rem;
-  color: var(--muted);
-  margin: 2px 0 8px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  margin: 4px 0 0;
 }
 .viz form.vega-bindings .vega-bind { display: inline-block; }
-.viz form.vega-bindings label { margin-right: 4px; }
-.viz form.vega-bindings input[type="radio"] { accent-color: var(--accent); }
+.viz form.vega-bindings .vega-bind-name { font-weight: 700; margin-right: 6px; }
+.viz form.vega-bindings label { margin-right: 6px; }
+.viz form.vega-bindings input[type="radio"] { accent-color: var(--ochre-600); }
+
+/* Vega tooltip: same typeface as the page. */
+#vg-tooltip-element { font-family: var(--sans); font-size: 16px; }
 
 /* ---------- narrower screens: collapse to fewer columns, never scroll ----- */
 
 @media (max-width: 1040px) {
-  .card, .card.wide, .card.third, .aside { grid-column: span 12; }
+  .grid { grid-template-columns: minmax(0, 1fr); }
 }
 
 @media (max-width: 720px) {
-  :root { --gutter: 20px; }
-  .contents { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .chapter-head { grid-template-columns: 1fr; gap: 10px; }
-  .masthead { padding-top: 56px; }
-  /* Credits wrap to two lines on a phone, so let the bar grow to fit. */
-  footer .byline { gap: 2px 18px; }
+  html { font-size: 17px; }
+  :root { --gutter: 18px; --card-pad: 18px; }
+  .masthead { padding-top: 52px; }
+  .closing-cols, .sources-cols { grid-template-columns: 1fr; gap: 14px; }
+  .contents, .takeaways { grid-template-columns: 1fr; }
 }
 
 @media (prefers-reduced-motion: reduce) {

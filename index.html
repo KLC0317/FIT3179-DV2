@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Australia grows far more food than it eats | FIT3179 Data Visualisation 2</title>
-<meta name="description" content="How Australia's food system produces, ships, eats and sustains: fourteen charts built with Vega-Lite from ABS, ABARES and FAO data.">
-<meta name="author" content="Monash University, FIT3179 Data Visualisation 2">
+<meta name="description" content="How Australia's food system grows, ships, eats and sustains: fourteen charts built with Vega-Lite from ABS, ABARES and FAO data.">
+<meta name="author" content="Kian Lok Chin">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%230f3f39'/%3E%3Cpath d='M16 6v20M16 11l5-3M16 11l-5-3M16 17l5-3M16 17l-5-3M16 23l5-3M16 23l-5-3' stroke='%239c6114' stroke-width='2' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
 <link rel="stylesheet" href="css/styles.css">
 
@@ -23,93 +23,104 @@
 
   <!-- ================================================================= -->
   <header class="masthead">
+    <p class="kicker">Australia's food system, from paddock to plate</p>
     <h1>Australia grows far more food<br>than it can possibly <em>eat</em></h1>
     <p class="standfirst measure">
-      This is one of the world's great farming countries. It harvests around
-      <strong>34 million tonnes of wheat</strong> in a good year and sells most
-      of it overseas. It is also the driest inhabited continent on Earth, and in
-      2023 <strong>one in eight Australian households</strong> ran short of food.
-      This is how those facts fit together.
+      Australia is one of the world's great farming countries. In 2024&#8288;&ndash;&#8288;25
+      it harvested almost <strong>35 million tonnes of wheat</strong>, and most
+      of it was sold overseas. It is also the driest inhabited continent on
+      Earth, and in 2023 <strong class="k-accent">more than one in eight
+      households</strong> could not be sure of having enough food. This page
+      follows the food from the paddock to the plate to show how those facts
+      fit together.
     </p>
   </header>
 
   <!-- ================================================================= -->
+  <!-- Contents: one key figure per chapter, so the four columns double as
+       the page's headline numbers. Each links down to its chapter. -->
   <nav class="contents" aria-label="Chapters">
     <a href="#grow">
-      <span class="t">Grow</span>
-      <span class="d">What comes off the paddock, and how unreliable it is</span>
+      <span class="n">01 &middot; Grow</span>
+      <span class="fig k-supply">34.8&nbsp;million</span>
+      <span class="d">tonnes of wheat sold from the 2024&#8288;&ndash;&#8288;25 harvest</span>
     </a>
     <a href="#move">
-      <span class="t">Move</span>
-      <span class="d">Where the wheat is grown and where in the world it goes</span>
+      <span class="n">02 &middot; Move</span>
+      <span class="fig k-supply">71%</span>
+      <span class="d">of farm production goes overseas (2022&#8288;&ndash;&#8288;23 to 2024&#8288;&ndash;&#8288;25 average)</span>
     </a>
     <a href="#eat">
-      <span class="t">Eat</span>
-      <span class="d">What Australians actually put on the plate</span>
+      <span class="n">03 &middot; Eat</span>
+      <span class="fig k-accent">13.2%</span>
+      <span class="d">of households faced food insecurity in 2023</span>
     </a>
     <a href="#sustain">
-      <span class="t">Sustain</span>
-      <span class="d">The water and the land it all runs on</span>
+      <span class="n">04 &middot; Sustain</span>
+      <span class="fig k-supply">68.3%</span>
+      <span class="d">of the nation's water was used by agriculture in 2023&#8288;&ndash;&#8288;24</span>
     </a>
   </nav>
 
   <!-- ================================================================= -->
   <section class="chapter" id="grow">
     <div class="chapter-head">
-        <h2>The harvest is huge, and it is never the same twice</h2>
-        <p class="measure">Australian cropping is built on winter rain. When the
-          rain arrives the country produces a staggering surplus. When it does
-          not, the harvest can halve in a single season.</p>
+      <p class="kicker">01 &middot; Grow: how much, and how reliably?</p>
+      <h2>The harvest is huge, and it is never the same twice</h2>
+      <p class="measure">Australian cropping runs on winter rain. When the
+        rain comes, the country produces a staggering surplus. When it fails,
+        the wheat crop can <strong>halve in a single season</strong>. Start
+        with sixty-four years of harvests.</p>
     </div>
 
     <div class="grid">
 
       <article class="card hero">
-        <h3>Sixty-four years of grains and oilseeds</h3>
-        <p class="sub">Tonnes harvested each year, stacked around a centre line:
-          <span class="k-wheat">wheat</span>,
-          <span class="k-barley">barley</span>,
-          <span class="k-canola">canola</span> and
-          <span class="k-other">other grains</span>.</p>
+        <h3>Sixty-four years of harvests: wheat dominates, canola arrives</h3>
+        <p class="sub">Million tonnes (Mt) harvested each year, stacked around a
+          centre line: <span class="k-wheat">wheat</span>,
+          <span class="k-barley">barley</span>, <span class="k-canola">canola</span>
+          and <span class="k-other">other grains</span>. Click a band to isolate
+          it.</p>
         <div class="viz" id="viz-streamgraph"></div>
-        <p class="finding">Canola did not meaningfully exist here fifty years
-          ago. Growers harvested <b>34,000&nbsp;tonnes in 1970</b> and
-          <b>6.4&nbsp;million tonnes in 2024</b>, turning a novelty into the
-          country's third grain crop.</p>
+        <p class="finding"><span class="k-canola">Canola</span> barely existed here fifty years ago. Growers
+          harvested <b>34,000&nbsp;tonnes in 1970</b> and <b>6.4&nbsp;million
+          tonnes in 2024</b>, making it the third-biggest crop on this chart,
+          behind only wheat and barley.</p>
       </article>
 
       <article class="card full">
-        <h3>Where the droughts are written</h3>
-        <p class="sub">Each cell is one crop in one year, against its own
-          eleven-year normal.</p>
+        <h3>Droughts cut through the winter crops all at once</h3>
+        <p class="sub">Each cell is one crop in one year, compared with its own
+          eleven-year normal: <span class="k-accent">ochre</span> is a short
+          harvest, <span class="k-supply">teal</span> a surplus.</p>
         <div class="viz" id="viz-matrix"></div>
-        <p class="finding">Drought shows up as ochre columns cutting through
-          every rain-fed crop at once, in
-          <b>1982, 1994, 2002, 2006 and 2019</b>. Irrigated sugar cane sits
-          almost unchanged through all five, which is what a secure water supply
-          looks like.</p>
+        <p class="finding">In each of the five drought years marked, wheat fell
+          <b class="k-accent">45&#8288;&ndash;&#8288;54% below its normal</b>, and most other winter crops fell
+          with it. Irrigated sugar cane barely changes colour, which is what a
+          secure water supply looks like.</p>
       </article>
 
       <article class="card">
-        <h3>How far a harvest can move in one year</h3>
-        <p class="sub">Year-on-year changes since 1962. The bar covers the
-          middle half of all years; dots are the rare extremes.</p>
+        <h3>A wheat crop can halve, then more than double</h3>
+        <p class="sub">Change on the previous year, 1962&#8288;&ndash;&#8288;2024. The box holds
+          the middle half of years, the line is the typical year, and dots are
+          rare extremes.</p>
         <div class="viz" id="viz-boxplot"></div>
-        <p class="finding">Wheat fell <b>58% in 2002</b> and then rose
-          <b>158% in 2003</b>. Sugar cane, grown under irrigation, almost never
-          moves more than a fifth.</p>
+        <p class="finding"><span class="k-wheat">Wheat</span> fell <b>58% in 2002</b>, then rose <b>158% in
+          2003</b>. Sugar cane, grown under irrigation, moved by more than a
+          fifth in only <b>4 of 63 years</b>.</p>
       </article>
 
       <article class="card">
-        <h3>What the harvest is worth</h3>
-        <p class="sub">Local value in 2024&ndash;25. Same crop colours as
-          above: <span class="k-wheat">wheat</span>,
-          <span class="k-barley">barley</span>,
-          <span class="k-canola">canola</span>,
-          <span class="k-other">others</span>.</p>
+        <h3>Wheat alone is worth almost half the crop</h3>
+        <p class="sub">Local value in 2024&#8288;&ndash;&#8288;25, grouped by crop type. Same
+          colours as above: <span class="k-wheat">wheat</span>,
+          <span class="k-barley">barley</span>, <span class="k-canola">canola</span>
+          and <span class="k-other">others</span>.</p>
         <div class="viz" id="viz-treemap"></div>
-        <p class="finding">Wheat alone was worth <b>$10.1&nbsp;billion</b>,
-          three times every pulse crop in the country put together.</p>
+        <p class="finding"><span class="k-wheat">Wheat</span> was worth <b>$10.1&nbsp;billion</b>, three times
+          as much as every pulse crop in the country put together.</p>
       </article>
 
     </div>
@@ -118,65 +129,84 @@
   <!-- ================================================================= -->
   <section class="chapter" id="move">
     <div class="chapter-head">
-        <h2>Grown in a narrow crescent, sold to the world</h2>
-        <p class="measure">Almost all of this wheat comes from a thin band of
-          country along the south and east. Most of it leaves again within
-          months.</p>
+      <p class="kicker">02 &middot; Move: where is it grown, and where does it go?</p>
+      <h2>Grown in a narrow crescent, sold to the world</h2>
+      <p class="measure">Almost all of that wheat comes from a thin band of
+        country along the south and east of the continent. Most of it leaves
+        again within months, and <strong>most of what leaves goes to
+        Asia</strong>.</p>
     </div>
 
     <div class="grid">
 
       <article class="card">
-        <h3>Which states work their land hardest</h3>
-        <p class="sub">A choropleth has to show a <b>rate</b>, so this divides
-          each state's harvest by its area.</p>
+        <h3>Victoria works its land hardest for wheat</h3>
+        <p class="sub">Tonnes of wheat per square kilometre of each state. A rate,
+          not a total, so big states do not look important just for being big.</p>
         <div class="viz" id="viz-choropleth"></div>
-        <p class="finding">Victoria is the most wheat-intensive state at
-          <b>18 tonnes per square kilometre</b>, against Western Australia's
-          <b>5</b>. The Northern Territory is grey because the ABS published no
-          figure for it.</p>
+        <p class="finding">Victoria produced <b class="k-wheat">18&nbsp;tonnes per square
+          kilometre</b> in 2024&#8288;&ndash;&#8288;25, against Western Australia's <b>5</b>.
+          The Northern Territory is grey because the Australian Bureau of
+          Statistics published no figure for it.</p>
       </article>
 
       <article class="card">
-        <h3>And how much that actually adds up to</h3>
-        <p class="sub">The same data as totals, where circle area carries the
-          quantity.</p>
+        <h3>&hellip;but New South Wales and Western Australia grow the most</h3>
+        <p class="sub">The same harvest as totals: circle area shows tonnes, with
+          <span class="k-wheat">New South Wales and Western Australia</span> in
+          teal. Change the season on either map and the other follows.</p>
         <div class="viz" id="viz-symbolmap"></div>
-        <p class="finding">Read the other way round, Western Australia sells
-          <b>three times more wheat</b> than Victoria. Neither map is wrong.
-          They answer different questions, which is why both are here.</p>
+        <p class="finding"><span class="k-wheat">Western Australia</span> sold <b>three times as much
+          wheat</b> as Victoria in 2024&#8288;&ndash;&#8288;25. Neither map is wrong: one shows
+          how hard the land is worked, the other how much is grown.</p>
       </article>
 
       <article class="card hero">
-        <h3>Where the wheat goes</h3>
+        <h3>Most of the wheat goes to Asia, and the biggest buyer is Indonesia</h3>
         <p class="sub">Great-circle routes to Australia's twelve largest wheat
-          markets in 2024.</p>
+          markets in 2024, which are shaded. Arrows point to the buyer, and line
+          width shows million tonnes (Mt). Hover over a route to isolate it.</p>
         <div class="viz" id="viz-flowmap"></div>
-        <p class="finding">The largest single customer is not China. It is
-          <b>Indonesia</b>, at <b>3.46&nbsp;million tonnes</b>, just ahead of
-          China on 3.23&nbsp;million. Nearly two-thirds of the trade stays
-          inside Asia.</p>
+        <p class="finding">The largest customer is not China but
+          <b class="k-accent">Indonesia</b>, at <b>3.46&nbsp;million tonnes</b>,
+          just ahead of China on 3.23&nbsp;million. Almost <b>three-quarters</b>
+          of Australia's wheat exports went to East and South-East Asia.</p>
       </article>
 
-      <article class="card wide">
-        <h3>The same two seasons, state by state</h3>
-        <p class="sub">Each line is one state between 2022&ndash;23 and
-          2024&ndash;25.</p>
+      <article class="card">
+        <h3>South Australia's harvest more than halved in two seasons</h3>
+        <p class="sub">Wheat sold by each state in 2022&#8288;&ndash;&#8288;23 and
+          2024&#8288;&ndash;&#8288;25. <span class="k-accent">South Australia</span> is
+          highlighted.</p>
         <div class="viz" id="viz-stateslope"></div>
-        <p class="finding">South Australia's harvest <b>more than halved</b>,
-          from 6.8 to 2.9&nbsp;million tonnes, while Western Australia gave up
-          only about a sixth of its crop.</p>
+        <p class="finding"><span class="k-accent">South Australia</span> fell from <b>6.8 to 2.9&nbsp;million
+          tonnes</b>, while Western Australia gave up only about a sixth of its
+          crop. A national total would hide both stories.</p>
       </article>
 
-      <aside class="aside">
-        <h4>Why so much leaves</h4>
-        <span class="stat">71%</span>
-        <p>of everything Australian agriculture produces is exported, averaged
-          across 2022&ndash;23 to 2024&ndash;25.</p>
-        <p>A country of 27&nbsp;million people cannot eat a 34&nbsp;million
-          tonne wheat crop. The surplus is the entire point of the system, and
-          it is why a dry year in New South Wales is felt in Jakarta and
-          Manila.</p>
+      <!-- A callout card built from the same four rows as a chart card
+           (heading, subtitle, body, finding), so every row lines up with
+           the slope chart beside it. -->
+      <aside class="card aside">
+        <h3>Why so much of it leaves</h3>
+        <p class="sub">What Australian farms produce, and what it earns
+          overseas.</p>
+        <div class="stats">
+          <div class="stat-block">
+            <span class="stat k-supply">71%</span>
+            <p>of everything Australian farms produce is exported, by volume,
+              averaged over 2022&#8288;&ndash;&#8288;23 to 2024&#8288;&ndash;&#8288;25.</p>
+          </div>
+          <div class="stat-block">
+            <span class="stat k-supply">$75.8&nbsp;billion</span>
+            <p>earned from agriculture, fisheries and forestry exports in
+              2024&#8288;&ndash;&#8288;25.</p>
+          </div>
+        </div>
+        <p class="finding">A country of 27&nbsp;million people cannot eat a
+          35-million-tonne wheat crop. The surplus is the point of the
+          system, which is why a dry year in New South Wales is felt in Jakarta
+          and Manila.</p>
       </aside>
 
     </div>
@@ -185,43 +215,48 @@
   <!-- ================================================================= -->
   <section class="chapter" id="eat">
     <div class="chapter-head">
-        <h2>Abundance on the paddock is not abundance on the plate</h2>
-        <p class="measure">The 2023 National Nutrition and Physical Activity
-          Survey asked Australians what they actually ate. The answer has very
-          little to do with how much the country grows.</p>
+      <p class="kicker">03 &middot; Eat: what ends up on the plate?</p>
+      <h2>Abundance on the paddock is not abundance on the plate</h2>
+      <p class="measure">The 2023 National Nutrition and Physical Activity
+        Survey asked Australians what they actually eat. The answer has very
+        little to do with how much the country grows, and <strong>some
+        households still go without</strong>.</p>
     </div>
 
     <div class="grid">
 
       <article class="card hero">
-        <h3>How many of us eat the recommended amount</h3>
-        <p class="sub">Each icon is one person in a hundred; a filled icon met
-          the guideline.</p>
+        <h3>Fewer than 5 in 100 Australians eat enough vegetables</h3>
+        <p class="sub">Each figure is one person in a hundred (2023). A
+          <span class="k-supply">teal</span> figure ate the recommended daily
+          serves of that food group; a <span class="k-other">grey</span> one did
+          not.</p>
         <div class="viz" id="viz-dietwaffle"></div>
-        <p class="finding">Fewer than <b>five people in a hundred</b> eat the
-          recommended vegetables, legumes and beans. Not one of the four food
-          groups reaches even a third of the population.</p>
+        <p class="finding">Not one of the four food groups is eaten in the
+          recommended amount by even <b>a third</b> of Australians. Vegetables
+          are the worst: just <b>4.3%</b> eat enough.</p>
       </article>
 
       <article class="card">
-        <h3>Discretionary food is losing ground</h3>
-        <p class="sub">Share of daily energy from confectionery, soft drink,
-          pastries and alcohol.</p>
+        <h3>Discretionary food is losing ground, slowly</h3>
+        <p class="sub">Share of daily energy from foods such as confectionery,
+          soft drink, pastries and alcohol, for people aged 2 and over.</p>
         <div class="viz" id="viz-discretionary"></div>
-        <p class="finding">Down <b>4.1 percentage points</b> in eleven years,
-          which is real progress. It still leaves <b>roughly a third</b> of
-          everything eaten in the discretionary column.</p>
+        <p class="finding">The share fell <b class="k-accent">4.1 percentage points</b> in eleven
+          years, which is real progress. It still leaves <b>almost a third</b> of all
+          energy coming from discretionary food.</p>
       </article>
 
       <article class="card">
-        <h3>And some households simply go without</h3>
-        <p class="sub">Each house icon is one Australian household in a
-          hundred.</p>
+        <h3>More than one in eight households faced food insecurity</h3>
+        <p class="sub">Each house is one Australian household in a hundred (2023).
+          <span class="k-accent">Ochre</span> houses experienced food
+          insecurity.</p>
         <div class="viz" id="viz-insecurity"></div>
-        <p class="finding"><b>13.2% of households</b> ran short of food in the
-          same year the country exported <b>$75.8&nbsp;billion</b> of farm
-          produce. Growing enough food and everyone having enough food are two
-          different problems.</p>
+        <p class="finding">In 2023, <b class="k-accent">13.2% of households</b> were food insecure,
+          while farm, fishery and forestry exports earned <b>$73.3&nbsp;billion</b>
+          in 2023&#8288;&ndash;&#8288;24. Growing enough food and everyone having enough food
+          are two different problems.</p>
       </article>
 
     </div>
@@ -230,56 +265,53 @@
   <!-- ================================================================= -->
   <section class="chapter" id="sustain">
     <div class="chapter-head">
-        <h2>All of it rests on water that may not arrive</h2>
-        <p class="measure">Every tonne in this story was grown with rainfall and
-          irrigation on the driest inhabited continent. That is the constraint
-          the whole system is built around.</p>
+      <p class="kicker">04 &middot; Sustain: what does it cost?</p>
+      <h2>All of it rests on water that may not arrive</h2>
+      <p class="measure">Every tonne in this story was grown with rain and
+        irrigation on the driest inhabited continent. Water is the constraint
+        the whole system is built around, and <strong>agriculture uses most of
+        it</strong>.</p>
     </div>
 
     <div class="grid">
 
-      <article class="card wide">
-        <h3>Rain falls, water gets used</h3>
-        <p class="sub">Each point is one financial year, joined in time
-          order.</p>
-        <div class="viz" id="viz-water"></div>
-        <p class="finding">The path collapses to the bottom left in
-          <b>2019&ndash;20</b>, which tied 2018&ndash;19 as the driest year at
-          347&nbsp;mm but used the least water of the decade by a wide margin,
-          <b>12,148&nbsp;gigalitres</b>. By 2023&ndash;24 both had climbed
-          back.</p>
-      </article>
-
-      <aside class="aside">
-        <h4>The trade-off in one number</h4>
-        <span class="stat">31&times;</span>
-        <p>Agriculture takes <b>68.3%</b> of Australia's water while producing
-          <b>2.2%</b> of its GDP.</p>
-        <p>That is not automatically a bad bargain. Food is not optional and
-          export income is real. But it is the number every argument about
-          Australian water policy eventually comes back to.</p>
-      </aside>
-
-      <article class="card">
-        <h3>Its footprint against its economic weight</h3>
-        <p class="sub">Each bar runs from agriculture's 2.2% share of GDP to its
-          share of a <b>different</b> national total.</p>
+      <article class="card full">
+        <h3>Agriculture's footprint is far bigger than its economic weight</h3>
+        <p class="sub">Each dumbbell runs from agriculture's 2.2% share of the
+          economy (GDP) to its share of another national total. <span class="k-supply">Natural
+          resources</span> are in teal.</p>
         <div class="viz" id="viz-footprint"></div>
-        <p class="finding">Agriculture uses <b>31 times</b> more of the nation's
-          water, and <b>26 times</b> more of its land, than its share of the
-          economy would suggest. Its share of jobs, by contrast, sits almost
-          exactly on its share of GDP.</p>
+        <p class="finding">Agriculture uses <b class="k-supply">31 times</b> more of the nation's
+          water, and <b class="k-supply">26 times</b> more of its land, than its share of the
+          economy would suggest, while its share of jobs sits almost exactly on
+          its share of GDP. That is not automatically a bad bargain: food is
+          not optional, and export income is real.</p>
       </article>
 
       <article class="card">
-        <h3>Ten years of the water account</h3>
-        <p class="sub">Each line is one year across four measures, each axis on
-          its own scale.</p>
+        <h3>Water use follows last year's rain</h3>
+        <p class="sub">Rainfall (top) and water used (bottom) each year.
+          <span class="k-accent">Ochre</span> marks the driest years and the low
+          that followed; <span class="k-supply">teal</span>, the wettest year and
+          the peak that followed.</p>
+        <div class="viz" id="viz-water"></div>
+        <p class="finding">Two dry years in a row ended with the decade's lowest
+          water use, <b class="k-accent">12,148&nbsp;gigalitres</b> in 2019&#8288;&ndash;&#8288;20. The year
+          after the wettest year used the most, <b class="k-supply">17,223&nbsp;gigalitres</b>. The likely
+          reason: much of the rain is used only after it has filled the dams
+          that irrigation draws on.</p>
+      </article>
+
+      <article class="card">
+        <h3>Household water use drifts down, wet years or dry</h3>
+        <p class="sub">Each line is one year across four measures, each axis
+          running from its own ten-year low to high. Hover over a line to
+          follow one year.</p>
         <div class="viz" id="viz-parallel"></div>
-        <p class="finding">National water use swings with the rain, but
-          household use slides quietly down the frame year after year:
-          <b>187 kilolitres</b> per household in 2014&ndash;15, <b>174</b> by
-          2023&ndash;24, regardless of how wet the year was.</p>
+        <p class="finding">Total water use and water per dollar of output swing
+          together from year to year, but household use has drifted down, from
+          <b>187&nbsp;kilolitres</b> per household in 2014&#8288;&ndash;&#8288;15 to
+          <b>174</b> in 2023&#8288;&ndash;&#8288;24.</p>
       </article>
 
     </div>
@@ -287,40 +319,109 @@
 
   <!-- ================================================================= -->
   <section class="closing">
+    <p class="kicker">Conclusion</p>
     <h2>So why does a country this productive still have hungry households?</h2>
     <div class="closing-cols">
-      <p class="measure">Because the two things are barely connected.
+      <p class="measure">The two things are barely connected.
         Australia's food system is built to produce a surplus and sell it:
-        <strong>71% of what it grows leaves the country</strong>, and the
-        harvest that stays is priced on the same world market as the harvest
-        that goes. A record crop in Western Australia does not lower anyone's
-        grocery bill in western Sydney.</p>
-      <p class="measure">What the fourteen charts have in common is
+        <strong>71% of what its farms produce leaves the country</strong>, and
+        the food that stays is priced on the same world market as the food that
+        goes. A record crop in Western Australia does not lower anyone's grocery
+        bill in western Sydney.</p>
+      <p class="measure">What the fourteen charts share is
         <strong>variability</strong>. The harvest halves and doubles; the rain
-        arrives or it does not. A system with that much natural volatility,
-        feeding <strong>68.3% of the nation's water</strong> into
-        <strong>2.2% of its economy</strong>, does not guarantee anybody a
-        meal. It just makes a great many of them possible, somewhere else.</p>
+        arrives or it does not. A system that puts <strong>68.3% of the
+        nation's water</strong> into <strong>2.2% of its economy</strong>, under
+        that much natural volatility, does not guarantee anyone a meal. It makes
+        a great many meals possible, mostly somewhere else.</p>
     </div>
+    <!-- One takeaway per chapter, in the same 2 x 2 cards and the same
+         chapter labels as the key figures at the top: the page opens and
+         closes on one structure. -->
+    <ol class="takeaways">
+      <li><span class="n">01 &middot; Grow</span>
+        <b>The harvest is only as reliable as the rain.</b> Five droughts in
+        forty years each cut the wheat crop roughly in half.</li>
+      <li><span class="n">02 &middot; Move</span>
+        <b>Australia grows for the world.</b> Most of the wheat is exported,
+        and almost three-quarters of that goes to East and South-East Asia.</li>
+      <li><span class="n">03 &middot; Eat</span>
+        <b>Plenty of food is not the same as enough food.</b> More than one
+        household in eight was food insecure in 2023.</li>
+      <li><span class="n">04 &middot; Sustain</span>
+        <b>It all runs on water.</b> Agriculture uses 68.3% of the nation's
+        water, and how much it uses follows the previous year's rain.</li>
+    </ol>
   </section>
 
   <!-- ================================================================= -->
+  <section class="sources" aria-labelledby="sources-title">
+    <h2 id="sources-title">Sources and notes</h2>
+    <div class="sources-cols">
+      <div>
+        <h3>Data</h3>
+        <ul>
+          <li><b>Australian Bureau of Statistics</b>, <i>Australian Agriculture:
+            Broadacre Crops, 2024&#8288;&ndash;&#8288;25</i>. Crop production and value; wheat
+            by state, 2022&#8288;&ndash;&#8288;23 to 2024&#8288;&ndash;&#8288;25.
+            <a href="https://www.abs.gov.au/statistics/industry/agriculture/australian-agriculture-broadacre-crops/2024-25" target="_blank" rel="noopener">abs.gov.au/statistics/industry/agriculture/australian-agriculture-broadacre-crops/2024-25</a></li>
+          <li><b>Australian Bureau of Statistics</b>, <i>Water Account, Australia,
+            2023&#8288;&ndash;&#8288;24</i>. Rainfall and water use, 2014&#8288;&ndash;&#8288;15 to
+            2023&#8288;&ndash;&#8288;24.
+            <a href="https://www.abs.gov.au/statistics/environment/environmental-accounts/water-account-australia/2023-24" target="_blank" rel="noopener">abs.gov.au/statistics/environment/environmental-accounts/water-account-australia/2023-24</a></li>
+          <li><b>Australian Bureau of Statistics</b>, <i>National Nutrition and
+            Physical Activity Survey, 2023</i>. Dietary guidelines, discretionary
+            food, food insecurity.
+            <a href="https://www.abs.gov.au/statistics/health/food-and-nutrition/national-nutrition-and-physical-activity-survey/2023" target="_blank" rel="noopener">abs.gov.au/statistics/health/food-and-nutrition/national-nutrition-and-physical-activity-survey/2023</a></li>
+          <li><b>ABARES</b>, <i>Snapshot of Australian Agriculture 2026</i>. Export
+            share and value, agriculture's share of GDP, jobs, water and land.
+            <a href="https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture" target="_blank" rel="noopener">agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture</a></li>
+          <li><b>Food and Agriculture Organization of the United Nations</b>,
+            <i>FAOSTAT Crops and Livestock Products</i>. Australian crop
+            production, 1961&#8288;&ndash;&#8288;2024.
+            <a href="https://www.fao.org/faostat/en/#data/QCL" target="_blank" rel="noopener">fao.org/faostat/en/#data/QCL</a></li>
+          <li><b>Food and Agriculture Organization of the United Nations</b>,
+            <i>FAOSTAT Detailed Trade Matrix</i>. Australian wheat exports by
+            destination, 2024.
+            <a href="https://www.fao.org/faostat/en/#data/TM" target="_blank" rel="noopener">fao.org/faostat/en/#data/TM</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Maps</h3>
+        <ul>
+          <li><b>State boundaries</b> from the <i>australian-states</i>
+            repository (derived from the ABS Australian Statistical Geography
+            Standard), simplified and converted to TopoJSON with mapshaper.
+            <a href="https://github.com/rowanhogan/australian-states" target="_blank" rel="noopener">github.com/rowanhogan/australian-states</a></li>
+          <li><b>Natural Earth</b> 1:110m countries, oceans and 30&deg;
+            graticules (public domain), as used in the FIT3179 Vega-Lite studio
+            examples.
+            <a href="https://www.naturalearthdata.com" target="_blank" rel="noopener">naturalearthdata.com</a></li>
+        </ul>
+        <h3>Notes</h3>
+        <ul class="notes">
+          <li>The state maps use a conic equal-area projection, so state sizes
+            are compared fairly; the world map uses the Equal Earth
+            projection.</li>
+          <li>Financial years run from July to June. FAO reports Australian
+            crops on a calendar year that matches the start of the financial
+            year; where FAO and ABS overlap, the figures agree.</li>
+          <li>Blank cells in ABS tables stay blank: the maps show them as
+            &ldquo;no figure&rdquo;, never as zero.</li>
+          <li>Pictograms were drawn for this page. Chart specifications are in
+            <a href="https://github.com/KLC0317/FIT3179-DV2/tree/main/js/specs" target="_blank" rel="noopener">js/specs</a>
+            of the project repository.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <p class="byline">
       <span>By <b>Kian Lok Chin</b></span>
-      <span>Monash University, <b>September 2026</b></span>
-      <span>Data: <b>ABS, ABARES and FAO</b></span>
-      <span>Built with <b>Vega-Lite</b></span>
-    </p>
-    <p class="srcs">
-      <a href="https://www.abs.gov.au/statistics/industry/agriculture/australian-agriculture-broadacre-crops/2024-25" target="_blank" rel="noopener">abs.gov.au/&hellip;/broadacre-crops</a>
-      <a href="https://www.abs.gov.au/statistics/environment/environmental-accounts/water-account-australia/2023-24" target="_blank" rel="noopener">abs.gov.au/&hellip;/water-account</a>
-      <a href="https://www.abs.gov.au/statistics/health/food-and-nutrition/national-nutrition-and-physical-activity-survey/2023" target="_blank" rel="noopener">abs.gov.au/&hellip;/nutrition-survey</a>
-      <a href="https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture" target="_blank" rel="noopener">agriculture.gov.au/&hellip;/snapshot</a>
-      <a href="https://www.fao.org/faostat/en/#data/QCL" target="_blank" rel="noopener">fao.org/faostat/&hellip;/QCL</a>
-      <a href="https://www.fao.org/faostat/en/#data/TM" target="_blank" rel="noopener">fao.org/faostat/&hellip;/TM</a>
-      <a href="https://github.com/rowanhogan/australian-states" target="_blank" rel="noopener">github.com/&hellip;/australian-states</a>
-      <a href="https://github.com/topojson/world-atlas" target="_blank" rel="noopener">github.com/&hellip;/world-atlas</a>
+      <span>FIT3179 Data Visualisation 2, Monash University</span>
+      <span>Published <b>October 2026</b></span>
+      <span>Built with <b>Vega-Lite 5</b></span>
     </p>
   </footer>
 

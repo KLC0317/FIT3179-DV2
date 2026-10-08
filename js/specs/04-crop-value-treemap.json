@@ -1,8 +1,17 @@
 {
   "$schema": "https://vega.github.io/schema/vega/v5.json",
+  "title": {
+    "text": "Wheat alone is worth almost half the crop",
+    "subtitle": "Local value of broadacre crops, 2024–25, grouped by crop type."
+  },
   "width": 600,
-  "height": 380,
-  "padding": 0,
+  "height": 325,
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 1,
+    "bottom": 0
+  },
   "background": null,
   "autosize": {
     "type": "none",
@@ -32,7 +41,7 @@
           "method": "squarify",
           "round": true,
           "paddingInner": 3,
-          "paddingTop": 34,
+          "paddingTop": 46,
           "size": [
             {
               "signal": "width"
@@ -51,6 +60,18 @@
         {
           "type": "filter",
           "expr": "datum.depth === 2"
+        },
+        {
+          "type": "joinaggregate",
+          "fields": [
+            "value"
+          ],
+          "ops": [
+            "sum"
+          ],
+          "as": [
+            "grand"
+          ]
         }
       ]
     },
@@ -105,7 +126,17 @@
       "transform": [
         {
           "type": "filter",
-          "expr": "(datum.x1-datum.x0) > 58 && (datum.y1-datum.y0) > 34"
+          "expr": "(datum.x1-datum.x0) > 68 && (datum.y1-datum.y0) > 54"
+        }
+      ]
+    },
+    {
+      "name": "hero",
+      "source": "leaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.name === 'Wheat'"
         }
       ]
     }
@@ -120,7 +151,7 @@
       "encode": {
         "enter": {
           "stroke": {
-            "value": "#fbfaf6"
+            "value": "#fefdf9"
           },
           "strokeWidth": {
             "value": 2
@@ -140,10 +171,10 @@
             "field": "y1"
           },
           "fill": {
-            "signal": "datum.name === 'Wheat' ? '#0f3f39' : datum.name === 'Barley' ? '#33887c' : datum.name === 'Canola' ? '#bc801d' : '#c3cac5'"
+            "signal": "datum.name === 'Wheat' ? '#0f3f39' : datum.name === 'Barley' ? '#3e9588' : datum.name === 'Canola' ? '#7461a8' : '#c3cac5'"
           },
           "tooltip": {
-            "signal": "{'Crop': datum.name, 'Type': datum.crop_type, 'Local value 2024-25': '$' + format(datum.value, ',.0f') + 'm'}"
+            "signal": "{'Crop': datum.name, 'Type': datum.crop_type, 'Local value 2024–25': '$' + format(datum.value, ',.0f') + 'm', 'Share of all crops': format(datum.value / datum.grand, '.1%')}"
           }
         }
       }
@@ -159,22 +190,22 @@
             "signal": "datum.x0 + 10"
           },
           "y": {
-            "signal": "datum.y0 + 20"
+            "signal": "datum.y0 + 23"
           },
           "text": {
             "field": "name"
           },
           "fill": {
-            "signal": "datum.name === 'Wheat' ? '#ffffff' : '#161f1b'"
+            "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
           },
           "font": {
-            "value": "Inter"
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 12
+            "value": 16
           },
           "fontWeight": {
-            "value": 600
+            "value": 700
           },
           "limit": {
             "signal": "datum.x1 - datum.x0 - 18"
@@ -193,22 +224,53 @@
             "signal": "datum.x0 + 10"
           },
           "y": {
-            "signal": "datum.y0 + 37"
+            "signal": "datum.y0 + 45"
           },
           "text": {
             "signal": "'$' + format(datum.value/1000, '.2f') + 'b'"
           },
           "fill": {
-            "signal": "datum.name === 'Wheat' ? '#ffffff' : '#161f1b'"
-          },
-          "fillOpacity": {
-            "value": 0.85
+            "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
           },
           "font": {
-            "value": "Inter"
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 12
+            "value": 16
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 18"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "from": {
+        "data": "hero"
+      },
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 10"
+          },
+          "y": {
+            "signal": "datum.y1 - 14"
+          },
+          "text": {
+            "signal": "format(datum.value / datum.grand, '.0%') + ' of all crop value'"
+          },
+          "fill": {
+            "value": "#ffffff"
+          },
+          "font": {
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
+          },
+          "fontSize": {
+            "value": 16
+          },
+          "fontWeight": {
+            "value": 600
           },
           "limit": {
             "signal": "datum.x1 - datum.x0 - 18"
@@ -258,7 +320,7 @@
             "signal": "datum.x0 + 8"
           },
           "y": {
-            "signal": "datum.y0 + 16"
+            "signal": "datum.y0 + 19"
           },
           "text": {
             "signal": "upper(datum.name)"
@@ -267,10 +329,10 @@
             "value": "#333e38"
           },
           "font": {
-            "value": "Inter"
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 12
+            "value": 15
           },
           "fontWeight": {
             "value": 700
@@ -292,7 +354,7 @@
             "signal": "datum.x0 + 8"
           },
           "y": {
-            "signal": "datum.y0 + 30"
+            "signal": "datum.y0 + 38"
           },
           "text": {
             "signal": "'$' + format(datum.total/1000, '.2f') + 'b total'"
@@ -301,10 +363,10 @@
             "value": "#57625b"
           },
           "font": {
-            "value": "Inter"
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 12
+            "value": 15
           },
           "fontWeight": {
             "value": 400

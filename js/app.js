@@ -22,9 +22,9 @@
     { el: "viz-symbolmap",     spec: "06-wheat-symbol-map.json"        },
     { el: "viz-flowmap",       spec: "07-wheat-flow-map.json"          },
     { el: "viz-stateslope",    spec: "08-state-slope.json"             },
-    { el: "viz-dietwaffle",    spec: "09-diet-waffle.json", facet: 2     },
+    { el: "viz-dietwaffle",    spec: "09-diet-waffle.json", facet: true  },
     { el: "viz-discretionary", spec: "10-discretionary-slope.json"     },
-    { el: "viz-water",         spec: "11-water-connected-scatter.json" },
+    { el: "viz-water",         spec: "11-water-rain-timeline.json"     },
     { el: "viz-footprint",     spec: "12-footprint-dumbbell.json"      },
     { el: "viz-parallel",      spec: "13-water-parallel.json"          },
     { el: "viz-insecurity",    spec: "14-food-insecurity-waffle.json"  }
@@ -53,19 +53,18 @@
       '<code>' + file + '</code> and the files in <code>data/</code>.</p>';
   }
 
-  /* Size one small multiple (a 10x10 icon grid) so the whole faceted row
-     fills its card edge to edge, not just a fraction of it. The mark is a
-     text glyph, so the tunable is fontSize, not the "size" (area) property a
-     square or circle mark would use. Only a floor is enforced (so icons never
-     shrink past legibility on a narrow phone width) — no ceiling, because
-     capping childW well below the card's actual width is exactly what left a
-     few hundred pixels of blank space on the right of this chart before. */
-  function sizeFacet(s, columns, childW) {
-    childW = Math.max(170, childW);
+  /* Size one small multiple (a block of pictograms, usermeta.grid columns by
+     rows) to a given panel width. The mark is an SVG-path symbol, so the
+     tunable is its "size" - the AREA of the symbol in square pixels - set
+     from the width of one grid step. Only a floor is enforced, so the
+     pictograms never shrink past legibility on a narrow screen. */
+  function sizeFacet(s, childW) {
+    var grid = (s.usermeta && s.usermeta.grid) || [10, 10];
+    childW = Math.max(140, childW);
     s.spec.width = childW;
-    s.spec.height = Math.round(childW * 1.06);
-    var side = (childW / 10) * 0.86;          // ten icons across, with air
-    s.spec.mark.fontSize = Math.round(side);
+    s.spec.height = Math.round(childW * grid[1] / grid[0]);
+    var step = childW / grid[0];              // one person per step
+    s.spec.mark.size = Math.round(Math.pow(step * 0.8, 2));
     return childW;
   }
 
@@ -86,12 +85,32 @@
     if (svgW <= cardW) return Promise.resolve(result);
 
     var overflow = svgW - cardW;
-    var next = childW - Math.ceil(overflow / chart.facet) - 3;
+    var next = childW - Math.ceil(overflow / s.columns) - 3;
     if (next >= childW || next < 100) return Promise.resolve(result);
 
-    sizeFacet(s, chart.facet, next);
+    sizeFacet(s, next);
     return vegaEmbed(el, s, EMBED_OPTIONS).then(function (r) {
       return fitFacet(el, s, chart, next, r, pass + 1);
+    });
+  }
+
+  /* Every Vega-Lite chart is laid out with autosize "pad", so its SVG grows to
+     hold everything drawn outside the plot: the label column, direct labels,
+     annotations. The plot is given a first-guess width (the card width minus
+     the gutters the spec declares in usermeta.gutter), the real SVG width is
+     measured, and the plot is corrected by the difference until the chart's
+     edges land exactly on the card's. Two passes is typical. (Vega's own
+     fit-to-width makes one pass, which under-measured labels that hang off
+     points inside the plot and clipped them.) */
+  function fitToCard(el, s, setWidth, plotW, result, pass) {
+    var svg = el.querySelector("svg");
+    if (!svg || pass > 5) return Promise.resolve(result);
+    var diff = cardWidth(el) - svg.getBoundingClientRect().width;
+    if (Math.abs(diff) < 1) return Promise.resolve(result);
+    var next = Math.floor(plotW + diff);
+    setWidth(next);
+    return vegaEmbed(el, s, EMBED_OPTIONS).then(function (r) {
+      return fitToCard(el, s, setWidth, next, r, pass + 1);
     });
   }
 
@@ -116,15 +135,38 @@
         // file so each specification still reads correctly on its own.
         delete s.title;
 
-        if (!chart.facet) {
+        // A plain Vega spec (the treemap) draws at exactly the width given.
+        if (s.$schema && s.$schema.indexOf("vega-lite") < 0) {
           s.width = cardWidth(el);
           return vegaEmbed(el, s, EMBED_OPTIONS);
         }
 
-        var gap = s.spacing || 22;
+        if (!chart.facet) {
+          var setWidth = s.vconcat
+            ? function (w) { s.vconcat.forEach(function (v) { v.width = w; }); }
+            : function (w) { s.width = w; };
+          var gutter = (s.usermeta && s.usermeta.gutter) || [0, 0];
+          var plotW = cardWidth(el) - gutter[0] - gutter[1];
+          setWidth(plotW);
+          return vegaEmbed(el, s, EMBED_OPTIONS).then(function (result) {
+            return fitToCard(el, s, setWidth, plotW, result, 1);
+          });
+        }
+
+        // Two panels per row. On a two-column page the gap between them is
+        // exactly the gap between two half-width cards' text (the gutter
+        // plus both cards' padding), so the second panel starts on the same
+        // vertical line as every right-hand card above and below it.
+        var css = getComputedStyle(document.documentElement);
+        var gap = stacked()
+          ? 30
+          : parseFloat(css.getPropertyValue("--gutter")) +
+            2 * parseFloat(css.getPropertyValue("--card-pad"));
+        var cols = cardWidth(el) >= 520 ? 2 : 1;
+        s.columns = cols;
+        s.spacing = { row: 22, column: gap };
         var childW = sizeFacet(
-          s, chart.facet,
-          Math.floor((cardWidth(el) - gap * (chart.facet - 1)) / chart.facet));
+          s, Math.floor((cardWidth(el) - gap * (cols - 1)) / cols));
 
         return vegaEmbed(el, s, EMBED_OPTIONS).then(function (result) {
           return fitFacet(el, s, chart, childW, result);
@@ -159,9 +201,40 @@
     bind(vb, va);
   }
 
+  /* True when the page has collapsed to one column (matches the CSS). */
+  function stacked() {
+    return window.matchMedia("(max-width: 1040px)").matches;
+  }
+
+  /* The plot area of a single-view chart: Vega draws its frame's background
+     exactly over the data rectangle. */
+  function plotRect(svg) {
+    var bg = svg && svg.querySelector(
+      "g.mark-group.role-frame.root > g > path.background");
+    return bg ? bg.getBoundingClientRect() : null;
+  }
+
+  /* A callout card sits beside a chart. Once the chart is drawn, the
+     callout's figures are pinned to that chart's plot area: the first starts
+     on the plot's top edge and the last ends on its baseline, so the two
+     cards share those horizontal lines as well as their card edges. */
+  function alignCallouts() {
+    document.querySelectorAll(".card.aside .stats").forEach(function (stats) {
+      stats.style.paddingTop = stats.style.paddingBottom = "";
+      if (stacked()) return;
+      var partner = stats.closest(".card").previousElementSibling;
+      var plot = plotRect(partner && partner.querySelector(".viz svg"));
+      if (!plot) return;
+      var box = stats.getBoundingClientRect();
+      stats.style.paddingTop = Math.max(0, plot.top - box.top) + "px";
+      stats.style.paddingBottom = Math.max(0, box.bottom - plot.bottom) + "px";
+    });
+  }
+
   function renderAll() {
     return Promise.all(CHARTS.map(render)).then(function () {
       linkSeasonSignal("viz-choropleth", "viz-symbolmap");
+      alignCallouts();
     });
   }
 
@@ -175,9 +248,18 @@
     resizeTimer = setTimeout(renderAll, 220);
   });
 
+  /* Vega measures label widths when it lays a chart out, so wait for the
+     web fonts first; otherwise annotations are placed using the fallback
+     font's widths and drift once the real font arrives. */
+  function start() {
+    var fontsReady = document.fonts && document.fonts.ready
+      ? document.fonts.ready : Promise.resolve();
+    fontsReady.then(renderAll, renderAll);
+  }
+
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", renderAll);
+    document.addEventListener("DOMContentLoaded", start);
   } else {
-    renderAll();
+    start();
   }
 })();

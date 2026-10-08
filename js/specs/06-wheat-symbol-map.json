@@ -1,20 +1,26 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 390,
+  "width": 520,
+  "height": 380,
   "autosize": {
-    "type": "fit-x",
+    "type": "pad",
     "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      0,
+      0
+    ]
   },
   "config": {
     "background": null,
-    "font": "Inter",
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
     "axis": {
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#57625b",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
       "titleColor": "#333e38",
       "titlePadding": 10,
@@ -30,15 +36,15 @@
       "orient": "top",
       "direction": "horizontal",
       "titleAnchor": "start",
-      "labelFont": "Inter",
-      "labelFontSize": 12,
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
       "labelColor": "#333e38",
-      "titleFont": "Inter",
-      "titleFontSize": 12,
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
       "titleFontWeight": 600,
-      "titleColor": "#57625b",
+      "titleColor": "#333e38",
       "symbolStrokeWidth": 0,
-      "offset": 6,
+      "offset": 8,
       "titlePadding": 6,
       "labelLimit": 240,
       "rowPadding": 4
@@ -47,27 +53,37 @@
       "stroke": null
     },
     "text": {
-      "font": "Inter",
-      "fontSize": 12
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
     },
     "title": {
-      "font": "Noto Serif",
-      "fontSize": 14,
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
       "anchor": "start",
       "color": "#161f1b",
       "fontWeight": 600,
       "dy": -6,
-      "subtitleFont": "Inter",
-      "subtitleFontSize": 12,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
       "subtitleColor": "#57625b",
       "subtitlePadding": 4,
-      "subtitleLineHeight": 16
+      "subtitleLineHeight": 17
     }
   },
   "title": {
-    "text": "...and how much wheat that actually adds up to",
-    "subtitle": "Circle area is proportional to tonnes sold. Totals belong on symbols, never on a choropleth.",
+    "text": "...but New South Wales and Western Australia grow the most",
+    "subtitle": "Circle area is proportional to tonnes of wheat sold. Totals belong on symbols, never on a choropleth.",
     "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 5,
+    "bottom": 5
+  },
+  "view": {
+    "fill": "#d6e3e9",
+    "stroke": null
   },
   "params": [
     {
@@ -81,9 +97,9 @@
           "2024_25"
         ],
         "labels": [
-          "2022-23  ",
-          "2023-24  ",
-          "2024-25"
+          "2022–23  ",
+          "2023–24  ",
+          "2024–25"
         ],
         "name": "Season  "
       }
@@ -103,16 +119,16 @@
   "layer": [
     {
       "data": {
-        "url": "data/au-states.geojson",
+        "url": "data/au-states.json",
         "format": {
-          "type": "json",
-          "property": "features"
+          "type": "topojson",
+          "feature": "austates"
         }
       },
       "mark": {
         "type": "geoshape",
-        "fill": "#eaece8",
-        "stroke": "#fbfaf6",
+        "fill": "#e7e6de",
+        "stroke": "#fefdf9",
         "strokeWidth": 1
       }
     },
@@ -152,16 +168,20 @@
           }
         },
         {
-          "calculate": "datum['kt_' + season]",
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
           "as": "kt"
         },
         {
-          "filter": "datum.kt !== '' && isValid(datum.kt) && datum.kt > 0"
+          "filter": "isValid(datum.kt) && datum.kt > 0"
+        },
+        {
+          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
+          "as": "abbr"
         }
       ],
       "mark": {
         "type": "circle",
-        "stroke": "#fbfaf6",
+        "stroke": "#fefdf9",
         "strokeWidth": 1.4,
         "opacity": 0.92
       },
@@ -177,21 +197,23 @@
         "size": {
           "field": "kt",
           "type": "quantitative",
-          "title": "Wheat sold (kt)",
+          "title": "Wheat sold (thousand tonnes)",
           "scale": {
             "type": "sqrt",
             "domain": [
               0,
-              13100
+              15000
             ],
             "range": [
               0,
-              5200
+              5400
             ]
           },
           "legend": {
             "direction": "horizontal",
-            "orient": "top",
+            "orient": "none",
+            "legendX": 0,
+            "legendY": -118,
             "values": [
               1000,
               5000,
@@ -199,13 +221,17 @@
             ],
             "format": ",.0f",
             "symbolFillColor": "#0f3f39",
-            "symbolStrokeColor": "#fbfaf6",
+            "symbolStrokeColor": "#fefdf9",
             "titleLimit": 340,
             "clipHeight": 84
           }
         },
         "color": {
-          "value": "#0f3f39"
+          "condition": {
+            "test": "indexof(['New South Wales','Western Australia'], datum.state) >= 0",
+            "value": "#0f3f39"
+          },
+          "value": "#a0a9a3"
         },
         "tooltip": [
           {
@@ -216,7 +242,7 @@
           {
             "field": "kt",
             "type": "quantitative",
-            "title": "Wheat sold (kt)",
+            "title": "Wheat sold (thousand tonnes)",
             "format": ","
           }
         ]
@@ -258,20 +284,27 @@
           }
         },
         {
-          "calculate": "datum['kt_' + season]",
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
           "as": "kt"
         },
         {
-          "filter": "datum.kt !== '' && isValid(datum.kt) && datum.kt > 2500"
+          "filter": "isValid(datum.kt) && datum.kt > 0 && datum.kt >= 1500"
+        },
+        {
+          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
+          "as": "abbr"
+        },
+        {
+          "calculate": "datum.abbr",
+          "as": "t"
         }
       ],
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
         "fontWeight": 700,
-        "fill": "#ffffff",
-        "dy": 1
+        "dy": -10
       },
       "encoding": {
         "longitude": {
@@ -283,9 +316,15 @@
           "type": "quantitative"
         },
         "text": {
-          "field": "kt",
-          "type": "quantitative",
-          "format": ",.0f"
+          "field": "t",
+          "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "indexof(['New South Wales','Western Australia'], datum.state) >= 0",
+            "value": "#ffffff"
+          },
+          "value": "#161f1b"
         }
       }
     },
@@ -325,26 +364,27 @@
           }
         },
         {
-          "calculate": "datum['kt_' + season]",
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
           "as": "kt"
         },
         {
-          "filter": "datum.kt !== '' && isValid(datum.kt) && datum.kt > 0 && datum.kt <= 2500"
+          "filter": "isValid(datum.kt) && datum.kt > 0 && datum.kt >= 1500"
         },
         {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state] + '  ' + format(datum.kt, ',.0f')",
-          "as": "lab"
+          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
+          "as": "abbr"
+        },
+        {
+          "calculate": "format(datum.kt, ',.0f')",
+          "as": "t"
         }
       ],
       "mark": {
         "type": "text",
-        "font": "Inter",
-        "fontSize": 12,
-        "fontWeight": 600,
-        "fill": "#333e38",
-        "align": "left",
-        "dx": 20,
-        "dy": 2
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "dy": 11
       },
       "encoding": {
         "longitude": {
@@ -356,16 +396,151 @@
           "type": "quantitative"
         },
         "text": {
-          "field": "lab",
+          "field": "t",
           "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "indexof(['New South Wales','Western Australia'], datum.state) >= 0",
+            "value": "#ffffff"
+          },
+          "value": "#161f1b"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
+          "as": "kt"
+        },
+        {
+          "filter": "isValid(datum.kt)"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "kt",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "filter": "indexof(['New South Wales','Western Australia'], datum.state) >= 0"
+        },
+        {
+          "aggregate": [
+            {
+              "op": "sum",
+              "field": "kt",
+              "as": "both"
+            },
+            {
+              "op": "max",
+              "field": "total",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "calculate": "141.4",
+          "as": "lon"
+        },
+        {
+          "calculate": "-39.25",
+          "as": "lat"
+        },
+        {
+          "calculate": "format(datum.both / datum.total, '.0%') + ' of the national crop'",
+          "as": "t1"
+        },
+        {
+          "calculate": "'grown in NSW and WA alone'",
+          "as": "t2"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 16,
+            "fontWeight": 700,
+            "fill": "#161f1b",
+            "align": "right",
+            "dx": -3,
+            "dy": 4
+          },
+          "encoding": {
+            "text": {
+              "field": "t1",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 16,
+            "fontWeight": 400,
+            "fill": "#57625b",
+            "align": "right",
+            "dx": -3,
+            "dy": 26
+          },
+          "encoding": {
+            "text": {
+              "field": "t2",
+              "type": "nominal"
+            }
+          }
+        }
+      ],
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
         }
       }
     }
-  ],
-  "padding": {
-    "left": 5,
-    "top": 5,
-    "bottom": 5,
-    "right": 22
-  }
+  ]
 }
