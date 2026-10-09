@@ -1439,7 +1439,7 @@
           ],
           "mark": {
             "type": "area",
-            "color": "#c3cac5",
+            "color": "#dee2dd",
             "interpolate": "monotone",
             "cursor": "ew-resize"
           },

@@ -136,7 +136,7 @@
       "as": "label"
     },
     {
-      "calculate": "datum.state === state ? 'focus' : 'rest'",
+      "calculate": "datum.state !== state ? 'rest' : datum.change < 0 ? 'fell' : 'grew'",
       "as": "emph"
     }
   ],
@@ -195,11 +195,13 @@
           "legend": null,
           "scale": {
             "domain": [
-              "focus",
+              "fell",
+              "grew",
               "rest"
             ],
             "range": [
               "#9c6114",
+              "#0f3f39",
               "#a0a9a3"
             ]
           }
@@ -211,7 +213,7 @@
         },
         "strokeWidth": {
           "condition": {
-            "test": "datum.emph === 'focus'",
+            "test": "datum.emph !== 'rest'",
             "value": 3.2
           },
           "value": 2
@@ -288,11 +290,13 @@
           "legend": null,
           "scale": {
             "domain": [
-              "focus",
+              "fell",
+              "grew",
               "rest"
             ],
             "range": [
               "#84520f",
+              "#0f3f39",
               "#333e38"
             ]
           }
@@ -351,11 +355,13 @@
           "legend": null,
           "scale": {
             "domain": [
-              "focus",
+              "fell",
+              "grew",
               "rest"
             ],
             "range": [
               "#84520f",
+              "#0f3f39",
               "#333e38"
             ]
           }
@@ -414,11 +420,13 @@
           "legend": null,
           "scale": {
             "domain": [
-              "focus",
+              "fell",
+              "grew",
               "rest"
             ],
             "range": [
               "#84520f",
+              "#0f3f39",
               "#333e38"
             ]
           }
@@ -440,7 +448,6 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 16,
         "fontWeight": 700,
-        "fill": "#84520f",
         "align": "right",
         "baseline": "bottom",
         "x": {
@@ -452,6 +459,13 @@
         "text": {
           "field": "t",
           "type": "nominal"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.change < 0",
+            "value": "#84520f"
+          },
+          "value": "#0f3f39"
         }
       }
     },

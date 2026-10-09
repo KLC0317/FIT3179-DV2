@@ -282,10 +282,6 @@
           }
         },
         "color": {
-          "condition": {
-            "test": "datum.destination === 'Indonesia'",
-            "value": "#9c6114"
-          },
           "value": "#0f3f39"
         },
         "opacity": {
@@ -414,10 +410,6 @@
           }
         },
         "color": {
-          "condition": {
-            "test": "datum.destination === 'Indonesia'",
-            "value": "#9c6114"
-          },
           "value": "#0f3f39"
         },
         "opacity": {
@@ -479,10 +471,6 @@
           "type": "quantitative"
         },
         "color": {
-          "condition": {
-            "test": "datum.destination === 'Indonesia'",
-            "value": "#9c6114"
-          },
           "value": "#0f3f39"
         },
         "tooltip": [
@@ -832,7 +820,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 16,
         "fontWeight": 700,
-        "fill": "#84520f",
+        "fill": "#161f1b",
         "align": "right",
         "baseline": "middle",
         "dy": 0
@@ -907,7 +895,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 15,
         "fontWeight": 400,
-        "fill": "#84520f",
+        "fill": "#161f1b",
         "align": "right",
         "baseline": "middle",
         "dy": 18
@@ -982,7 +970,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 15,
         "fontWeight": 400,
-        "fill": "#84520f",
+        "fill": "#161f1b",
         "align": "right",
         "baseline": "middle",
         "dy": 36

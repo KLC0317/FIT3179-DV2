@@ -141,12 +141,17 @@ All of it from the FIT3179 studios, and each answers a question:
   streamgraph (barley and the minor crops are context), wheat and sugar cane in the box
   plot, New South Wales and Western Australia on the symbol map, the chosen state on
   the slope chart, Indonesia on the flow map.
-- **Colour.** One meaning per hue across all fourteen charts: teal is supply, violet is
-  canola, ochre is the accent (always the thing to notice, which on this page is a
-  shortfall), slate is context, grey is "no figure". Colours are named in the
-  subtitles instead of legends. The palette was audited so every text colour clears
-  4.5:1, every thin mark 3:1, adjacent fills differ in luminance, and the crop colours
-  stay distinct under simulated protanopia, deuteranopia and tritanopia. No red–green
+- **Colour: one meaning per colour, on every chart.** Teal is wheat and supply
+  (harvests, buyers, water and land, "enough", the wettest year, a state whose crop
+  grew). Violet is canola. Ochre is a shortfall and only a shortfall (a short
+  harvest, a drought, a state whose crop fell, discretionary food, households going
+  without). Slate is context and "the rest". Mid grey on a map means no published
+  figure, and is used nowhere else. Ink marks a reference line. The focus of a chart
+  is picked out in its meaning colour against slate; it is never given a colour
+  that means something else (the largest wheat buyer stays wheat teal, standing out
+  by width and label). The palette was audited so every text colour clears 4.5:1,
+  every thin mark 3:1, adjacent fills differ in luminance, and the colours stay
+  distinct under simulated protanopia, deuteranopia and tritanopia. No red–green
   pairing and no rainbow scale anywhere.
 - **Typography.** The title is set in Big Shoulders Stencil: condensed stencil capitals,
   like the lettering stamped on grain sacks and painted on silos, used once, for the
