@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 520,
-  "height": 228,
+  "height": 200,
   "autosize": {
     "type": "pad",
     "contains": "padding"
@@ -78,8 +78,8 @@
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 26,
-    "bottom": 5
+    "top": 22,
+    "bottom": 0
   },
   "data": {
     "url": "data/food_insecurity_waffle.csv",
@@ -113,7 +113,7 @@
         "filled": true,
         "strokeWidth": 0,
         "opacity": 1,
-        "size": 316
+        "size": 243
       },
       "encoding": {
         "x": {
@@ -125,7 +125,7 @@
             "padding": 0.5,
             "range": [
               0,
-              228
+              200
             ]
           }
         },
@@ -138,7 +138,7 @@
             "padding": 0.5,
             "range": [
               0,
-              228
+              200
             ]
           }
         },
@@ -170,32 +170,6 @@
       "data": {
         "values": [
           {
-            "t": "Australian households, 2023"
-          }
-        ]
-      },
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 15,
-        "fontWeight": 600,
-        "fill": "#333e38",
-        "align": "left",
-        "baseline": "bottom",
-        "x": 0,
-        "y": -12
-      },
-      "encoding": {
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        }
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
             "t": "13.2%"
           }
         ]
@@ -208,7 +182,7 @@
         "fill": "#84520f",
         "align": "left",
         "baseline": "top",
-        "x": 256,
+        "x": 224,
         "y": 0
       },
       "encoding": {
@@ -232,7 +206,7 @@
         "fontSize": 16,
         "fontWeight": 400,
         "fill": "#333e38",
-        "x": 256,
+        "x": 224,
         "y": 58,
         "align": "left",
         "baseline": "top"
@@ -248,7 +222,7 @@
       "data": {
         "values": [
           {
-            "t": "experienced food insecurity"
+            "t": "could not always be sure"
           }
         ]
       },
@@ -258,7 +232,7 @@
         "fontSize": 16,
         "fontWeight": 400,
         "fill": "#333e38",
-        "x": 256,
+        "x": 224,
         "y": 80,
         "align": "left",
         "baseline": "top"
@@ -274,7 +248,7 @@
       "data": {
         "values": [
           {
-            "t": "in 2023: they could not"
+            "t": "of having enough food."
           }
         ]
       },
@@ -284,7 +258,7 @@
         "fontSize": 16,
         "fontWeight": 400,
         "fill": "#333e38",
-        "x": 256,
+        "x": 224,
         "y": 102,
         "align": "left",
         "baseline": "top"
@@ -300,7 +274,7 @@
       "data": {
         "values": [
           {
-            "t": "always be sure of having"
+            "t": "Surveyed just after inflation peaked"
           }
         ]
       },
@@ -310,8 +284,8 @@
         "fontSize": 16,
         "fontWeight": 400,
         "fill": "#333e38",
-        "x": 256,
-        "y": 124,
+        "x": 0,
+        "y": 242,
         "align": "left",
         "baseline": "top"
       },
@@ -326,7 +300,7 @@
       "data": {
         "values": [
           {
-            "t": "enough food."
+            "t": "at 7.8%, the highest since 1990"
           }
         ]
       },
@@ -336,60 +310,8 @@
         "fontSize": 16,
         "fontWeight": 400,
         "fill": "#333e38",
-        "x": 256,
-        "y": 146,
-        "align": "left",
-        "baseline": "top"
-      },
-      "encoding": {
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        }
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "t": "That is more than one"
-          }
-        ]
-      },
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 16,
-        "fontWeight": 700,
-        "fill": "#161f1b",
-        "x": 256,
-        "y": 184,
-        "align": "left",
-        "baseline": "top"
-      },
-      "encoding": {
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        }
-      }
-    },
-    {
-      "data": {
-        "values": [
-          {
-            "t": "household in every eight."
-          }
-        ]
-      },
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 16,
-        "fontWeight": 700,
-        "fill": "#161f1b",
-        "x": 256,
-        "y": 206,
+        "x": 0,
+        "y": 262,
         "align": "left",
         "baseline": "top"
       },

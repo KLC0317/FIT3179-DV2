@@ -65,8 +65,8 @@
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 5,
-    "bottom": 5
+    "top": 0,
+    "bottom": 0
   },
   "usermeta": {
     "gutter": [
@@ -84,7 +84,7 @@
   },
   "title": {
     "text": "Water use follows last year's rain",
-    "subtitle": "Rainfall (top) and water used (bottom) each financial year. Ochre: the driest years and the low use that followed; teal: the wettest year and the peak that followed.",
+    "subtitle": "Rainfall (top) and water used (bottom) each financial year. Hover over a year's rainfall to light up the water used the year after.",
     "subtitleLimit": 760
   },
   "data": {
@@ -99,12 +99,16 @@
   },
   "vconcat": [
     {
-      "width": 420,
-      "height": 116,
+      "width": 900,
+      "height": 150,
       "transform": [
         {
           "calculate": "indexof([\"2018-19\", \"2019-20\"], datum.year) >= 0 ? 'dry' : indexof([\"2022-23\"], datum.year) >= 0 ? 'wet' : 'rest'",
           "as": "emph"
+        },
+        {
+          "calculate": "indexof([\"2014-15\", \"2015-16\", \"2016-17\", \"2017-18\", \"2018-19\", \"2019-20\", \"2020-21\", \"2021-22\", \"2022-23\", \"2023-24\"], datum.year)",
+          "as": "link"
         },
         {
           "calculate": "replace(datum.year, '-', '–')",
@@ -114,7 +118,8 @@
       "layer": [
         {
           "mark": {
-            "type": "bar"
+            "type": "bar",
+            "cursor": "pointer"
           },
           "encoding": {
             "x": {
@@ -134,8 +139,8 @@
                 "2023-24"
               ],
               "scale": {
-                "paddingInner": 0.28,
-                "paddingOuter": 0.14
+                "paddingInner": 0.3,
+                "paddingOuter": 0.15
               },
               "axis": {
                 "labels": false,
@@ -149,7 +154,7 @@
               "scale": {
                 "domain": [
                   0,
-                  700
+                  760
                 ],
                 "nice": false
               },
@@ -189,6 +194,14 @@
                 ]
               }
             },
+            "opacity": {
+              "condition": {
+                "param": "lag",
+                "empty": true,
+                "value": 1
+              },
+              "value": 0.25
+            },
             "tooltip": [
               {
                 "field": "fy_full",
@@ -207,7 +220,20 @@
                 "format": ","
               }
             ]
-          }
+          },
+          "params": [
+            {
+              "name": "lag",
+              "select": {
+                "type": "point",
+                "fields": [
+                  "link"
+                ],
+                "on": "mouseover",
+                "clear": "mouseout"
+              }
+            }
+          ]
         },
         {
           "transform": [
@@ -241,8 +267,8 @@
                 "2023-24"
               ],
               "scale": {
-                "paddingInner": 0.28,
-                "paddingOuter": 0.14
+                "paddingInner": 0.3,
+                "paddingOuter": 0.15
               },
               "axis": {
                 "labels": false,
@@ -279,6 +305,144 @@
         {
           "data": {
             "values": [
+              {
+                "year": "2019-20",
+                "v": 347,
+                "t": "on record"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#333e38",
+            "baseline": "bottom",
+            "dy": -24
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "sort": [
+                "2014-15",
+                "2015-16",
+                "2016-17",
+                "2017-18",
+                "2018-19",
+                "2019-20",
+                "2020-21",
+                "2021-22",
+                "2022-23",
+                "2023-24"
+              ]
+            },
+            "y": {
+              "field": "v",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "year": "2022-23",
+                "v": 611,
+                "t": "third La Niña year in a row"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#333e38",
+            "baseline": "bottom",
+            "dy": -24
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "sort": [
+                "2014-15",
+                "2015-16",
+                "2016-17",
+                "2017-18",
+                "2018-19",
+                "2019-20",
+                "2020-21",
+                "2021-22",
+                "2022-23",
+                "2023-24"
+              ]
+            },
+            "y": {
+              "field": "v",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "year": "2019-20",
+                "v": 347,
+                "t": "2019: driest"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#333e38",
+            "baseline": "bottom",
+            "dy": -42
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "ordinal",
+              "sort": [
+                "2014-15",
+                "2015-16",
+                "2016-17",
+                "2017-18",
+                "2018-19",
+                "2019-20",
+                "2020-21",
+                "2021-22",
+                "2022-23",
+                "2023-24"
+              ]
+            },
+            "y": {
+              "field": "v",
+              "type": "quantitative"
+            },
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
               {}
             ]
           },
@@ -309,12 +473,16 @@
       }
     },
     {
-      "width": 420,
-      "height": 150,
+      "width": 900,
+      "height": 170,
       "transform": [
         {
           "calculate": "indexof([\"2019-20\"], datum.year) >= 0 ? 'dry' : indexof([\"2023-24\"], datum.year) >= 0 ? 'wet' : 'rest'",
           "as": "emph"
+        },
+        {
+          "calculate": "indexof([\"2014-15\", \"2015-16\", \"2016-17\", \"2017-18\", \"2018-19\", \"2019-20\", \"2020-21\", \"2021-22\", \"2022-23\", \"2023-24\"], datum.year) - 1",
+          "as": "link"
         },
         {
           "calculate": "replace(datum.year, '-', '–')",
@@ -324,7 +492,8 @@
       "layer": [
         {
           "mark": {
-            "type": "bar"
+            "type": "bar",
+            "cursor": "default"
           },
           "encoding": {
             "x": {
@@ -344,13 +513,17 @@
                 "2023-24"
               ],
               "scale": {
-                "paddingInner": 0.28,
-                "paddingOuter": 0.14
+                "paddingInner": 0.3,
+                "paddingOuter": 0.15
               },
               "axis": {
-                "labels": false,
+                "labels": true,
                 "ticks": false,
-                "domain": true
+                "domain": true,
+                "labelExpr": "replace(datum.label, '-', '–')",
+                "labelAngle": 0,
+                "labelPadding": 8,
+                "labelFontWeight": 600
               }
             },
             "y": {
@@ -359,7 +532,7 @@
               "scale": {
                 "domain": [
                   0,
-                  20000
+                  21000
                 ],
                 "nice": false
               },
@@ -400,6 +573,14 @@
                 ]
               }
             },
+            "opacity": {
+              "condition": {
+                "param": "lag",
+                "empty": true,
+                "value": 1
+              },
+              "value": 0.25
+            },
             "tooltip": [
               {
                 "field": "fy_full",
@@ -452,13 +633,17 @@
                 "2023-24"
               ],
               "scale": {
-                "paddingInner": 0.28,
-                "paddingOuter": 0.14
+                "paddingInner": 0.3,
+                "paddingOuter": 0.15
               },
               "axis": {
-                "labels": false,
+                "labels": true,
                 "ticks": false,
-                "domain": true
+                "domain": true,
+                "labelExpr": "replace(datum.label, '-', '–')",
+                "labelAngle": 0,
+                "labelPadding": 8,
+                "labelFontWeight": 600
               }
             },
             "y": {
@@ -488,28 +673,28 @@
           }
         },
         {
-          "transform": [
-            {
-              "filter": "indexof([\"2014-15\", \"2015-16\", \"2016-17\", \"2017-18\", \"2018-19\", \"2019-20\", \"2020-21\", \"2021-22\", \"2022-23\", \"2023-24\"], datum.year) % 2 === 0"
-            },
-            {
-              "calculate": "slice(datum.year, 2, 4) + '–' + slice(datum.year, 5, 7)",
-              "as": "fy"
-            }
-          ],
+          "data": {
+            "values": [
+              {
+                "year": "2019-20",
+                "v": 12148,
+                "t": "the year after two dry ones"
+              }
+            ]
+          },
           "mark": {
             "type": "text",
             "font": "'Source Sans 3', 'Segoe UI', sans-serif",
             "fontSize": 15,
             "fontWeight": 600,
-            "baseline": "top",
-            "y": 156
+            "fill": "#333e38",
+            "baseline": "bottom",
+            "dy": -24
           },
           "encoding": {
             "x": {
               "field": "year",
               "type": "ordinal",
-              "title": null,
               "sort": [
                 "2014-15",
                 "2015-16",
@@ -521,65 +706,41 @@
                 "2021-22",
                 "2022-23",
                 "2023-24"
-              ],
-              "scale": {
-                "paddingInner": 0.28,
-                "paddingOuter": 0.14
-              },
-              "axis": {
-                "labels": false,
-                "ticks": false,
-                "domain": true
-              }
+              ]
+            },
+            "y": {
+              "field": "v",
+              "type": "quantitative"
             },
             "text": {
-              "field": "fy",
+              "field": "t",
               "type": "nominal"
-            },
-            "color": {
-              "condition": {
-                "test": "datum.emph === 'rest'",
-                "value": "#57625b"
-              },
-              "field": "emph",
-              "type": "nominal",
-              "scale": {
-                "domain": [
-                  "dry",
-                  "wet"
-                ],
-                "range": [
-                  "#84520f",
-                  "#0f3f39"
-                ]
-              },
-              "legend": null
             }
           }
         },
         {
-          "transform": [
-            {
-              "filter": "indexof([\"2014-15\", \"2015-16\", \"2016-17\", \"2017-18\", \"2018-19\", \"2019-20\", \"2020-21\", \"2021-22\", \"2022-23\", \"2023-24\"], datum.year) % 2 === 1"
-            },
-            {
-              "calculate": "slice(datum.year, 2, 4) + '–' + slice(datum.year, 5, 7)",
-              "as": "fy"
-            }
-          ],
+          "data": {
+            "values": [
+              {
+                "year": "2023-24",
+                "v": 17223,
+                "t": "the year after the wettest"
+              }
+            ]
+          },
           "mark": {
             "type": "text",
             "font": "'Source Sans 3', 'Segoe UI', sans-serif",
             "fontSize": 15,
             "fontWeight": 600,
-            "baseline": "top",
-            "y": 176
+            "fill": "#333e38",
+            "baseline": "bottom",
+            "dy": -24
           },
           "encoding": {
             "x": {
               "field": "year",
               "type": "ordinal",
-              "title": null,
               "sort": [
                 "2014-15",
                 "2015-16",
@@ -591,39 +752,15 @@
                 "2021-22",
                 "2022-23",
                 "2023-24"
-              ],
-              "scale": {
-                "paddingInner": 0.28,
-                "paddingOuter": 0.14
-              },
-              "axis": {
-                "labels": false,
-                "ticks": false,
-                "domain": true
-              }
+              ]
+            },
+            "y": {
+              "field": "v",
+              "type": "quantitative"
             },
             "text": {
-              "field": "fy",
+              "field": "t",
               "type": "nominal"
-            },
-            "color": {
-              "condition": {
-                "test": "datum.emph === 'rest'",
-                "value": "#57625b"
-              },
-              "field": "emph",
-              "type": "nominal",
-              "scale": {
-                "domain": [
-                  "dry",
-                  "wet"
-                ],
-                "range": [
-                  "#84520f",
-                  "#0f3f39"
-                ]
-              },
-              "legend": null
             }
           }
         },
@@ -649,34 +786,6 @@
             },
             "y2": {
               "value": 1
-            }
-          }
-        },
-        {
-          "data": {
-            "values": [
-              {
-                "t": "follows the rain a year later"
-              }
-            ]
-          },
-          "mark": {
-            "type": "text",
-            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-            "fontSize": 16,
-            "fontWeight": 700,
-            "fill": "#161f1b",
-            "align": "right",
-            "baseline": "bottom",
-            "x": {
-              "expr": "width"
-            },
-            "y": -12
-          },
-          "encoding": {
-            "text": {
-              "field": "t",
-              "type": "nominal"
             }
           }
         }

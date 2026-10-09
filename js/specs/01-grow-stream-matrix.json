@@ -1,0 +1,1751 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      78
+    ]
+  },
+  "config": {
+    "background": null,
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+    "axis": {
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#57625b",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#333e38",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "symbolStrokeWidth": 0,
+      "offset": 8,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
+    },
+    "title": {
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 17
+    }
+  },
+  "spacing": 28,
+  "data": {
+    "url": "data/crop_production_long.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "production_kt": "number",
+        "year": "number"
+      }
+    }
+  },
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  },
+  "title": {
+    "text": "Sixty-four years of harvests, and the droughts that cut them",
+    "subtitle": "Tonnes harvested each year (top) and each crop against its own normal (below). Drag across the strip at the bottom to zoom both.",
+    "subtitleLimit": 760
+  },
+  "vconcat": [
+    {
+      "height": 290,
+      "layer": [
+        {
+          "data": {
+            "values": [
+              {
+                "year": 1996.5,
+                "year2": 2009.5
+              }
+            ]
+          },
+          "mark": {
+            "type": "rect",
+            "fill": "#f8eedc",
+            "clip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative",
+              "scale": {
+                "domain": {
+                  "param": "brush",
+                  "encoding": "x"
+                },
+                "nice": false,
+                "zero": false
+              }
+            },
+            "x2": {
+              "field": "year2"
+            },
+            "y": {
+              "value": 0
+            },
+            "y2": {
+              "value": 290
+            }
+          }
+        },
+        {
+          "layer": [
+            {
+              "transform": [
+                {
+                  "filter": "datum.crop !== 'Sugar cane'"
+                },
+                {
+                  "calculate": "indexof(['Wheat','Barley','Canola'], datum.crop) >= 0 ? datum.crop : datum.crop === 'Sugar cane' ? 'Sugar cane' : 'Other grains and oilseeds'",
+                  "as": "group"
+                },
+                {
+                  "calculate": "indexof([\"Wheat\", \"Barley\", \"Canola\", \"Other grains and oilseeds\"], datum.group)",
+                  "as": "ord"
+                },
+                {
+                  "aggregate": [
+                    {
+                      "op": "sum",
+                      "field": "production_kt",
+                      "as": "kt"
+                    }
+                  ],
+                  "groupby": [
+                    "year",
+                    "group",
+                    "ord"
+                  ]
+                },
+                {
+                  "stack": "kt",
+                  "groupby": [
+                    "year"
+                  ],
+                  "sort": [
+                    {
+                      "field": "ord",
+                      "order": "ascending"
+                    }
+                  ],
+                  "offset": "center",
+                  "as": [
+                    "lo",
+                    "hi"
+                  ]
+                },
+                {
+                  "calculate": "(datum.lo + datum.hi) / 2",
+                  "as": "mid"
+                }
+              ],
+              "params": [
+                {
+                  "name": "pick",
+                  "select": {
+                    "type": "point",
+                    "fields": [
+                      "group"
+                    ],
+                    "on": "click[item() && item().mark && item().mark.marktype === 'area']",
+                    "clear": "dblclick"
+                  }
+                }
+              ],
+              "mark": {
+                "type": "area",
+                "interpolate": "monotone",
+                "cursor": "pointer",
+                "clip": true
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "title": null,
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  },
+                  "axis": null
+                },
+                "y": {
+                  "field": "lo",
+                  "type": "quantitative",
+                  "axis": null,
+                  "title": null,
+                  "scale": {
+                    "domain": [
+                      -1000,
+                      84000
+                    ]
+                  }
+                },
+                "y2": {
+                  "field": "hi"
+                },
+                "color": {
+                  "field": "group",
+                  "type": "nominal",
+                  "legend": null,
+                  "scale": {
+                    "domain": [
+                      "Wheat",
+                      "Barley",
+                      "Canola",
+                      "Other grains and oilseeds"
+                    ],
+                    "range": [
+                      "#0f3f39",
+                      "#a0a9a3",
+                      "#7461a8",
+                      "#dee2dd"
+                    ]
+                  }
+                },
+                "opacity": {
+                  "condition": {
+                    "param": "pick",
+                    "empty": true,
+                    "value": 1
+                  },
+                  "value": 0.18
+                },
+                "order": {
+                  "field": "ord",
+                  "type": "quantitative"
+                },
+                "tooltip": [
+                  {
+                    "field": "year",
+                    "type": "quantitative",
+                    "title": "Year",
+                    "format": "d"
+                  },
+                  {
+                    "field": "group",
+                    "type": "nominal",
+                    "title": "Crop"
+                  },
+                  {
+                    "field": "kt",
+                    "type": "quantitative",
+                    "title": "Thousand tonnes harvested",
+                    "format": ",.0f"
+                  }
+                ]
+              }
+            },
+            {
+              "transform": [
+                {
+                  "filter": "datum.crop !== 'Sugar cane'"
+                },
+                {
+                  "calculate": "indexof(['Wheat','Barley','Canola'], datum.crop) >= 0 ? datum.crop : datum.crop === 'Sugar cane' ? 'Sugar cane' : 'Other grains and oilseeds'",
+                  "as": "group"
+                },
+                {
+                  "calculate": "indexof([\"Wheat\", \"Barley\", \"Canola\", \"Other grains and oilseeds\"], datum.group)",
+                  "as": "ord"
+                },
+                {
+                  "aggregate": [
+                    {
+                      "op": "sum",
+                      "field": "production_kt",
+                      "as": "kt"
+                    }
+                  ],
+                  "groupby": [
+                    "year",
+                    "group",
+                    "ord"
+                  ]
+                },
+                {
+                  "stack": "kt",
+                  "groupby": [
+                    "year"
+                  ],
+                  "sort": [
+                    {
+                      "field": "ord",
+                      "order": "ascending"
+                    }
+                  ],
+                  "offset": "center",
+                  "as": [
+                    "lo",
+                    "hi"
+                  ]
+                },
+                {
+                  "calculate": "(datum.lo + datum.hi) / 2",
+                  "as": "mid"
+                },
+                {
+                  "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5))) && datum.group !== 'Other grains and oilseeds'"
+                },
+                {
+                  "calculate": "datum.mid + (datum.group === 'Canola' ? 4500 : datum.group === 'Barley' ? -2500 : 0)",
+                  "as": "label_y"
+                },
+                {
+                  "calculate": "(isValid(brush.year) ? brush.year[1] : 2024.5)",
+                  "as": "edge"
+                },
+                {
+                  "calculate": "(isValid(brush.year) ? brush.year[1] : 2024.5)",
+                  "as": "edge"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 700,
+                "align": "left",
+                "dx": 8,
+                "dy": -10,
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "edge",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "y": {
+                  "field": "label_y",
+                  "type": "quantitative"
+                },
+                "text": {
+                  "field": "group",
+                  "type": "nominal"
+                },
+                "color": {
+                  "field": "group",
+                  "type": "nominal",
+                  "legend": null,
+                  "scale": {
+                    "domain": [
+                      "Wheat",
+                      "Barley",
+                      "Canola",
+                      "Other grains and oilseeds"
+                    ],
+                    "range": [
+                      "#0f3f39",
+                      "#57625b",
+                      "#5a4a8a",
+                      "#57625b"
+                    ]
+                  }
+                }
+              }
+            },
+            {
+              "transform": [
+                {
+                  "filter": "datum.crop !== 'Sugar cane'"
+                },
+                {
+                  "calculate": "indexof(['Wheat','Barley','Canola'], datum.crop) >= 0 ? datum.crop : datum.crop === 'Sugar cane' ? 'Sugar cane' : 'Other grains and oilseeds'",
+                  "as": "group"
+                },
+                {
+                  "calculate": "indexof([\"Wheat\", \"Barley\", \"Canola\", \"Other grains and oilseeds\"], datum.group)",
+                  "as": "ord"
+                },
+                {
+                  "aggregate": [
+                    {
+                      "op": "sum",
+                      "field": "production_kt",
+                      "as": "kt"
+                    }
+                  ],
+                  "groupby": [
+                    "year",
+                    "group",
+                    "ord"
+                  ]
+                },
+                {
+                  "stack": "kt",
+                  "groupby": [
+                    "year"
+                  ],
+                  "sort": [
+                    {
+                      "field": "ord",
+                      "order": "ascending"
+                    }
+                  ],
+                  "offset": "center",
+                  "as": [
+                    "lo",
+                    "hi"
+                  ]
+                },
+                {
+                  "calculate": "(datum.lo + datum.hi) / 2",
+                  "as": "mid"
+                },
+                {
+                  "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5))) && datum.group !== 'Other grains and oilseeds'"
+                },
+                {
+                  "calculate": "datum.mid + (datum.group === 'Canola' ? 4500 : datum.group === 'Barley' ? -2500 : 0)",
+                  "as": "label_y"
+                },
+                {
+                  "calculate": "(isValid(brush.year) ? brush.year[1] : 2024.5)",
+                  "as": "edge"
+                },
+                {
+                  "calculate": "format(datum.kt / 1000, '.1f') + ' Mt'",
+                  "as": "mt"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 15,
+                "fontWeight": 400,
+                "fill": "#57625b",
+                "align": "left",
+                "dx": 8,
+                "dy": 10,
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "edge",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "y": {
+                  "field": "label_y",
+                  "type": "quantitative"
+                },
+                "text": {
+                  "field": "mt",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "a": 0,
+                    "b": 10000
+                  }
+                ]
+              },
+              "mark": {
+                "type": "rule",
+                "stroke": "#333e38",
+                "strokeWidth": 2,
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "value": -106
+                },
+                "y": {
+                  "field": "a",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": [
+                      -1000,
+                      84000
+                    ]
+                  }
+                },
+                "y2": {
+                  "field": "b"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "m": 5000,
+                    "t": "10 Mt"
+                  }
+                ]
+              },
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 700,
+                "fill": "#333e38",
+                "align": "left",
+                "baseline": "bottom",
+                "x": -98,
+                "dy": -3,
+                "clip": false
+              },
+              "encoding": {
+                "y": {
+                  "field": "m",
+                  "type": "quantitative"
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "m": 5000,
+                    "t": "of harvest"
+                  }
+                ]
+              },
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 15,
+                "fontWeight": 400,
+                "fill": "#57625b",
+                "align": "left",
+                "baseline": "top",
+                "x": -98,
+                "dy": 3,
+                "clip": false
+              },
+              "encoding": {
+                "y": {
+                  "field": "m",
+                  "type": "quantitative"
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 1960.5
+                  },
+                  {
+                    "year": 2024.5
+                  }
+                ]
+              },
+              "mark": {
+                "type": "point",
+                "opacity": 0,
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "y": {
+                  "value": 0
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 2003,
+                    "t": "Millennium Drought"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 700,
+                "fill": "#84520f",
+                "align": "center",
+                "dx": 0,
+                "y": 14,
+                "baseline": "middle",
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 2003,
+                    "t": "1997–2009"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 400,
+                "fill": "#57625b",
+                "align": "center",
+                "dx": 0,
+                "y": 34,
+                "baseline": "middle",
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 2022,
+                    "t": "2022: record 41.2 Mt"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 700,
+                "fill": "#161f1b",
+                "align": "right",
+                "dx": -6,
+                "y": 14,
+                "baseline": "middle",
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 2022,
+                    "t": "third La Niña year"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 400,
+                "fill": "#57625b",
+                "align": "right",
+                "dx": -6,
+                "y": 34,
+                "baseline": "middle",
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 1993,
+                    "t": "1993: herbicide-tolerant canola"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 700,
+                "fill": "#5a4a8a",
+                "align": "right",
+                "dx": -6,
+                "y": 84,
+                "baseline": "middle",
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {
+                    "year": 1993,
+                    "t": "makes it a break crop for wheat"
+                  }
+                ]
+              },
+              "transform": [
+                {
+                  "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+                }
+              ],
+              "mark": {
+                "type": "text",
+                "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+                "fontSize": 16,
+                "fontWeight": 400,
+                "fill": "#57625b",
+                "align": "right",
+                "dx": -6,
+                "y": 104,
+                "baseline": "middle",
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "field": "year",
+                  "type": "quantitative",
+                  "scale": {
+                    "domain": {
+                      "param": "brush",
+                      "encoding": "x"
+                    },
+                    "nice": false,
+                    "zero": false
+                  }
+                },
+                "text": {
+                  "field": "t",
+                  "type": "nominal"
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {}
+                ]
+              },
+              "mark": {
+                "type": "rule",
+                "opacity": 0,
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "value": -108
+                },
+                "x2": {
+                  "value": -108
+                },
+                "y": {
+                  "value": 0
+                },
+                "y2": {
+                  "value": 1
+                }
+              }
+            },
+            {
+              "data": {
+                "values": [
+                  {}
+                ]
+              },
+              "mark": {
+                "type": "rule",
+                "opacity": 0,
+                "clip": false
+              },
+              "encoding": {
+                "x": {
+                  "value": {
+                    "expr": "width + 78"
+                  }
+                },
+                "x2": {
+                  "value": {
+                    "expr": "width + 78"
+                  }
+                },
+                "y": {
+                  "value": 0
+                },
+                "y2": {
+                  "value": 1
+                }
+              }
+            }
+          ],
+          "resolve": {
+            "scale": {
+              "color": "independent"
+            }
+          }
+        }
+      ],
+      "resolve": {
+        "scale": {
+          "color": "independent"
+        }
+      }
+    },
+    {
+      "height": 168,
+      "transform": [
+        {
+          "window": [
+            {
+              "op": "median",
+              "field": "production_kt",
+              "as": "baseline"
+            }
+          ],
+          "frame": [
+            -5,
+            5
+          ],
+          "groupby": [
+            "crop"
+          ],
+          "sort": [
+            {
+              "field": "year",
+              "order": "ascending"
+            }
+          ]
+        },
+        {
+          "filter": "datum.baseline > 0 && datum.production_kt > 0"
+        },
+        {
+          "calculate": "100 * (datum.production_kt / datum.baseline - 1)",
+          "as": "dev"
+        },
+        {
+          "calculate": "datum.year - 0.5",
+          "as": "x0"
+        },
+        {
+          "calculate": "datum.year + 0.5",
+          "as": "x1"
+        },
+        {
+          "calculate": "indexof(['Wheat','Barley','Canola'], datum.crop) >= 0 ? datum.crop : datum.crop === 'Sugar cane' ? 'Sugar cane' : 'Other grains and oilseeds'",
+          "as": "group"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "rect",
+            "clip": true
+          },
+          "encoding": {
+            "x": {
+              "field": "x0",
+              "type": "quantitative",
+              "title": null,
+              "scale": {
+                "domain": {
+                  "param": "brush",
+                  "encoding": "x"
+                },
+                "nice": false,
+                "zero": false
+              },
+              "axis": {
+                "format": "d",
+                "grid": false,
+                "ticks": false,
+                "domain": false,
+                "labelFlush": false,
+                "tickMinStep": 1
+              }
+            },
+            "x2": {
+              "field": "x1"
+            },
+            "y": {
+              "field": "crop",
+              "type": "nominal",
+              "title": null,
+              "sort": [
+                "Wheat",
+                "Barley",
+                "Canola",
+                "Sugar cane",
+                "Maize",
+                "Dry peas",
+                "Soybeans"
+              ],
+              "axis": {
+                "ticks": false,
+                "domain": false,
+                "labelAlign": "left",
+                "labelPadding": 108,
+                "labelLimit": 102,
+                "labelFontWeight": 600,
+                "labelColor": "#333e38",
+                "labelFontSize": 16
+              }
+            },
+            "color": {
+              "field": "dev",
+              "type": "quantitative",
+              "title": "Harvest against its eleven-year normal (%)",
+              "scale": {
+                "type": "threshold",
+                "domain": [
+                  -40,
+                  -15,
+                  15,
+                  40
+                ],
+                "range": [
+                  "#84520f",
+                  "#d6a248",
+                  "#efeee7",
+                  "#5ba79b",
+                  "#0f3f39"
+                ]
+              },
+              "legend": {
+                "direction": "horizontal",
+                "orient": "none",
+                "legendX": -108,
+                "legendY": -96,
+                "symbolType": "square",
+                "symbolSize": 170,
+                "format": "+d",
+                "titleLimit": 360
+              }
+            },
+            "opacity": {
+              "condition": {
+                "param": "pick",
+                "empty": true,
+                "value": 1
+              },
+              "value": 0.2
+            },
+            "tooltip": [
+              {
+                "field": "crop",
+                "type": "nominal",
+                "title": "Crop"
+              },
+              {
+                "field": "year",
+                "type": "quantitative",
+                "title": "Year",
+                "format": "d"
+              },
+              {
+                "field": "production_kt",
+                "type": "quantitative",
+                "title": "Thousand tonnes harvested",
+                "format": ",.0f"
+              },
+              {
+                "field": "baseline",
+                "type": "quantitative",
+                "title": "Eleven-year normal",
+                "format": ",.0f"
+              },
+              {
+                "field": "dev",
+                "type": "quantitative",
+                "title": "vs normal (%)",
+                "format": "+.0f"
+              }
+            ]
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "year": 1982
+              },
+              {
+                "year": 1994
+              },
+              {
+                "year": 2002
+              },
+              {
+                "year": 2006
+              },
+              {
+                "year": 2019
+              }
+            ]
+          },
+          "transform": [
+            {
+              "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+            }
+          ],
+          "mark": {
+            "type": "point",
+            "shape": "triangle-down",
+            "filled": true,
+            "size": 46,
+            "color": "#9c6114",
+            "opacity": 1,
+            "clip": false
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative",
+              "scale": {
+                "domain": {
+                  "param": "brush",
+                  "encoding": "x"
+                },
+                "nice": false,
+                "zero": false
+              }
+            },
+            "y": {
+              "value": -7
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "year": 1982
+              },
+              {
+                "year": 1994
+              },
+              {
+                "year": 2002
+              },
+              {
+                "year": 2006
+              },
+              {
+                "year": 2019
+              }
+            ]
+          },
+          "transform": [
+            {
+              "filter": "datum.year >= (isValid(brush.year) ? brush.year[0] : 1960.5) && datum.year <= (isValid(brush.year) ? brush.year[1] : 2024.5)"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "fill": "#84520f",
+            "align": "center",
+            "baseline": "bottom",
+            "clip": false
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative",
+              "scale": {
+                "domain": {
+                  "param": "brush",
+                  "encoding": "x"
+                },
+                "nice": false,
+                "zero": false
+              }
+            },
+            "y": {
+              "value": -14
+            },
+            "text": {
+              "field": "year",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "t": "Drought years:"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#57625b",
+            "align": "left",
+            "baseline": "bottom",
+            "x": -108,
+            "y": -14,
+            "clip": false
+          },
+          "encoding": {
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "t": "Four of the five were El Niño years;"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 16,
+            "fontWeight": 400,
+            "fill": "#333e38",
+            "x": {
+              "expr": "width"
+            },
+            "y": -78,
+            "align": "right",
+            "baseline": "middle",
+            "clip": false
+          },
+          "encoding": {
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "t": "2019 had a near-record Indian Ocean Dipole"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 16,
+            "fontWeight": 400,
+            "fill": "#333e38",
+            "x": {
+              "expr": "width"
+            },
+            "y": -58,
+            "align": "right",
+            "baseline": "middle",
+            "clip": false
+          },
+          "encoding": {
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "opacity": 0,
+            "clip": false
+          },
+          "encoding": {
+            "x": {
+              "value": -108
+            },
+            "x2": {
+              "value": -108
+            },
+            "y": {
+              "value": 0
+            },
+            "y2": {
+              "value": 1
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "opacity": 0,
+            "clip": false
+          },
+          "encoding": {
+            "x": {
+              "value": {
+                "expr": "width + 78"
+              }
+            },
+            "x2": {
+              "value": {
+                "expr": "width + 78"
+              }
+            },
+            "y": {
+              "value": 0
+            },
+            "y2": {
+              "value": 1
+            }
+          }
+        }
+      ]
+    },
+    {
+      "height": 44,
+      "layer": [
+        {
+          "transform": [
+            {
+              "filter": "datum.crop !== 'Sugar cane'"
+            },
+            {
+              "aggregate": [
+                {
+                  "op": "sum",
+                  "field": "production_kt",
+                  "as": "total"
+                }
+              ],
+              "groupby": [
+                "year"
+              ]
+            }
+          ],
+          "params": [
+            {
+              "name": "brush",
+              "select": {
+                "type": "interval",
+                "encodings": [
+                  "x"
+                ],
+                "mark": {
+                  "fill": "#333e38",
+                  "fillOpacity": 0.12,
+                  "stroke": "#333e38",
+                  "strokeWidth": 1
+                }
+              }
+            }
+          ],
+          "mark": {
+            "type": "area",
+            "color": "#c3cac5",
+            "interpolate": "monotone",
+            "cursor": "ew-resize"
+          },
+          "encoding": {
+            "x": {
+              "field": "year",
+              "type": "quantitative",
+              "title": null,
+              "scale": {
+                "domain": [
+                  1960.5,
+                  2024.5
+                ],
+                "nice": false,
+                "zero": false
+              },
+              "axis": {
+                "format": "d",
+                "grid": false,
+                "domain": false,
+                "ticks": false,
+                "values": [
+                  1970,
+                  1980,
+                  1990,
+                  2000,
+                  2010,
+                  2020
+                ]
+              }
+            },
+            "y": {
+              "field": "total",
+              "type": "quantitative",
+              "axis": null,
+              "title": null
+            },
+            "tooltip": [
+              {
+                "field": "year",
+                "type": "quantitative",
+                "title": "Year",
+                "format": "d"
+              },
+              {
+                "field": "total",
+                "type": "quantitative",
+                "title": "All crops shown (kt)",
+                "format": ",.0f"
+              }
+            ]
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": {
+                "param": "brush"
+              }
+            },
+            {
+              "filter": "datum.crop === 'Wheat'"
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "mean",
+                  "field": "production_kt",
+                  "as": "avg"
+                },
+                {
+                  "op": "min",
+                  "field": "year",
+                  "as": "y0"
+                },
+                {
+                  "op": "max",
+                  "field": "year",
+                  "as": "y1"
+                }
+              ]
+            },
+            {
+              "window": [
+                {
+                  "op": "row_number",
+                  "as": "rank"
+                }
+              ],
+              "sort": [
+                {
+                  "field": "production_kt",
+                  "order": "ascending"
+                }
+              ]
+            },
+            {
+              "filter": "datum.rank === 1"
+            },
+            {
+              "calculate": "(datum.y0 === datum.y1 ? datum.y0 : datum.y0 + '–' + datum.y1) + ': wheat averaged ' + format(datum.avg / 1000, '.1f') + ' Mt a year'",
+              "as": "t1"
+            },
+            {
+              "calculate": "'Smallest crop: ' + format(datum.production_kt / 1000, '.1f') + ' Mt, in ' + datum.year",
+              "as": "t2"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 16,
+            "fontWeight": 700,
+            "fill": "#161f1b",
+            "align": "left",
+            "baseline": "bottom",
+            "x": 0,
+            "y": -28
+          },
+          "encoding": {
+            "text": {
+              "field": "t1",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": {
+                "param": "brush"
+              }
+            },
+            {
+              "filter": "datum.crop === 'Wheat'"
+            },
+            {
+              "joinaggregate": [
+                {
+                  "op": "mean",
+                  "field": "production_kt",
+                  "as": "avg"
+                },
+                {
+                  "op": "min",
+                  "field": "year",
+                  "as": "y0"
+                },
+                {
+                  "op": "max",
+                  "field": "year",
+                  "as": "y1"
+                }
+              ]
+            },
+            {
+              "window": [
+                {
+                  "op": "row_number",
+                  "as": "rank"
+                }
+              ],
+              "sort": [
+                {
+                  "field": "production_kt",
+                  "order": "ascending"
+                }
+              ]
+            },
+            {
+              "filter": "datum.rank === 1"
+            },
+            {
+              "calculate": "(datum.y0 === datum.y1 ? datum.y0 : datum.y0 + '–' + datum.y1) + ': wheat averaged ' + format(datum.avg / 1000, '.1f') + ' Mt a year'",
+              "as": "t1"
+            },
+            {
+              "calculate": "'Smallest crop: ' + format(datum.production_kt / 1000, '.1f') + ' Mt, in ' + datum.year",
+              "as": "t2"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 16,
+            "fontWeight": 400,
+            "fill": "#333e38",
+            "align": "left",
+            "baseline": "bottom",
+            "x": 0,
+            "y": -8
+          },
+          "encoding": {
+            "text": {
+              "field": "t2",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "t": "Drag here"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "fill": "#333e38",
+            "x": -108,
+            "y": 4,
+            "align": "left",
+            "baseline": "top"
+          },
+          "encoding": {
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {
+                "t": "to zoom"
+              }
+            ]
+          },
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "fill": "#333e38",
+            "x": -108,
+            "y": 24,
+            "align": "left",
+            "baseline": "top"
+          },
+          "encoding": {
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "opacity": 0
+          },
+          "encoding": {
+            "x": {
+              "value": -108
+            },
+            "x2": {
+              "value": -108
+            },
+            "y": {
+              "value": 0
+            },
+            "y2": {
+              "value": 1
+            }
+          }
+        },
+        {
+          "data": {
+            "values": [
+              {}
+            ]
+          },
+          "mark": {
+            "type": "rule",
+            "opacity": 0
+          },
+          "encoding": {
+            "x": {
+              "value": {
+                "expr": "width + 78"
+              }
+            },
+            "x2": {
+              "value": {
+                "expr": "width + 78"
+              }
+            },
+            "y": {
+              "value": 0
+            },
+            "y2": {
+              "value": 1
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

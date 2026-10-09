@@ -125,11 +125,165 @@
           "feature": "austates"
         }
       },
+      "transform": [
+        {
+          "lookup": "properties.STATE_NAME",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
+          "as": "kt"
+        },
+        {
+          "calculate": "isValid(datum.kt) ? format(datum.kt, ',') + ' kt' : 'No figure published by the ABS'",
+          "as": "kt_text"
+        }
+      ],
       "mark": {
         "type": "geoshape",
-        "fill": "#e7e6de",
         "stroke": "#fefdf9",
         "strokeWidth": 1
+      },
+      "encoding": {
+        "fill": {
+          "condition": {
+            "test": "!isValid(datum.kt)",
+            "value": "#c3cac5"
+          },
+          "value": "#e7e6de"
+        },
+        "tooltip": [
+          {
+            "field": "properties.STATE_NAME",
+            "type": "nominal",
+            "title": "State"
+          },
+          {
+            "field": "kt_text",
+            "type": "nominal",
+            "title": "Wheat sold"
+          }
+        ]
+      }
+    },
+    {
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
+          "as": "kt"
+        },
+        {
+          "filter": "!isValid(datum.kt)"
+        },
+        {
+          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
+          "as": "abbr"
+        },
+        {
+          "filter": "indexof(['ACT','TAS'], datum.abbr) < 0"
+        }
+      ],
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "fill": "#161f1b",
+            "dy": -10
+          },
+          "encoding": {
+            "text": {
+              "field": "abbr",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 400,
+            "fill": "#161f1b",
+            "dy": 11
+          },
+          "encoding": {
+            "text": {
+              "value": "no figure"
+            }
+          }
+        }
+      ],
+      "encoding": {
+        "longitude": {
+          "field": "longitude",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "latitude",
+          "type": "quantitative"
+        }
       }
     },
     {
@@ -183,7 +337,7 @@
         "type": "circle",
         "stroke": "#fefdf9",
         "strokeWidth": 1.4,
-        "opacity": 0.92
+        "opacity": 1
       },
       "encoding": {
         "longitude": {
@@ -193,6 +347,11 @@
         "latitude": {
           "field": "latitude",
           "type": "quantitative"
+        },
+        "order": {
+          "field": "kt",
+          "type": "quantitative",
+          "sort": "descending"
         },
         "size": {
           "field": "kt",
@@ -541,6 +700,168 @@
           "type": "quantitative"
         }
       }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#161f1b",
+        "align": "left",
+        "baseline": "middle",
+        "x": 8,
+        "y": 14
+      },
+      "encoding": {
+        "text": {
+          "field": "l1",
+          "type": "nominal"
+        }
+      },
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
+          "as": "kt"
+        },
+        {
+          "filter": "isValid(datum.kt)"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "kt",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "filter": "datum.state === 'Western Australia'"
+        },
+        {
+          "calculate": "'WA: 1 in 9 Australians,'",
+          "as": "l1"
+        },
+        {
+          "calculate": "'but ' + format(datum.kt / datum.total, '.0%') + ' of the wheat'",
+          "as": "l2"
+        }
+      ]
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 8,
+        "y": 33
+      },
+      "encoding": {
+        "text": {
+          "field": "l2",
+          "type": "nominal"
+        }
+      },
+      "data": {
+        "url": "data/state_centroids.csv"
+      },
+      "transform": [
+        {
+          "lookup": "state",
+          "from": {
+            "data": {
+              "url": "data/wheat_state_density.csv",
+              "format": {
+                "type": "csv",
+                "parse": {
+                  "kt_2022_23": "number",
+                  "kt_2023_24": "number",
+                  "kt_2024_25": "number",
+                  "tpk_2022_23": "number",
+                  "tpk_2023_24": "number",
+                  "tpk_2024_25": "number",
+                  "area_km2": "number"
+                }
+              }
+            },
+            "key": "state",
+            "fields": [
+              "area_km2",
+              "kt_2022_23",
+              "kt_2023_24",
+              "kt_2024_25",
+              "tpk_2022_23",
+              "tpk_2023_24",
+              "tpk_2024_25"
+            ]
+          }
+        },
+        {
+          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
+          "as": "kt"
+        },
+        {
+          "filter": "isValid(datum.kt)"
+        },
+        {
+          "joinaggregate": [
+            {
+              "op": "sum",
+              "field": "kt",
+              "as": "total"
+            }
+          ]
+        },
+        {
+          "filter": "datum.state === 'Western Australia'"
+        },
+        {
+          "calculate": "'WA: 1 in 9 Australians,'",
+          "as": "l1"
+        },
+        {
+          "calculate": "'but ' + format(datum.kt / datum.total, '.0%') + ' of the wheat'",
+          "as": "l2"
+        }
+      ]
     }
   ]
 }

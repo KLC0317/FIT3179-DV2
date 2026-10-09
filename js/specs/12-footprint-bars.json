@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 520,
-  "height": 250,
+  "height": 290,
   "autosize": {
     "type": "pad",
     "contains": "padding"
@@ -9,7 +9,7 @@
   "usermeta": {
     "gutter": [
       108,
-      78
+      58
     ]
   },
   "config": {
@@ -71,15 +71,15 @@
     }
   },
   "title": {
-    "text": "Agriculture's footprint is far bigger than its share of the economy",
-    "subtitle": "Each dumbbell runs from agriculture's 2.2% share of GDP to its share of another national total. Natural resources in teal.",
+    "text": "Agriculture's footprint is far bigger than its economy",
+    "subtitle": "Agriculture's share of six national totals. Natural resources in teal; the dashed line is its 2.2% share of GDP.",
     "subtitleLimit": 760
   },
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 5,
-    "bottom": 5
+    "top": 21,
+    "bottom": 28
   },
   "data": {
     "url": "data/farm_footprint_hierarchy.csv",
@@ -92,82 +92,162 @@
   },
   "transform": [
     {
-      "filter": "datum.parent === 'root' && datum.name !== 'GDP' && datum.name !== 'Output exported'"
-    },
-    {
-      "calculate": "2.2",
-      "as": "ref"
+      "filter": "datum.parent === 'root' && datum.name !== 'Output exported'"
     },
     {
       "calculate": "datum.value / 2.2",
       "as": "multiple"
+    },
+    {
+      "calculate": "datum.name === 'Water used' ? 'Water' : datum.name",
+      "as": "row"
     }
   ],
   "layer": [
     {
       "mark": {
         "type": "rule",
-        "stroke": "#a0a9a3",
-        "strokeWidth": 1,
+        "stroke": "#9c6114",
+        "strokeWidth": 1.5,
         "strokeDash": [
-          3,
+          4,
           3
         ]
       },
       "encoding": {
         "x": {
           "datum": 2.2,
-          "type": "quantitative"
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          }
+        },
+        "y": {
+          "value": -4
+        },
+        "y2": {
+          "value": {
+            "expr": "height"
+          }
         }
       }
     },
     {
       "mark": {
-        "type": "rule",
-        "strokeWidth": 3,
-        "opacity": 0.45
+        "type": "bar",
+        "color": "#eaece8"
       },
       "encoding": {
         "y": {
-          "field": "name",
+          "field": "row",
           "type": "nominal",
           "title": null,
-          "sort": {
-            "field": "value",
-            "order": "descending"
+          "sort": [
+            "Water",
+            "Land",
+            "Exports",
+            "Rural jobs",
+            "Jobs",
+            "GDP"
+          ],
+          "scale": {
+            "paddingInner": 0.5,
+            "paddingOuter": 0.25
           },
           "axis": {
             "ticks": false,
             "domain": false,
             "labelAlign": "left",
-            "labelPadding": 108,
-            "labelLimit": 102,
+            "labelPadding": 82,
+            "labelLimit": 76,
             "labelFontWeight": 600,
             "labelColor": "#161f1b",
             "labelFontSize": 16
           }
         },
         "x": {
-          "field": "ref",
           "type": "quantitative",
-          "title": "Share of the national total (%)",
+          "title": null,
           "scale": {
             "domain": [
               0,
-              76
+              100
             ]
           },
           "axis": {
-            "grid": true,
             "values": [
               0,
-              20,
-              40,
-              60
-            ]
+              25,
+              50,
+              75,
+              100
+            ],
+            "labelExpr": "datum.value + '%'",
+            "grid": false,
+            "domain": false,
+            "ticks": false
+          },
+          "datum": 100
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "bar"
+      },
+      "encoding": {
+        "y": {
+          "field": "row",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Water",
+            "Land",
+            "Exports",
+            "Rural jobs",
+            "Jobs",
+            "GDP"
+          ],
+          "scale": {
+            "paddingInner": 0.5,
+            "paddingOuter": 0.25
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 82,
+            "labelLimit": 76,
+            "labelFontWeight": 600,
+            "labelColor": "#161f1b",
+            "labelFontSize": 16
           }
         },
-        "x2": {
+        "x": {
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              100
+            ]
+          },
+          "axis": {
+            "values": [
+              0,
+              25,
+              50,
+              75,
+              100
+            ],
+            "labelExpr": "datum.value + '%'",
+            "grid": false,
+            "domain": false,
+            "ticks": false
+          },
           "field": "value"
         },
         "color": {
@@ -181,103 +261,7 @@
             ],
             "range": [
               "#0f3f39",
-              "#a0a9a3"
-            ]
-          }
-        }
-      }
-    },
-    {
-      "mark": {
-        "type": "circle",
-        "size": 110,
-        "color": "#a0a9a3",
-        "opacity": 1
-      },
-      "encoding": {
-        "y": {
-          "field": "name",
-          "type": "nominal",
-          "title": null,
-          "sort": {
-            "field": "value",
-            "order": "descending"
-          },
-          "axis": {
-            "ticks": false,
-            "domain": false,
-            "labelAlign": "left",
-            "labelPadding": 108,
-            "labelLimit": 102,
-            "labelFontWeight": 600,
-            "labelColor": "#161f1b",
-            "labelFontSize": 16
-          }
-        },
-        "x": {
-          "field": "ref",
-          "type": "quantitative",
-          "title": "Share of the national total (%)",
-          "scale": {
-            "domain": [
-              0,
-              76
-            ]
-          },
-          "axis": {
-            "grid": true,
-            "values": [
-              0,
-              20,
-              40,
-              60
-            ]
-          }
-        }
-      }
-    },
-    {
-      "mark": {
-        "type": "circle",
-        "size": 210,
-        "opacity": 1
-      },
-      "encoding": {
-        "y": {
-          "field": "name",
-          "type": "nominal",
-          "title": null,
-          "sort": {
-            "field": "value",
-            "order": "descending"
-          },
-          "axis": {
-            "ticks": false,
-            "domain": false,
-            "labelAlign": "left",
-            "labelPadding": 108,
-            "labelLimit": 102,
-            "labelFontWeight": 600,
-            "labelColor": "#161f1b",
-            "labelFontSize": 16
-          }
-        },
-        "x": {
-          "field": "value",
-          "type": "quantitative"
-        },
-        "color": {
-          "field": "group",
-          "type": "nominal",
-          "legend": null,
-          "scale": {
-            "domain": [
-              "Natural resources",
-              "Economy"
-            ],
-            "range": [
-              "#0f3f39",
-              "#a0a9a3"
+              "#7a857e"
             ]
           }
         },
@@ -310,8 +294,8 @@
     {
       "transform": [
         {
-          "calculate": "format(datum.value, '.1f') + '%  (' + format(datum.multiple, '.0f') + '\\u00d7)'",
-          "as": "lab"
+          "calculate": "format(datum.value, '.1f') + '%'",
+          "as": "t"
         }
       ],
       "mark": {
@@ -320,34 +304,42 @@
         "fontSize": 16,
         "fontWeight": 700,
         "align": "left",
-        "dx": 14
+        "dx": 8
       },
       "encoding": {
         "y": {
-          "field": "name",
+          "field": "row",
           "type": "nominal",
           "title": null,
-          "sort": {
-            "field": "value",
-            "order": "descending"
+          "sort": [
+            "Water",
+            "Land",
+            "Exports",
+            "Rural jobs",
+            "Jobs",
+            "GDP"
+          ],
+          "scale": {
+            "paddingInner": 0.5,
+            "paddingOuter": 0.25
           },
           "axis": {
             "ticks": false,
             "domain": false,
             "labelAlign": "left",
-            "labelPadding": 108,
-            "labelLimit": 102,
+            "labelPadding": 82,
+            "labelLimit": 76,
             "labelFontWeight": 600,
             "labelColor": "#161f1b",
             "labelFontSize": 16
           }
         },
         "x": {
-          "field": "value",
+          "datum": 100,
           "type": "quantitative"
         },
         "text": {
-          "field": "lab",
+          "field": "t",
           "type": "nominal"
         },
         "color": {
@@ -368,27 +360,140 @@
       }
     },
     {
+      "mark": {
+        "type": "point",
+        "filled": true,
+        "size": 300,
+        "strokeWidth": 0,
+        "opacity": 1,
+        "clip": false
+      },
+      "encoding": {
+        "y": {
+          "field": "row",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Water",
+            "Land",
+            "Exports",
+            "Rural jobs",
+            "Jobs",
+            "GDP"
+          ],
+          "scale": {
+            "paddingInner": 0.5,
+            "paddingOuter": 0.25
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 82,
+            "labelLimit": 76,
+            "labelFontWeight": 600,
+            "labelColor": "#161f1b",
+            "labelFontSize": 16
+          }
+        },
+        "x": {
+          "value": -98
+        },
+        "shape": {
+          "field": "row",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Water",
+              "Land",
+              "Exports",
+              "Rural jobs",
+              "Jobs",
+              "GDP"
+            ],
+            "range": [
+              "M0,-1 C0.4,-0.4 0.8,0 0.8,0.4 C0.8,0.85 0.4,1 0,1 C-0.4,1 -0.8,0.85 -0.8,0.4 C-0.8,0 -0.4,-0.4 0,-1 Z",
+              "M-1,1 L-1,0.15 Q-0.5,-0.55 0,0.1 Q0.5,-0.75 1,0 L1,1 Z",
+              "M-1,0.15 L1,0.15 L0.7,0.8 L-0.7,0.8 Z M-0.55,0.15 L-0.55,-0.4 L0.35,-0.4 L0.35,0.15 Z M-0.25,-0.4 L-0.25,-0.85 L0.1,-0.85 L0.1,-0.4 Z",
+              "M0,-0.96 A0.3,0.3 0 1,1 0,-0.36 A0.3,0.3 0 1,1 0,-0.96 Z M-0.48,-0.26 L0.48,-0.26 Q0.62,-0.26 0.62,-0.1 L0.62,0.4 L0.34,0.4 L0.34,1 L-0.34,1 L-0.34,0.4 L-0.62,0.4 L-0.62,-0.1 Q-0.62,-0.26 -0.48,-0.26 Z",
+              "M0,-0.96 A0.3,0.3 0 1,1 0,-0.36 A0.3,0.3 0 1,1 0,-0.96 Z M-0.48,-0.26 L0.48,-0.26 Q0.62,-0.26 0.62,-0.1 L0.62,0.4 L0.34,0.4 L0.34,1 L-0.34,1 L-0.34,0.4 L-0.62,0.4 L-0.62,-0.1 Q-0.62,-0.26 -0.48,-0.26 Z",
+              "M-0.8,0.5 L0.8,0.5 L0.8,0.9 L-0.8,0.9 Z M-0.8,-0.05 L0.8,-0.05 L0.8,0.35 L-0.8,0.35 Z M-0.8,-0.6 L0.8,-0.6 L0.8,-0.2 L-0.8,-0.2 Z"
+            ]
+          }
+        },
+        "color": {
+          "field": "group",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Natural resources",
+              "Economy"
+            ],
+            "range": [
+              "#0f3f39",
+              "#7a857e"
+            ]
+          }
+        }
+      }
+    },
+    {
       "data": {
         "values": [
           {
-            "t": "agriculture's 2.2% of GDP"
+            "row": "Water",
+            "t": "mostly irrigation"
+          },
+          {
+            "row": "Land",
+            "t": "mostly grazing on native vegetation"
           }
         ]
       },
       "mark": {
         "type": "text",
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 16,
+        "fontSize": 15,
         "fontWeight": 400,
-        "fill": "#57625b",
+        "fill": "#333e38",
         "align": "left",
-        "x": {
-          "expr": "scale('x', 2.2) + 8"
-        },
-        "y": 10,
-        "limit": 210
+        "dx": 6,
+        "dy": 24
       },
       "encoding": {
+        "y": {
+          "field": "row",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Water",
+            "Land",
+            "Exports",
+            "Rural jobs",
+            "Jobs",
+            "GDP"
+          ],
+          "scale": {
+            "paddingInner": 0.5,
+            "paddingOuter": 0.25
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 82,
+            "labelLimit": 76,
+            "labelFontWeight": 600,
+            "labelColor": "#161f1b",
+            "labelFontSize": 16
+          }
+        },
+        "x": {
+          "datum": 2.2,
+          "type": "quantitative"
+        },
         "text": {
           "field": "t",
           "type": "nominal"
@@ -433,12 +538,12 @@
       "encoding": {
         "x": {
           "value": {
-            "expr": "width + 78"
+            "expr": "width + 58"
           }
         },
         "x2": {
           "value": {
-            "expr": "width + 78"
+            "expr": "width + 58"
           }
         },
         "y": {

@@ -127,6 +127,33 @@
       },
       "transform": [
         {
+          "calculate": "datum.properties.STATE_NAME + ': no figure published by the ABS'",
+          "as": "note"
+        }
+      ],
+      "mark": {
+        "type": "geoshape",
+        "fill": "#c3cac5",
+        "stroke": "#fefdf9",
+        "strokeWidth": 1.1
+      },
+      "encoding": {
+        "tooltip": {
+          "field": "note",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "url": "data/au-states.json",
+        "format": {
+          "type": "topojson",
+          "feature": "austates"
+        }
+      },
+      "transform": [
+        {
           "lookup": "properties.STATE_NAME",
           "from": {
             "data": {
@@ -580,6 +607,52 @@
           "field": "lat",
           "type": "quantitative"
         }
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#161f1b",
+        "align": "left",
+        "baseline": "middle",
+        "x": 8,
+        "y": 14
+      },
+      "encoding": {
+        "text": {
+          "value": "Most of WA is desert:"
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 8,
+        "y": 33
+      },
+      "encoding": {
+        "text": {
+          "value": "wheat grows in its south-west"
+        }
+      },
+      "data": {
+        "values": [
+          {}
+        ]
       }
     }
   ]

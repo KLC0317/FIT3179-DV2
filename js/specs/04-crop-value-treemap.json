@@ -5,11 +5,11 @@
     "subtitle": "Local value of broadacre crops, 2024–25, grouped by crop type."
   },
   "width": 600,
-  "height": 325,
+  "height": 397,
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 1,
+    "top": 18,
     "bottom": 0
   },
   "background": null,
@@ -40,16 +40,26 @@
           "field": "value",
           "method": "squarify",
           "round": true,
-          "paddingInner": 3,
-          "paddingTop": 46,
+          "paddingInner": 4,
+          "paddingTop": 30,
           "size": [
             {
               "signal": "width"
             },
             {
-              "signal": "height"
+              "signal": "height - 54 + 30"
             }
           ]
+        },
+        {
+          "type": "formula",
+          "as": "y0",
+          "expr": "datum.y0 - 30"
+        },
+        {
+          "type": "formula",
+          "as": "y1",
+          "expr": "datum.y1 - 30"
         }
       ]
     },
@@ -105,11 +115,16 @@
           "expr": "datum.depth === 1"
         },
         {
+          "type": "formula",
+          "as": "type",
+          "expr": "slice(datum.name, 0, -1)"
+        },
+        {
           "type": "lookup",
           "from": "group_totals",
           "key": "crop_type",
           "fields": [
-            "name"
+            "type"
           ],
           "values": [
             "total"
@@ -117,16 +132,6 @@
           "as": [
             "total"
           ]
-        }
-      ]
-    },
-    {
-      "name": "labelled",
-      "source": "leaves",
-      "transform": [
-        {
-          "type": "filter",
-          "expr": "(datum.x1-datum.x0) > 68 && (datum.y1-datum.y0) > 54"
         }
       ]
     },
@@ -139,6 +144,26 @@
           "expr": "datum.name === 'Wheat'"
         }
       ]
+    },
+    {
+      "name": "tall",
+      "source": "leaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.y1 - datum.y0 >= 50"
+        }
+      ]
+    },
+    {
+      "name": "short",
+      "source": "leaves",
+      "transform": [
+        {
+          "type": "filter",
+          "expr": "datum.y1 - datum.y0 < 50"
+        }
+      ]
     }
   ],
   "scales": [],
@@ -146,17 +171,10 @@
     {
       "type": "rect",
       "from": {
-        "data": "leaves"
+        "data": "groups"
       },
+      "interactive": false,
       "encode": {
-        "enter": {
-          "stroke": {
-            "value": "#fefdf9"
-          },
-          "strokeWidth": {
-            "value": 2
-          }
-        },
         "update": {
           "x": {
             "field": "x0"
@@ -171,29 +189,96 @@
             "field": "y1"
           },
           "fill": {
-            "signal": "datum.name === 'Wheat' ? '#0f3f39' : datum.name === 'Barley' ? '#3e9588' : datum.name === 'Canola' ? '#7461a8' : '#c3cac5'"
+            "value": "#eaece8"
           },
-          "tooltip": {
-            "signal": "{'Crop': datum.name, 'Type': datum.crop_type, 'Local value 2024–25': '$' + format(datum.value, ',.0f') + 'm', 'Share of all crops': format(datum.value / datum.grand, '.1%')}"
+          "stroke": {
+            "value": "#a0a9a3"
+          },
+          "strokeWidth": {
+            "value": 1
           }
         }
       }
     },
     {
       "type": "text",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 9"
+          },
+          "y": {
+            "signal": "datum.y0 + 20"
+          },
+          "text": {
+            "signal": "upper(datum.name) + '  ' + format(datum.total / 1000, '$.1f') + 'b'"
+          },
+          "fill": {
+            "value": "#333e38"
+          },
+          "font": {
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fontWeight": {
+            "value": 700
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 14"
+          }
+        }
+      },
       "from": {
-        "data": "labelled"
+        "data": "groups"
+      }
+    },
+    {
+      "type": "rect",
+      "from": {
+        "data": "leaves"
       },
       "encode": {
         "update": {
           "x": {
-            "signal": "datum.x0 + 10"
+            "field": "x0"
+          },
+          "x2": {
+            "field": "x1"
           },
           "y": {
-            "signal": "datum.y0 + 23"
+            "field": "y0"
+          },
+          "y2": {
+            "field": "y1"
+          },
+          "fill": {
+            "signal": "datum.name === 'Wheat' ? '#0f3f39' : datum.name === 'Barley' ? '#a0a9a3' : datum.name === 'Canola' ? '#7461a8' : '#dee2dd'"
+          },
+          "cursor": {
+            "value": "default"
+          },
+          "tooltip": {
+            "signal": "{'Crop': datum.name, 'Type': datum.crop_type, 'Local value 2024–25': format(datum.value, '$,.0f') + ' million', 'Share of all crops': format(datum.value / datum.grand, '.1%'), 'Made up of': datum.detail ? datum.detail : 'one crop'}"
+          }
+        }
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y0 + 21"
           },
           "text": {
-            "field": "name"
+            "signal": "datum.name === 'Other pulses' ? 'Others' : datum.name"
           },
           "fill": {
             "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
@@ -208,26 +293,27 @@
             "value": 700
           },
           "limit": {
-            "signal": "datum.x1 - datum.x0 - 18"
+            "signal": "datum.x1 - datum.x0 - 14"
           }
         }
+      },
+      "from": {
+        "data": "tall"
       }
     },
     {
       "type": "text",
-      "from": {
-        "data": "labelled"
-      },
+      "interactive": false,
       "encode": {
         "update": {
           "x": {
-            "signal": "datum.x0 + 10"
+            "signal": "datum.x0 + 8"
           },
           "y": {
-            "signal": "datum.y0 + 45"
+            "signal": "datum.y0 + 41"
           },
           "text": {
-            "signal": "'$' + format(datum.value/1000, '.2f') + 'b'"
+            "signal": "format(datum.value / 1000, '$.1f') + 'b'"
           },
           "fill": {
             "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
@@ -236,26 +322,68 @@
             "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 16
+            "value": 15
+          },
+          "fontWeight": {
+            "value": 400
           },
           "limit": {
-            "signal": "datum.x1 - datum.x0 - 18"
+            "signal": "datum.x1 - datum.x0 - 14"
           }
         }
+      },
+      "from": {
+        "data": "tall"
       }
     },
     {
       "type": "text",
-      "from": {
-        "data": "hero"
-      },
+      "interactive": false,
       "encode": {
         "update": {
           "x": {
-            "signal": "datum.x0 + 10"
+            "signal": "datum.x0 + 8"
           },
           "y": {
-            "signal": "datum.y1 - 14"
+            "signal": "(datum.y0 + datum.y1) / 2"
+          },
+          "text": {
+            "signal": "datum.name === 'Other pulses' ? 'Others' : datum.name + '  ' + format(datum.value / 1000, '$.1f') + 'b'"
+          },
+          "fill": {
+            "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
+          },
+          "font": {
+            "value": "'Source Sans 3', 'Segoe UI', sans-serif"
+          },
+          "fontSize": {
+            "value": 15
+          },
+          "fontWeight": {
+            "value": 700
+          },
+          "limit": {
+            "signal": "datum.x1 - datum.x0 - 14"
+          },
+          "baseline": {
+            "value": "middle"
+          }
+        }
+      },
+      "from": {
+        "data": "short"
+      }
+    },
+    {
+      "type": "text",
+      "interactive": false,
+      "encode": {
+        "update": {
+          "x": {
+            "signal": "datum.x0 + 8"
+          },
+          "y": {
+            "signal": "datum.y1 - 12"
           },
           "text": {
             "signal": "format(datum.value / datum.grand, '.0%') + ' of all crop value'"
@@ -273,106 +401,74 @@
             "value": 600
           },
           "limit": {
-            "signal": "datum.x1 - datum.x0 - 18"
+            "signal": "datum.x1 - datum.x0 - 14"
           }
         }
-      }
-    },
-    {
-      "type": "rect",
-      "from": {
-        "data": "groups"
       },
-      "encode": {
-        "update": {
-          "x": {
-            "field": "x0"
-          },
-          "x2": {
-            "field": "x1"
-          },
-          "y": {
-            "field": "y0"
-          },
-          "y2": {
-            "field": "y1"
-          },
-          "fill": {
-            "value": "transparent"
-          },
-          "stroke": {
-            "value": "#333e38"
-          },
-          "strokeWidth": {
-            "value": 1.5
-          }
-        }
+      "from": {
+        "data": "hero"
       }
     },
     {
       "type": "text",
-      "from": {
-        "data": "groups"
-      },
+      "interactive": false,
       "encode": {
         "update": {
           "x": {
-            "signal": "datum.x0 + 8"
+            "value": 0
           },
           "y": {
-            "signal": "datum.y0 + 19"
+            "signal": "height - 30"
           },
           "text": {
-            "signal": "upper(datum.name)"
+            "value": "Chickpeas: $0.4b to $1.7b in a year,"
           },
           "fill": {
-            "value": "#333e38"
+            "value": "#161f1b"
           },
           "font": {
             "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 15
+            "value": 16
           },
           "fontWeight": {
             "value": 700
           },
-          "limit": {
-            "signal": "datum.x1 - datum.x0 - 16"
+          "baseline": {
+            "value": "bottom"
           }
         }
       }
     },
     {
       "type": "text",
-      "from": {
-        "data": "groups"
-      },
+      "interactive": false,
       "encode": {
         "update": {
           "x": {
-            "signal": "datum.x0 + 8"
+            "value": 0
           },
           "y": {
-            "signal": "datum.y0 + 38"
+            "signal": "height - 8"
           },
           "text": {
-            "signal": "'$' + format(datum.total/1000, '.2f') + 'b total'"
+            "value": "after India dropped its import duty in 2024"
           },
           "fill": {
-            "value": "#57625b"
+            "value": "#333e38"
           },
           "font": {
             "value": "'Source Sans 3', 'Segoe UI', sans-serif"
           },
           "fontSize": {
-            "value": 15
+            "value": 16
           },
           "fontWeight": {
             "value": 400
           },
-          "limit": {
-            "signal": "datum.x1 - datum.x0 - 16"
+          "baseline": {
+            "value": "bottom"
           }
         }
       }

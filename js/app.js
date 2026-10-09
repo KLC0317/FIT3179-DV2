@@ -14,20 +14,19 @@
   "use strict";
 
   var CHARTS = [
-    { el: "viz-streamgraph",   spec: "01-crop-streamgraph.json"        },
-    { el: "viz-matrix",        spec: "02-harvest-matrix.json"          },
+    { el: "viz-grow",          spec: "01-grow-stream-matrix.json"      },
     { el: "viz-boxplot",       spec: "03-volatility-boxplot.json"      },
     { el: "viz-treemap",       spec: "04-crop-value-treemap.json"      },
+    { el: "viz-flowmap",       spec: "07-wheat-flow-map.json"          },
     { el: "viz-choropleth",    spec: "05-wheat-choropleth.json"        },
     { el: "viz-symbolmap",     spec: "06-wheat-symbol-map.json"        },
-    { el: "viz-flowmap",       spec: "07-wheat-flow-map.json"          },
     { el: "viz-stateslope",    spec: "08-state-slope.json"             },
     { el: "viz-dietwaffle",    spec: "09-diet-waffle.json", facet: true  },
-    { el: "viz-discretionary", spec: "10-discretionary-slope.json"     },
+    { el: "viz-discretionary", spec: "10-discretionary-bars.json"      },
+    { el: "viz-insecurity",    spec: "14-food-insecurity-waffle.json"  },
     { el: "viz-water",         spec: "11-water-rain-timeline.json"     },
-    { el: "viz-footprint",     spec: "12-footprint-dumbbell.json"      },
-    { el: "viz-parallel",      spec: "13-water-parallel.json"          },
-    { el: "viz-insecurity",    spec: "14-food-insecurity-waffle.json"  }
+    { el: "viz-rainwheat",     spec: "13-rain-wheat-scatter.json"      },
+    { el: "viz-footprint",     spec: "12-footprint-bars.json"          }
   ];
 
   var EMBED_OPTIONS = {
@@ -37,6 +36,7 @@
   };
 
   var views = {};       // el id -> vega view
+  window.vegaViews = views;   // read by the automated layout checks
   var specCache = {};   // file  -> parsed spec
   var syncing = false;  // guards the linked-map signal loop
 
@@ -64,7 +64,9 @@
     s.spec.width = childW;
     s.spec.height = Math.round(childW * grid[1] / grid[0]);
     var step = childW / grid[0];              // one person per step
-    s.spec.mark.size = Math.round(Math.pow(step * 0.8, 2));
+    // the pictograms are the first layer (the second is the panel's note)
+    var mark = s.spec.layer ? s.spec.layer[0].mark : s.spec.mark;
+    mark.size = Math.round(Math.pow(step * 0.8, 2));
     return childW;
   }
 

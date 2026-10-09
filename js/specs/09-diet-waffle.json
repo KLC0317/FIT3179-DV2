@@ -8,7 +8,7 @@
     "left": 0,
     "right": 0,
     "top": 0,
-    "bottom": 5
+    "bottom": 0
   },
   "usermeta": {
     "grid": [
@@ -97,7 +97,7 @@
   },
   "transform": [
     {
-      "calculate": "datum.short + ': ' + format(datum.met_pct, '.0f') + ' in 100'",
+      "calculate": "datum.short + ': ' + format(datum.met_pct, '.0f') + ' in 100 (need ' + {\"Vegetables\": \"5\\u20136 a day\", \"Lean meat\": \"2\\u00bd\\u20133 a day\", \"Fruit\": \"2 a day\", \"Grains\": \"6 a day\"}[datum.short] + ')'",
       "as": "panel"
     },
     {
@@ -111,6 +111,10 @@
     {
       "calculate": "floor(datum.cell / 20)",
       "as": "r"
+    },
+    {
+      "calculate": "'Adults need ' + {\"Vegetables\": \"5\\u20136\", \"Lean meat\": \"2\\u00bd\\u20133\", \"Fruit\": \"2\", \"Grains\": \"6\"}[datum.short] + ' serves'",
+      "as": "need"
     }
   ],
   "columns": 2,
@@ -118,12 +122,11 @@
     "field": "panel",
     "type": "nominal",
     "title": null,
-    "sort": [
-      "Vegetables: 4 in 100",
-      "Lean meat: 21 in 100",
-      "Fruit: 23 in 100",
-      "Grains: 28 in 100"
-    ],
+    "sort": {
+      "field": "met_pct",
+      "op": "mean",
+      "order": "ascending"
+    },
     "header": {
       "labelFont": "Fraunces, Georgia, serif",
       "labelFontSize": 19,
@@ -191,6 +194,11 @@
           "type": "quantitative",
           "title": "Met the guideline (%)",
           "format": ".1f"
+        },
+        {
+          "field": "need",
+          "type": "nominal",
+          "title": "Guideline"
         }
       ]
     }

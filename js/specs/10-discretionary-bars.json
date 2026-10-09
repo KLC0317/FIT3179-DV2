@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 520,
-  "height": 228,
+  "height": 200,
   "autosize": {
     "type": "pad",
     "contains": "padding"
@@ -71,15 +71,15 @@
     }
   },
   "title": {
-    "text": "Discretionary food is losing ground, slowly",
-    "subtitle": "Share of daily energy from foods such as confectionery, soft drink, pastries and alcohol. People aged 2 and over.",
+    "text": "A third of daily energy still comes from discretionary food",
+    "subtitle": "Share of daily energy from foods such as confectionery, soft drink, pastries and alcohol, in two national surveys.",
     "subtitleLimit": 760
   },
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 26,
-    "bottom": 5
+    "top": 22,
+    "bottom": 0
   },
   "data": {
     "url": "data/food_consumption_indicators.csv",
@@ -97,111 +97,99 @@
     {
       "calculate": "replace(datum.year, '-', '–')",
       "as": "survey"
+    },
+    {
+      "calculate": "100 - datum.value",
+      "as": "core"
+    },
+    {
+      "fold": [
+        "value",
+        "core"
+      ],
+      "as": [
+        "part",
+        "pct"
+      ]
+    },
+    {
+      "calculate": "datum.part === 'value' ? 'Discretionary food' : 'Everything else'",
+      "as": "kind"
     }
   ],
   "layer": [
     {
       "mark": {
-        "type": "rule",
-        "stroke": "#a0a9a3",
-        "strokeWidth": 1.2,
-        "strokeDash": [
-          4,
-          3
-        ]
+        "type": "bar"
       },
       "encoding": {
         "y": {
-          "datum": 33.333333333333336,
-          "type": "quantitative",
+          "field": "survey",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "2011–12",
+            "2023"
+          ],
           "scale": {
-            "domain": [
-              28,
-              38
-            ]
-          }
-        }
-      }
-    },
-    {
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 15,
-        "fontWeight": 600,
-        "fill": "#57625b",
-        "align": "left",
-        "baseline": "top",
-        "x": 4,
-        "dy": 4
-      },
-      "encoding": {
-        "y": {
-          "datum": 33.333333333333336,
-          "type": "quantitative",
-          "scale": {
-            "domain": [
-              28,
-              38
-            ]
+            "paddingInner": 0.45,
+            "paddingOuter": 0.3
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
           }
         },
-        "text": {
-          "value": "one third of all energy"
-        }
-      }
-    },
-    {
-      "mark": {
-        "type": "line",
-        "strokeWidth": 3,
-        "color": "#9c6114",
-        "point": {
-          "filled": true,
-          "size": 140,
-          "color": "#9c6114"
-        }
-      },
-      "encoding": {
         "x": {
-          "field": "year",
-          "type": "ordinal",
+          "field": "pct",
+          "type": "quantitative",
           "title": null,
           "scale": {
-            "padding": 0.5
-          },
-          "axis": {
-            "labelFontSize": 16,
-            "labelFontWeight": 700,
-            "grid": false,
-            "domain": false,
-            "ticks": false,
-            "labelAngle": 0,
-            "labelPadding": 8,
-            "labelColor": "#161f1b",
-            "labelExpr": "replace(datum.label, '-', '–')"
-          }
-        },
-        "y": {
-          "field": "value",
-          "type": "quantitative",
-          "scale": {
             "domain": [
-              28,
-              38
+              0,
+              100
             ]
           },
+          "stack": "zero",
           "axis": {
-            "title": "% of daily energy",
-            "titleAngle": 0,
-            "titleAlign": "left",
-            "titleBaseline": "bottom",
-            "titleX": -108,
-            "titleY": -12,
-            "titleFontWeight": 600,
-            "titleColor": "#333e38",
-            "grid": true
+            "values": [
+              0,
+              25,
+              50,
+              75,
+              100
+            ],
+            "format": "d",
+            "labelExpr": "datum.value + '%'",
+            "grid": false,
+            "domain": false,
+            "ticks": false
           }
+        },
+        "color": {
+          "field": "kind",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "Discretionary food",
+              "Everything else"
+            ],
+            "range": [
+              "#9c6114",
+              "#dee2dd"
+            ]
+          }
+        },
+        "order": {
+          "field": "part",
+          "sort": "descending"
         },
         "tooltip": [
           {
@@ -210,9 +198,14 @@
             "title": "Survey"
           },
           {
-            "field": "value",
+            "field": "kind",
+            "type": "nominal",
+            "title": "Food"
+          },
+          {
+            "field": "pct",
             "type": "quantitative",
-            "title": "Share (%)",
+            "title": "Share of daily energy (%)",
             "format": ".1f"
           }
         ]
@@ -221,41 +214,49 @@
     {
       "transform": [
         {
-          "calculate": "format(datum.value, '.1f') + '%'",
+          "filter": "datum.part === 'value'"
+        },
+        {
+          "calculate": "format(datum.pct, '.1f') + '% of daily energy'",
           "as": "t"
         }
       ],
       "mark": {
         "type": "text",
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 18,
+        "fontSize": 16,
         "fontWeight": 700,
         "fill": "#84520f",
-        "dy": -24,
-        "align": "center"
+        "align": "left",
+        "baseline": "bottom",
+        "dy": -26
       },
       "encoding": {
-        "x": {
-          "field": "year",
-          "type": "ordinal",
+        "y": {
+          "field": "survey",
+          "type": "nominal",
           "title": null,
+          "sort": [
+            "2011–12",
+            "2023"
+          ],
           "scale": {
-            "padding": 0.5
+            "paddingInner": 0.45,
+            "paddingOuter": 0.3
           },
           "axis": {
-            "labelFontSize": 16,
-            "labelFontWeight": 700,
-            "grid": false,
-            "domain": false,
             "ticks": false,
-            "labelAngle": 0,
-            "labelPadding": 8,
-            "labelColor": "#161f1b",
-            "labelExpr": "replace(datum.label, '-', '–')"
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
           }
         },
-        "y": {
-          "field": "value",
+        "x": {
+          "datum": 0,
           "type": "quantitative"
         },
         "text": {
@@ -268,7 +269,7 @@
       "data": {
         "values": [
           {
-            "t": "down 4.1 percentage points in 11 years,"
+            "t": "Dietary guidelines: these foods are for"
           }
         ]
       },
@@ -277,12 +278,13 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 16,
         "fontWeight": 400,
-        "fill": "#57625b",
-        "x": {
-          "expr": "width"
+        "fill": "#333e38",
+        "x": 0,
+        "y": {
+          "expr": "(height + 42) + 0"
         },
-        "y": 8,
-        "align": "right"
+        "align": "left",
+        "baseline": "top"
       },
       "encoding": {
         "text": {
@@ -295,7 +297,7 @@
       "data": {
         "values": [
           {
-            "t": "but still almost a third of all energy"
+            "t": "“only sometimes and in small amounts”"
           }
         ]
       },
@@ -304,12 +306,13 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 16,
         "fontWeight": 400,
-        "fill": "#57625b",
-        "x": {
-          "expr": "width"
+        "fill": "#333e38",
+        "x": 0,
+        "y": {
+          "expr": "(height + 42) + 20"
         },
-        "y": 30,
-        "align": "right"
+        "align": "left",
+        "baseline": "top"
       },
       "encoding": {
         "text": {
@@ -343,5 +346,10 @@
         }
       }
     }
-  ]
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
 }

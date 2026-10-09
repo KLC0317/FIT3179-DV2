@@ -9,9 +9,12 @@
        ochre   the accent - the one thing to notice, always a shortfall
        slate   context - everything muted so the accent can read
 
-   Typography: Fraunces, a soft old-style serif with the feel of a seed
-   catalogue or farm almanac, for headings and headline numbers; Source Sans 3,
-   a humanist sans-serif, for every paragraph, label and chart.
+   Typography: the title is set in Big Shoulders Stencil, condensed stencil
+   capitals like the lettering stamped on grain sacks and painted on silos -
+   the one display face, used once, for the page's theme. Fraunces, a soft
+   old-style serif with the feel of a seed catalogue, sets the headings and
+   headline numbers; Source Sans 3, a humanist sans-serif, every paragraph,
+   label and chart.
    ========================================================================== */
 
 :root {
@@ -46,6 +49,7 @@
   --slate-100:  #eaece8;
 
   /* type */
+  --display: "Big Shoulders Stencil Display", "Fraunces", Georgia, serif;
   --serif: "Fraunces", Georgia, "Times New Roman", serif;
   --sans:  "Source Sans 3", "Segoe UI", system-ui, -apple-system, sans-serif;
 
@@ -53,6 +57,14 @@
   --gutter:     32px;
   --card-pad:   26px;
   --page-max:   1200px;
+
+  /* Reading measure: no more than ten words on any line of any paragraph
+     (tools/check_text.js counts the words on every rendered line). */
+  --measure:    19em;
+
+  /* One spacing rhythm between text and charts, in every card. */
+  --gap-title:  8px;      /* heading to subtitle */
+  --gap-chart:  20px;     /* subtitle to chart, and chart to finding */
 }
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -77,8 +89,9 @@ body {
 
 .page { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
 
-/* RULES.md: roughly 60 characters per line. At this size 32em lands at 60-66. */
-.measure { max-width: 32em; }
+/* Every reading paragraph keeps to the measure. */
+.standfirst, .intro, .card .sub, .finding, .aside .stat-block p,
+.closing p, .takeaways li, .contents .d, .sources li { max-width: var(--measure); }
 
 strong, b { font-weight: 700; }
 
@@ -97,15 +110,18 @@ strong, b { font-weight: 700; }
 .masthead { padding: 80px 0 44px; }
 
 .masthead h1 {
-  margin: 0 0 22px;
-  font-family: var(--serif);
-  font-optical-sizing: auto;
-  font-weight: 650;
-  font-size: clamp(2.4rem, 5.6vw, 4.2rem);
-  line-height: 1.04;
-  letter-spacing: -0.022em;
+  margin: 0 0 24px;
+  max-width: 11em;
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: clamp(3rem, 7.4vw, 5.8rem);
+  line-height: 0.94;
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  color: var(--ink);
 }
-.masthead h1 em { font-style: italic; font-weight: 500; color: var(--teal-800); }
+/* Stencil has no italic: the last word is picked out in the supply teal. */
+.masthead h1 em { font-style: normal; color: var(--teal-700); }
 
 .standfirst {
   margin: 0;
@@ -170,8 +186,8 @@ strong, b { font-weight: 700; }
   line-height: 1.14;
   letter-spacing: -0.016em;
 }
-.chapter-head p.measure { margin: 0; color: var(--ink-soft); font-size: 1.08rem; }
-.chapter-head p.measure strong { color: var(--ink); }
+.chapter-head .intro { margin: 0; color: var(--ink-soft); font-size: 1.08rem; }
+.chapter-head .intro strong { color: var(--ink); }
 
 /* ---------- chart grid ---------------------------------------------------- */
 
@@ -198,6 +214,13 @@ strong, b { font-weight: 700; }
 .card.full,
 .card.hero { grid-column: 1 / -1; }
 
+/* Chart hierarchy. Each chapter opens with one lead chart: full width, the
+   tallest chart of its chapter, a larger heading and a heavy teal rule
+   along its top edge (no label: the size and the rule say it). Supporting charts follow at half width. */
+.card.hero { border-top: 6px solid var(--teal-800); }
+.card.hero h3 { min-height: 0; font-size: 1.62rem; line-height: 1.15; }
+.card.hero .sub { min-height: 0; }
+
 /* Every card is built from the same four rows: heading, subtitle, chart,
    finding. With subgrid those rows are shared by the cards beside each
    other, so headings, subtitles, chart tops and findings line up across a
@@ -213,13 +236,15 @@ strong, b { font-weight: 700; }
     row-gap: 0;
     margin-bottom: var(--gutter);
   }
+  /* A lead chart has no neighbour to share rows with. */
+  .card.hero { display: flex; grid-row: auto; }
 }
 
 /* Sight-lines: every card reserves the same two-line height for its heading
    and its subtitle, so every chart on the page starts at the same offset from
    its card's top edge, whatever the length of its own title. */
 .card h3 {
-  margin: 0 0 6px;
+  margin: 0 0 var(--gap-title);
   min-height: 2.95rem;          /* two full lines at this size and leading */
   font-family: var(--serif);
   font-optical-sizing: auto;
@@ -232,29 +257,22 @@ strong, b { font-weight: 700; }
 /* Decodes the encoding, then gets out of the way. Hard-clamped to 2 lines:
    reserving space only works if content can never exceed it. */
 .card .sub {
-  margin: 0 0 16px;
-  min-height: 2.95rem;          /* two lines reserved on every card */
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;        /* a long subtitle may take a third line */
-  line-clamp: 3;
-  overflow: hidden;
+  margin: 0 0 var(--gap-chart);
   font-size: 0.98rem;
   line-height: 1.5;
   color: var(--muted);
-  max-width: 36em;              /* about 65-70 characters a line */
 }
 
 /* Colour keywords replace detached legends: the word is set in the colour of
    the marks it names. Weight only, never weight AND italic. */
 .k-wheat  { color: var(--teal-800);   font-weight: 700; }
-.k-barley { color: var(--teal-700);   font-weight: 700; }
+.k-barley { color: var(--slate-600);  font-weight: 700; }
 .k-canola { color: var(--violet-700); font-weight: 700; }
 .k-other  { color: var(--slate-600);  font-weight: 700; }
 .k-supply { color: var(--teal-700);   font-weight: 700; }
 .k-accent { color: var(--ochre-700);  font-weight: 700; }
 
-.viz { width: 100%; min-height: 180px; margin: 0 0 16px; }
+.viz { width: 100%; min-height: 180px; margin: 0 0 var(--gap-chart); }
 
 /* The finding, not a caption: body-size text directly under the chart, with
    the numbers that carry it set in bold. */
@@ -263,7 +281,6 @@ strong, b { font-weight: 700; }
   font-size: 1.06rem;
   line-height: 1.5;
   color: var(--ink-soft);
-  max-width: 36em;
 }
 .finding b { color: var(--ink); }
 /* One colour-matched word or number per finding, in the colour of the mark
@@ -287,14 +304,13 @@ strong, b { font-weight: 700; }
   flex-direction: column;
   justify-content: space-between;
   gap: 18px;
-  margin: 0 0 16px;
+  margin: 0 0 var(--gap-chart);
 }
 .aside .stat-block p {
   margin: 0;
   font-size: 1.04rem;
   line-height: 1.45;
   color: var(--ink-soft);
-  max-width: 30em;
 }
 .aside .stat {
   display: block;
@@ -403,7 +419,13 @@ strong, b { font-weight: 700; }
   text-underline-offset: 2px;
 }
 .sources a:hover, .sources a:focus-visible { color: var(--ochre-700); }
-.sources .notes li { color: var(--muted); }
+.sources .note {
+  margin: 0;
+  max-width: var(--measure);
+  font-size: 0.94rem;
+  line-height: 1.45;
+  color: var(--muted);
+}
 
 footer {
   margin: 28px calc(var(--gutter) * -1) 0;
@@ -441,6 +463,14 @@ footer .byline b { color: var(--ink); }
   margin: 4px 0 0;
 }
 .viz form.vega-bindings .vega-bind { display: inline-block; }
+.viz form.vega-bindings select {
+  font: inherit;
+  padding: 3px 6px;
+  border: 1px solid var(--slate-500);
+  border-radius: 3px;
+  background: var(--card);
+  color: var(--ink);
+}
 .viz form.vega-bindings .vega-bind-name { font-weight: 700; margin-right: 6px; }
 .viz form.vega-bindings label { margin-right: 6px; }
 .viz form.vega-bindings input[type="radio"] { accent-color: var(--ochre-600); }

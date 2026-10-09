@@ -30,7 +30,7 @@ treating them as a low value.
 | File | Source |
 |---|---|
 | `crop_production_long.csv` | FAOSTAT *Crops and Livestock Products* (QCL), Australia only, 1961–2024, seven crops, converted from tonnes to kilotonnes |
-| `wheat_export_flows.csv` | FAOSTAT *Detailed Trade Matrix* (TM), Australian wheat export quantity by partner country, 2024, top twelve partners |
+| `wheat_export_flows.csv` | FAOSTAT *Detailed Trade Matrix* (TM), Australian wheat export quantity by partner country, 2024, top twelve partners. The `city`, `dest_lon`/`dest_lat` and `origin_lon`/`origin_lat` columns are added by `tools/build_flow_arcs.py` (see below). |
 | `au-states.geojson` | State and territory boundaries, from the `rowanhogan/australian-states` repository, derived from the ABS ASGS |
 | `au-states.json` | State and territory boundaries as TopoJSON (object `austates`, 25 KB), made from `au-states.geojson` with mapshaper as taught in the week 8 studio: `-simplify 10% keep-shapes -filter-fields STATE_NAME -rename-layers austates -o format=topojson quantization=100000` |
 | `world_ne_110m.topojson` | Natural Earth 1:110m (public domain) in one TopoJSON with three objects: `ne_110m_admin_0_countries`, `ne_110m_graticules_30` and `oceans`. The countries and graticules are the files supplied with the week 8 studio code (`WorldMapWithGraticules.topojson`); the oceans layer is the one used in the week 10 studio (`FIT3179/Vega-Lite`, `7_others/oceans.topojson`). Combined with mapshaper, keeping only the `NAME` field: `combine-files -filter-fields ... -o format=topojson quantization=100000` |
@@ -40,10 +40,10 @@ treating them as a low value.
 | File | Derived from | Calculation |
 |---|---|---|
 | `wheat_state_density.csv` | `wheat_state_production.csv` + `au-states.geojson` | Tonnes of wheat divided by the state's area. Area is computed from the boundary polygons by spherical excess, not taken from a separate table. |
-| `crop_value_hierarchy.csv` | `broadacre_value_summary.csv` | 2024–25 local value per crop, in a genuine two-level hierarchy for the treemap: root → {Cereal, Oilseed, Pulse} → individual crops. Group rows carry no value of their own; the treemap sums their children. |
-| `wheat_export_arcs.csv` | `wheat_export_flows.csv` | 29 interpolated points along the great circle from Australia's centroid to each destination's centroid, so the flow map draws curved routes rather than straight segments. |
+| `crop_value_hierarchy.csv` | `broadacre_value_summary.csv` | 2024–25 local value per crop, in a genuine two-level hierarchy for the treemap: root → {Cereals, Oilseeds, Pulses} → crops. Group rows carry no value of their own; the treemap sums their children. Lentils, faba beans, lupins and field peas ($1,616m together) are one "Other pulses" cell, each too small on its own to hold a label; the `detail` column keeps their separate values for the tooltip. |
+| `wheat_export_arcs.csv` | `wheat_export_flows.csv` | 29 points per route, made by `tools/build_flow_arcs.py`. Every route starts at one origin, the geographic centre of Australia, and ends at the buyer's largest city (Jakarta, Shanghai, Manila, Sana'a, Seoul, Ho Chi Minh City, Tokyo, Kuala Lumpur, Bangkok, Auckland, Johannesburg, Kuwait City). The routes fan out: each leaves the origin at its own angle, at least 22° from its neighbours, then curves onto its city (a quadratic curve drawn in the map's own Equal Earth projection and converted back to longitude and latitude). As great circles, routes to markets in similar directions ran side by side for hundreds of kilometres; fanned out, no two routes touch beyond the origin dot. |
 | `state_centroids.csv` | `au-states.geojson` | Area-weighted centroid of each state's largest polygon. |
-| `farm_footprint_hierarchy.csv` | `farm_system_indicators.csv` | Same values with a `group` column (economy / natural resources / trade). The dumbbell chart reads the rows whose parent is `root`, drops GDP (it is the reference point) and drops "output exported" (a share of agricultural output, not of a national total, so it does not belong on the same axis). |
+| `farm_footprint_hierarchy.csv` | `farm_system_indicators.csv` | Same values with a `group` column (economy / natural resources / trade). The footprint bars read the rows whose parent is `root` and drop "output exported" (a share of agricultural output, not of a national total, so it does not belong on the same axis). |
 | `diet_waffle.csv` | `diet_guidelines.csv` | One row per square per food group: 100 squares, the first *n* marked as meeting the guideline. |
 | `food_insecurity_waffle.csv` | ABS food insecurity figure (13.2%) | 100 squares, 13 marked. |
 
@@ -80,9 +80,14 @@ computed against 2,526,786 km² published).
 - The harvest matrix compares each crop with its own **eleven-year rolling median**
   rather than its all-period median. A single fixed median would make canola look
   spectacular in every recent year simply because the crop barely existed before 1990.
-- Great-circle arcs on the flow map show origin, destination and volume. They are not
-  shipping lanes. Each route is 29 points drawn in `step` order, so `step` must be parsed
-  as a number; read as text, "10" sorts before "2" and the route folds back on itself.
+- Flow-map routes show origin, destination, direction and volume. They are drawn,
+  not shipping lanes. Each route is 29 points drawn in `step` order, so `step` must be
+  parsed as a number; read as text, "10" sorts before "2" and the route folds back on
+  itself. Flow-map label positions come from `tools/place_flow_labels.py`, which puts
+  each label in open sea or inside its own country, clear of every route.
+- The rainfall-and-harvest scatterplot joins the Water Account (financial years) to
+  FAO wheat production (calendar years) on the calendar year that starts each
+  financial year, the same convention under which the FAO and ABS series agree.
 - A blank ABS cell means "no figure published". The map specs convert blanks to null
   explicitly, because Vega-Lite does not apply a CSV `parse` to a lookup table and a
   blank would otherwise be drawn as zero.

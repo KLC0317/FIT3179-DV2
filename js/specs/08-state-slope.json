@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
   "width": 520,
-  "height": 318,
+  "height": 300,
   "autosize": {
     "type": "pad",
     "contains": "padding"
@@ -72,15 +72,32 @@
   },
   "title": {
     "text": "South Australia's harvest more than halved in two seasons",
-    "subtitle": "Wheat sold by each state, 2022–23 against 2024–25. South Australia is highlighted; a national total would hide it.",
+    "subtitle": "Wheat sold by each state, 2022–23 against 2024–25. Choose a state to highlight it.",
     "subtitleLimit": 760
   },
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 30,
-    "bottom": 5
+    "top": 0,
+    "bottom": 0
   },
+  "params": [
+    {
+      "name": "state",
+      "value": "South Australia",
+      "bind": {
+        "input": "select",
+        "options": [
+          "South Australia",
+          "New South Wales",
+          "Victoria",
+          "Queensland",
+          "Western Australia"
+        ],
+        "name": "Highlight  "
+      }
+    }
+  ],
   "data": {
     "url": "data/wheat_state_density.csv",
     "format": {
@@ -101,6 +118,10 @@
       "filter": "isValid(datum.kt_2022_23) && isValid(datum.kt_2024_25) && datum.kt_2022_23 > 100"
     },
     {
+      "calculate": "datum.kt_2024_25 / datum.kt_2022_23 - 1",
+      "as": "change"
+    },
+    {
       "fold": [
         "kt_2022_23",
         "kt_2024_25"
@@ -115,7 +136,7 @@
       "as": "label"
     },
     {
-      "calculate": "datum.state === 'South Australia' ? 'focus' : 'rest'",
+      "calculate": "datum.state === state ? 'focus' : 'rest'",
       "as": "emph"
     }
   ],
@@ -182,6 +203,18 @@
               "#a0a9a3"
             ]
           }
+        },
+        "order": {
+          "field": "emph",
+          "type": "nominal",
+          "sort": "descending"
+        },
+        "strokeWidth": {
+          "condition": {
+            "test": "datum.emph === 'focus'",
+            "value": 3.2
+          },
+          "value": 2
         },
         "tooltip": [
           {
@@ -393,13 +426,15 @@
       }
     },
     {
-      "data": {
-        "values": [
-          {
-            "t": "South Australia: down 58%"
-          }
-        ]
-      },
+      "transform": [
+        {
+          "filter": "datum.state === state && datum.label === '2024–25'"
+        },
+        {
+          "calculate": "datum.state + ': ' + (datum.change < 0 ? 'down ' : 'up ') + format(abs(datum.change), '.0%')",
+          "as": "t"
+        }
+      ],
       "mark": {
         "type": "text",
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
@@ -411,8 +446,40 @@
         "x": {
           "expr": "width"
         },
-        "y": -12,
-        "limit": 260
+        "y": -34
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "2024: record-low rain on its grain belt"
+          }
+        ]
+      },
+      "transform": [
+        {
+          "filter": "state === 'South Australia'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "right",
+        "baseline": "bottom",
+        "x": {
+          "expr": "width"
+        },
+        "y": -12
       },
       "encoding": {
         "text": {

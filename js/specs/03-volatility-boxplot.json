@@ -329,7 +329,7 @@
           {
             "pct": 158,
             "crop": "Wheat",
-            "t": "+158% in 2003"
+            "t": "+158% in 2003, as rain"
           }
         ]
       },
@@ -341,7 +341,61 @@
         "fill": "#0f3f39",
         "align": "right",
         "dx": 4,
-        "dy": -15
+        "dy": -36
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "pct": 158,
+            "crop": "Wheat",
+            "t": "returned after the El Niño"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "right",
+        "dx": 4,
+        "dy": -16
       },
       "encoding": {
         "x": {
@@ -383,7 +437,7 @@
           {
             "pct": 44,
             "crop": "Sugar cane",
-            "t": "irrigated, so it barely moves"
+            "t": "wet tropical coast"
           }
         ]
       },
@@ -393,7 +447,61 @@
         "fontSize": 16,
         "fontWeight": 600,
         "fill": "#39423d",
-        "align": "left"
+        "align": "left",
+        "dy": -9
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "pct": 44,
+            "crop": "Sugar cane",
+            "t": "outside the grain belt"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#57625b",
+        "align": "left",
+        "dy": 10
       },
       "encoding": {
         "x": {

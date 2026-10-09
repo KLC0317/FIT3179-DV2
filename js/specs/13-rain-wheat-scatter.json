@@ -1,0 +1,588 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 520,
+  "height": 290,
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      10
+    ]
+  },
+  "config": {
+    "background": null,
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+    "axis": {
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#57625b",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": true,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#333e38",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "symbolStrokeWidth": 0,
+      "offset": 8,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
+    },
+    "title": {
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
+      "subtitleColor": "#57625b",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 17
+    }
+  },
+  "title": {
+    "text": "The wheat harvest rises and falls with the rain",
+    "subtitle": "Each dot is one financial year: rainfall across Australia against that season's wheat harvest.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "data": {
+    "url": "data/crop_production_long.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "production_kt": "number",
+        "year": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": "datum.crop === 'Wheat' && datum.year >= 2014 && datum.year <= 2023"
+    },
+    {
+      "calculate": "datum.year + '-' + substring(toString(datum.year + 1), 2)",
+      "as": "fy"
+    },
+    {
+      "lookup": "fy",
+      "from": {
+        "data": {
+          "url": "data/water_account_national.csv"
+        },
+        "key": "year",
+        "fields": [
+          "area_average_rainfall_mm"
+        ]
+      }
+    },
+    {
+      "calculate": "toNumber(datum.area_average_rainfall_mm)",
+      "as": "rain"
+    },
+    {
+      "calculate": "datum.production_kt / 1000",
+      "as": "mt"
+    },
+    {
+      "calculate": "replace(datum.fy, '-', '–')",
+      "as": "fy_label"
+    },
+    {
+      "calculate": "indexof(['2018-19','2019-20'], datum.fy) >= 0 ? 'dry' : datum.fy === '2022-23' ? 'wet' : 'rest'",
+      "as": "emph"
+    }
+  ],
+  "layer": [
+    {
+      "transform": [
+        {
+          "regression": "mt",
+          "on": "rain",
+          "extent": [
+            330,
+            630
+          ]
+        }
+      ],
+      "mark": {
+        "type": "line",
+        "stroke": "#a0a9a3",
+        "strokeWidth": 1.5,
+        "strokeDash": [
+          5,
+          4
+        ]
+      },
+      "encoding": {
+        "x": {
+          "field": "rain",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "mt",
+          "type": "quantitative"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 120,
+        "opacity": 1,
+        "stroke": "#fefdf9",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "x": {
+          "field": "rain",
+          "type": "quantitative",
+          "title": "Rainfall across Australia that year (mm)",
+          "scale": {
+            "domain": [
+              320,
+              640
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              350,
+              400,
+              450,
+              500,
+              550,
+              600
+            ],
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "mt",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              45
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Wheat harvested (Mt)",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleBaseline": "bottom",
+            "titleX": -108,
+            "titleY": -12,
+            "titleFontWeight": 600,
+            "titleColor": "#333e38",
+            "grid": true,
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ]
+          }
+        },
+        "color": {
+          "field": "emph",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "dry",
+              "wet",
+              "rest"
+            ],
+            "range": [
+              "#9c6114",
+              "#0f3f39",
+              "#a0a9a3"
+            ]
+          }
+        },
+        "tooltip": [
+          {
+            "field": "fy_label",
+            "type": "nominal",
+            "title": "Year"
+          },
+          {
+            "field": "rain",
+            "type": "quantitative",
+            "title": "Rainfall (mm)"
+          },
+          {
+            "field": "mt",
+            "type": "quantitative",
+            "title": "Wheat (million tonnes)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.fy === '2022-23'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#0f3f39",
+        "align": "right",
+        "dx": -10,
+        "dy": -24
+      },
+      "encoding": {
+        "x": {
+          "field": "rain",
+          "type": "quantitative",
+          "title": "Rainfall across Australia that year (mm)",
+          "scale": {
+            "domain": [
+              320,
+              640
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              350,
+              400,
+              450,
+              500,
+              550,
+              600
+            ],
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "mt",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              45
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Wheat harvested (Mt)",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleBaseline": "bottom",
+            "titleX": -108,
+            "titleY": -12,
+            "titleFontWeight": 600,
+            "titleColor": "#333e38",
+            "grid": true,
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ]
+          }
+        },
+        "text": {
+          "value": "2022–23: record 41.2 Mt"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.fy === '2022-23'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "right",
+        "dx": -10,
+        "dy": -5
+      },
+      "encoding": {
+        "x": {
+          "field": "rain",
+          "type": "quantitative",
+          "title": "Rainfall across Australia that year (mm)",
+          "scale": {
+            "domain": [
+              320,
+              640
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              350,
+              400,
+              450,
+              500,
+              550,
+              600
+            ],
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "mt",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              45
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Wheat harvested (Mt)",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleBaseline": "bottom",
+            "titleX": -108,
+            "titleY": -12,
+            "titleFontWeight": 600,
+            "titleColor": "#333e38",
+            "grid": true,
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ]
+          }
+        },
+        "text": {
+          "value": "third La Niña year"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.fy === '2019-20'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#84520f",
+        "align": "left",
+        "dx": 12,
+        "dy": 4
+      },
+      "encoding": {
+        "x": {
+          "field": "rain",
+          "type": "quantitative",
+          "title": "Rainfall across Australia that year (mm)",
+          "scale": {
+            "domain": [
+              320,
+              640
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              350,
+              400,
+              450,
+              500,
+              550,
+              600
+            ],
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "mt",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              45
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Wheat harvested (Mt)",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleBaseline": "bottom",
+            "titleX": -108,
+            "titleY": -12,
+            "titleFontWeight": 600,
+            "titleColor": "#333e38",
+            "grid": true,
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ]
+          }
+        },
+        "text": {
+          "value": "2018–19 and 2019–20:"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.fy === '2019-20'"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "dx": 12,
+        "dy": 23
+      },
+      "encoding": {
+        "x": {
+          "field": "rain",
+          "type": "quantitative",
+          "title": "Rainfall across Australia that year (mm)",
+          "scale": {
+            "domain": [
+              320,
+              640
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              350,
+              400,
+              450,
+              500,
+              550,
+              600
+            ],
+            "grid": true
+          }
+        },
+        "y": {
+          "field": "mt",
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              45
+            ],
+            "nice": false
+          },
+          "axis": {
+            "title": "Wheat harvested (Mt)",
+            "titleAngle": 0,
+            "titleAlign": "left",
+            "titleBaseline": "bottom",
+            "titleX": -108,
+            "titleY": -12,
+            "titleFontWeight": 600,
+            "titleColor": "#333e38",
+            "grid": true,
+            "values": [
+              0,
+              10,
+              20,
+              30,
+              40
+            ]
+          }
+        },
+        "text": {
+          "value": "back-to-back drought"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}
