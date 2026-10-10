@@ -747,7 +747,7 @@
                 "fill": "#161f1b",
                 "align": "right",
                 "dx": -6,
-                "y": 14,
+                "y": 32,
                 "baseline": "middle",
                 "clip": false
               },
@@ -792,7 +792,7 @@
                 "fill": "#57625b",
                 "align": "right",
                 "dx": -6,
-                "y": 34,
+                "y": 52,
                 "baseline": "middle",
                 "clip": false
               },

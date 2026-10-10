@@ -273,6 +273,8 @@ strong, b { font-weight: 700; }
 .k-accent { color: var(--ochre-700);  font-weight: 700; }
 
 .viz { width: 100%; min-height: 180px; margin: 0 0 var(--gap-chart); }
+/* A chart reached by keyboard shows where focus is. */
+.viz:focus-visible { outline: 2px solid var(--teal-700); outline-offset: 4px; }
 
 /* The finding, not a caption: body-size text directly under the chart, with
    the numbers that carry it set in bold. */

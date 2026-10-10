@@ -88,7 +88,7 @@
       0
     ],
     "scale": {
-      "expr": "min(width / 2.85, height / 1.69)"
+      "expr": "width >= 900 ? max(min(width / 2.85, height / 1.69), 372) : width / 2.85"
     },
     "translate": {
       "expr": "[width * 0.5, height * 0.5]"
@@ -588,7 +588,7 @@
           {
             "lon": 28.05,
             "lat": -26.2,
-            "lon2": 26.842,
+            "lon2": 26.795,
             "lat2": -29.339
           }
         ]
@@ -1519,9 +1519,9 @@
       "data": {
         "values": [
           {
-            "lon": 10.05,
+            "lon": 18.05,
             "lat": -30.7,
-            "t": "South Africa"
+            "t": "South"
           }
         ]
       },
@@ -1558,9 +1558,9 @@
       "data": {
         "values": [
           {
-            "lon": 10.05,
+            "lon": 18.05,
             "lat": -30.7,
-            "t": "South Africa"
+            "t": "South"
           }
         ]
       },
@@ -1574,6 +1574,81 @@
         "align": "left",
         "baseline": "middle",
         "dy": 0
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 18.05,
+            "lat": -30.7,
+            "t": "Africa"
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#fefdf9",
+        "align": "left",
+        "baseline": "middle",
+        "dy": 18,
+        "stroke": "#fefdf9",
+        "strokeWidth": 3.5,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 18.05,
+            "lat": -30.7,
+            "t": "Africa"
+          }
+        ]
+      },
+      "transform": [],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "dy": 18
       },
       "encoding": {
         "longitude": {

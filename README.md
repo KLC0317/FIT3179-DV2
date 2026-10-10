@@ -131,6 +131,9 @@ All of it from the FIT3179 studios, and each answers a question:
   that highlights any state and rewrites its note.
 - **Hover to isolate** a flow-map route, and **tooltips** everywhere carrying the exact
   value, unit and period.
+- **Reset and access.** Double-click clears the zoom brush and a clicked band. Every
+  chart is a keyboard-focusable image announced to screen readers with its heading,
+  subtitle and finding, and the controls are native radio buttons and a dropdown.
 
 ## Design
 

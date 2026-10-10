@@ -176,6 +176,20 @@
       })
       .then(function (result) {
         views[chart.el] = result.view;
+        // Keyboard and screen readers: the chart is one focusable image,
+        // announced with its heading, subtitle and finding.
+        var svg = el.querySelector("svg");
+        var card = el.closest(".card");
+        if (svg && card) {
+          var text = function (sel) {
+            var n = card.querySelector(sel);
+            return n ? n.textContent.replace(/\s+/g, " ").trim() : "";
+          };
+          svg.setAttribute("role", "img");
+          svg.setAttribute("aria-label", [text("h3"), text(".sub"),
+            text(".finding")].filter(Boolean).join(" "));
+          el.setAttribute("tabindex", "0");
+        }
       })
       .catch(function (err) {
         showError(el, file);
