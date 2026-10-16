@@ -1,0 +1,388 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 520,
+  "height": 288,
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      52
+    ]
+  },
+  "config": {
+    "background": null,
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+    "axis": {
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#4a554f",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#333e38",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "symbolStrokeWidth": 0,
+      "offset": 8,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
+    },
+    "title": {
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
+      "subtitleColor": "#4a554f",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 17
+    }
+  },
+  "title": {
+    "text": "The twelve buyers, ranked",
+    "subtitle": "Wheat bought from Australia in 2024, million tonnes.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "data": {
+    "url": "data/wheat_export_flows.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "quantity_kt": "number",
+        "share_pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.quantity_kt / 1000",
+      "as": "mt"
+    }
+  ],
+  "params": [
+    {
+      "name": "pin",
+      "value": ""
+    }
+  ],
+  "layer": [
+    {
+      "params": [
+        {
+          "name": "barhover",
+          "select": {
+            "type": "point",
+            "fields": [
+              "destination"
+            ],
+            "on": "mouseover",
+            "clear": "mouseout"
+          }
+        }
+      ],
+      "mark": {
+        "type": "bar",
+        "color": "#2e3532",
+        "cursor": "pointer"
+      },
+      "encoding": {
+        "y": {
+          "field": "destination",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Indonesia",
+            "China",
+            "Philippines",
+            "Yemen",
+            "South Korea",
+            "Vietnam",
+            "Japan",
+            "Malaysia",
+            "Thailand",
+            "New Zealand",
+            "South Africa",
+            "Kuwait"
+          ],
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.1
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 15
+          }
+        },
+        "x": {
+          "field": "mt",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              3.6
+            ],
+            "nice": false
+          },
+          "axis": null
+        },
+        "opacity": {
+          "condition": [
+            {
+              "test": "pin !== '' && datum.destination !== pin",
+              "value": 0.3
+            },
+            {
+              "param": "barhover",
+              "empty": true,
+              "value": 1
+            }
+          ],
+          "value": 0.3
+        },
+        "tooltip": [
+          {
+            "field": "destination",
+            "type": "nominal",
+            "title": "Buyer"
+          },
+          {
+            "field": "mt",
+            "type": "quantitative",
+            "title": "Million tonnes",
+            "format": ".2f"
+          },
+          {
+            "field": "share_pct",
+            "type": "quantitative",
+            "title": "Share of wheat exports (%)",
+            "format": ".1f"
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "dx": 6,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "y": {
+          "field": "destination",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Indonesia",
+            "China",
+            "Philippines",
+            "Yemen",
+            "South Korea",
+            "Vietnam",
+            "Japan",
+            "Malaysia",
+            "Thailand",
+            "New Zealand",
+            "South Africa",
+            "Kuwait"
+          ],
+          "scale": {
+            "paddingInner": 0.3,
+            "paddingOuter": 0.1
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 15
+          }
+        },
+        "x": {
+          "field": "mt",
+          "type": "quantitative",
+          "title": null,
+          "scale": {
+            "domain": [
+              0,
+              3.6
+            ],
+            "nice": false
+          },
+          "axis": null
+        },
+        "text": {
+          "field": "mt",
+          "type": "quantitative",
+          "format": ".2f"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "The top three buyers took"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "x": {
+          "expr": "width * 0.42"
+        },
+        "y": {
+          "expr": "(height * 0.75) + 0"
+        },
+        "align": "left",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "47% of all wheat exported"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "x": {
+          "expr": "width * 0.42"
+        },
+        "y": {
+          "expr": "(height * 0.75) + 20"
+        },
+        "align": "left",
+        "baseline": "middle"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": {
+            "expr": "width + 52"
+          }
+        },
+        "x2": {
+          "value": {
+            "expr": "width + 52"
+          }
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
+    }
+  ]
+}

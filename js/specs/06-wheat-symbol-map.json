@@ -18,7 +18,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -65,14 +65,14 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
   },
   "title": {
     "text": "...but New South Wales and Western Australia grow the most",
-    "subtitle": "Circle area is proportional to tonnes of wheat sold. Totals belong on symbols, never on a choropleth.",
+    "subtitle": "Circle area is proportional to tonnes of wheat sold, drawn see-through so no circle hides a border or another circle.",
     "subtitleLimit": 760
   },
   "padding": {
@@ -161,7 +161,7 @@
           "as": "kt"
         },
         {
-          "calculate": "isValid(datum.kt) ? format(datum.kt, ',') + ' kt' : 'No figure published by the ABS'",
+          "calculate": "isValid(datum.kt) ? format(datum.kt, ',') + ' thousand tonnes' : 'No figure published by the Australian Bureau of Statistics'",
           "as": "kt_text"
         }
       ],
@@ -232,16 +232,43 @@
           "as": "kt"
         },
         {
-          "filter": "!isValid(datum.kt)"
+          "filter": "!isValid(datum.kt) && !(indexof(['Tasmania','Australian Capital Territory'], datum.state) >= 0)"
         },
         {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
-          "as": "abbr"
+          "calculate": "datum.longitude",
+          "as": "lab_lon"
         },
         {
-          "filter": "indexof(['ACT','TAS'], datum.abbr) < 0"
+          "calculate": "datum.latitude",
+          "as": "lab_lat"
+        },
+        {
+          "calculate": "'no figure'",
+          "as": "t"
+        },
+        {
+          "calculate": "{'New South Wales':'New South','Victoria':'Victoria','Queensland':'Queensland','South Australia':'South','Western Australia':'Western','Tasmania':'Tasmania','Northern Territory':'Northern','Australian Capital Territory':'Canberra'}[datum.state]",
+          "as": "l1"
+        },
+        {
+          "calculate": "{'New South Wales':'Wales','South Australia':'Australia','Western Australia':'Australia','Northern Territory':'Territory'}[datum.state] || ''",
+          "as": "l2"
+        },
+        {
+          "calculate": "datum.l2 ? [datum.l1, datum.l2] : [datum.l1]",
+          "as": "name_lines"
         }
       ],
+      "encoding": {
+        "longitude": {
+          "field": "lab_lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lab_lat",
+          "type": "quantitative"
+        }
+      },
       "layer": [
         {
           "mark": {
@@ -250,14 +277,44 @@
             "fontSize": 15,
             "fontWeight": 700,
             "fill": "#161f1b",
-            "dy": -10
+            "baseline": "bottom",
+            "dy": -1,
+            "lineHeight": 17
           },
           "encoding": {
             "text": {
-              "field": "abbr",
+              "field": "name_lines",
               "type": "nominal"
             }
-          }
+          },
+          "transform": [
+            {
+              "filter": "!datum.l2"
+            }
+          ]
+        },
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "dy": -18,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "name_lines",
+              "type": "nominal"
+            }
+          },
+          "transform": [
+            {
+              "filter": "datum.l2"
+            }
+          ]
         },
         {
           "mark": {
@@ -266,25 +323,18 @@
             "fontSize": 15,
             "fontWeight": 400,
             "fill": "#161f1b",
-            "dy": 11
+            "baseline": "top",
+            "dy": 3,
+            "lineHeight": 17
           },
           "encoding": {
             "text": {
-              "value": "no figure"
+              "field": "t",
+              "type": "nominal"
             }
           }
         }
-      ],
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        }
-      }
+      ]
     },
     {
       "data": {
@@ -327,17 +377,14 @@
         },
         {
           "filter": "isValid(datum.kt) && datum.kt > 0"
-        },
-        {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
-          "as": "abbr"
         }
       ],
       "mark": {
         "type": "circle",
-        "stroke": "#fefdf9",
-        "strokeWidth": 1.4,
-        "opacity": 1
+        "stroke": "#2e3532",
+        "strokeWidth": 1.6,
+        "fillOpacity": 0.3,
+        "strokeOpacity": 1
       },
       "encoding": {
         "longitude": {
@@ -358,39 +405,21 @@
           "type": "quantitative",
           "title": "Wheat sold (thousand tonnes)",
           "scale": {
-            "type": "sqrt",
+            "type": "linear",
+            "zero": true,
             "domain": [
               0,
               15000
             ],
             "range": [
               0,
-              5400
+              5760.0
             ]
           },
-          "legend": {
-            "direction": "horizontal",
-            "orient": "none",
-            "legendX": 0,
-            "legendY": -118,
-            "values": [
-              1000,
-              5000,
-              12000
-            ],
-            "format": ",.0f",
-            "symbolFillColor": "#0f3f39",
-            "symbolStrokeColor": "#fefdf9",
-            "titleLimit": 340,
-            "clipHeight": 84
-          }
+          "legend": null
         },
         "color": {
-          "condition": {
-            "test": "indexof(['New South Wales','Western Australia'], datum.state) >= 0",
-            "value": "#0f3f39"
-          },
-          "value": "#a0a9a3"
+          "value": "#2e3532"
         },
         "tooltip": [
           {
@@ -450,21 +479,18 @@
           "filter": "isValid(datum.kt) && datum.kt > 0 && datum.kt >= 1500"
         },
         {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
-          "as": "abbr"
+          "calculate": "ceil(sqrt(0.384 * datum.kt / PI) / 3) * 3",
+          "as": "rb"
         },
         {
-          "calculate": "datum.abbr",
-          "as": "t"
+          "calculate": "[datum.state, format(datum.kt, ',.0f')]",
+          "as": "label"
+        },
+        {
+          "calculate": "datum.state === 'Victoria' ? 'below-west' : datum.state === 'South Australia' ? 'below' : 'above'",
+          "as": "place"
         }
       ],
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 15,
-        "fontWeight": 700,
-        "dy": -10
-      },
       "encoding": {
         "longitude": {
           "field": "longitude",
@@ -473,99 +499,2077 @@
         "latitude": {
           "field": "latitude",
           "type": "quantitative"
-        },
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        },
-        "color": {
-          "condition": {
-            "test": "indexof(['New South Wales','Western Australia'], datum.state) >= 0",
-            "value": "#ffffff"
-          },
-          "value": "#161f1b"
         }
-      }
-    },
-    {
-      "data": {
-        "url": "data/state_centroids.csv"
       },
-      "transform": [
+      "layer": [
         {
-          "lookup": "state",
-          "from": {
-            "data": {
-              "url": "data/wheat_state_density.csv",
-              "format": {
-                "type": "csv",
-                "parse": {
-                  "kt_2022_23": "number",
-                  "kt_2023_24": "number",
-                  "kt_2024_25": "number",
-                  "tpk_2022_23": "number",
-                  "tpk_2023_24": "number",
-                  "tpk_2024_25": "number",
-                  "area_km2": "number"
-                }
-              }
-            },
-            "key": "state",
-            "fields": [
-              "area_km2",
-              "kt_2022_23",
-              "kt_2023_24",
-              "kt_2024_25",
-              "tpk_2022_23",
-              "tpk_2023_24",
-              "tpk_2024_25"
-            ]
+          "transform": [
+            {
+              "filter": "datum.rb === 12 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -32,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
           }
         },
         {
-          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
-          "as": "kt"
-        },
-        {
-          "filter": "isValid(datum.kt) && datum.kt > 0 && datum.kt >= 1500"
-        },
-        {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
-          "as": "abbr"
-        },
-        {
-          "calculate": "format(datum.kt, ',.0f')",
-          "as": "t"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 15,
-        "fontWeight": 400,
-        "dy": 11
-      },
-      "encoding": {
-        "longitude": {
-          "field": "longitude",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "latitude",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        },
-        "color": {
-          "condition": {
-            "test": "indexof(['New South Wales','Western Australia'], datum.state) >= 0",
-            "value": "#ffffff"
+          "transform": [
+            {
+              "filter": "datum.rb === 12 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -32,
+            "lineHeight": 17
           },
-          "value": "#161f1b"
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 12 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 15,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 12 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 15,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 12 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 15,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 12 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 15,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 15 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -35,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 15 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -35,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 15 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 18,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 15 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 18,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 15 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 18,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 15 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 18,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 18 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -38,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 18 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -38,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 18 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 21,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 18 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 21,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 18 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 21,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 18 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 21,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 21 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -41,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 21 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -41,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 21 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 24,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 21 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 24,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 21 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 24,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 21 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 24,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 24 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -44,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 24 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -44,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 24 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 27,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 24 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 27,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 24 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 27,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 24 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 27,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 27 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -47,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 27 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -47,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 27 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 30,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 27 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 30,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 27 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 30,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 27 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 30,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 30 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -50,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 30 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -50,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 30 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 33,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 30 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 33,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 30 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 33,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 30 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 33,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 33 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -53,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 33 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -53,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 33 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 36,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 33 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 36,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 33 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 36,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 33 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 36,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 36 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -56,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 36 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -56,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 36 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 39,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 36 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 39,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 36 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 39,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 36 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 39,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 39 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -59,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 39 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -59,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 39 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 42,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 39 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 42,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 39 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 42,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 39 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 42,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 42 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -62,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 42 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -62,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 42 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 45,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 42 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 45,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 42 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 45,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 42 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 45,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 45 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -65,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 45 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -65,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 45 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 48,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 45 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 48,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 45 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 48,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 45 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 48,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 48 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -68,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 48 && datum.place === 'above'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "bottom",
+            "align": "center",
+            "dx": 0,
+            "dy": -68,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 48 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 51,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 48 && datum.place === 'below'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "center",
+            "dx": 0,
+            "dy": 51,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 48 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#fefdf9",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 51,
+            "lineHeight": 17,
+            "stroke": "#fefdf9",
+            "strokeWidth": 3.5,
+            "strokeJoin": "round"
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
+        },
+        {
+          "transform": [
+            {
+              "filter": "datum.rb === 48 && datum.place === 'below-west'"
+            }
+          ],
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 600,
+            "fill": "#161f1b",
+            "baseline": "top",
+            "align": "right",
+            "dx": 0,
+            "dy": 51,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "label",
+              "type": "nominal"
+            }
+          }
         }
-      }
+      ]
     },
     {
       "data": {
@@ -636,7 +2640,7 @@
           ]
         },
         {
-          "calculate": "141.4",
+          "calculate": "138.4",
           "as": "lon"
         },
         {
@@ -644,11 +2648,11 @@
           "as": "lat"
         },
         {
-          "calculate": "format(datum.both / datum.total, '.0%') + ' of the national crop'",
+          "calculate": "'New South Wales and Western'",
           "as": "t1"
         },
         {
-          "calculate": "'grown in NSW and WA alone'",
+          "calculate": "'Australia grew ' + format(datum.both / datum.total, '.0%') + ' of the crop'",
           "as": "t2"
         }
       ],
@@ -677,7 +2681,7 @@
             "font": "'Source Sans 3', 'Segoe UI', sans-serif",
             "fontSize": 16,
             "fontWeight": 400,
-            "fill": "#57625b",
+            "fill": "#4a554f",
             "align": "right",
             "dx": -3,
             "dy": 26
@@ -698,6 +2702,164 @@
         "latitude": {
           "field": "lat",
           "type": "quantitative"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Wheat sold (thousand tonnes)"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "top",
+        "x": 0,
+        "y": -118
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 384.0,
+        "color": "#2e3532",
+        "fillOpacity": 0.3,
+        "stroke": "#2e3532",
+        "strokeWidth": 1.6,
+        "strokeOpacity": 1,
+        "x": 11.1,
+        "y": -56
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "1,000"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 28.1,
+        "y": -56
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 1920.0,
+        "color": "#2e3532",
+        "fillOpacity": 0.3,
+        "stroke": "#2e3532",
+        "strokeWidth": 1.6,
+        "strokeOpacity": 1,
+        "x": 111.8,
+        "y": -56
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "5,000"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 142.6,
+        "y": -56
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 4608.0,
+        "color": "#2e3532",
+        "fillOpacity": 0.3,
+        "stroke": "#2e3532",
+        "strokeWidth": 1.6,
+        "strokeOpacity": 1,
+        "x": 239.9,
+        "y": -56
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "12,000"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 284.2,
+        "y": -56
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
         }
       }
     },
@@ -773,7 +2935,7 @@
           "filter": "datum.state === 'Western Australia'"
         },
         {
-          "calculate": "'WA: 1 in 9 Australians,'",
+          "calculate": "'The west: 1 in 9 Australians,'",
           "as": "l1"
         },
         {
@@ -854,7 +3016,7 @@
           "filter": "datum.state === 'Western Australia'"
         },
         {
-          "calculate": "'WA: 1 in 9 Australians,'",
+          "calculate": "'The west: 1 in 9 Australians,'",
           "as": "l1"
         },
         {

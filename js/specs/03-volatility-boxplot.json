@@ -18,7 +18,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -65,14 +65,14 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
   },
   "title": {
     "text": "A wheat crop can halve, then more than double",
-    "subtitle": "Year-on-year change, 1962–2024. The box holds the middle half of years, the line is the typical year, dots are rare extremes.",
+    "subtitle": "Year-on-year change, 1962–2024. The box holds the middle half of years, the line is the typical year, grey dots are rare extremes and ochre dots are the five drought years.",
     "subtitleLimit": 760
   },
   "padding": {
@@ -210,10 +210,10 @@
               "Dry peas"
             ],
             "range": [
-              "#0f3f39",
+              "#2e3532",
               "#a0a9a3",
               "#a0a9a3",
-              "#57625b",
+              "#7a857e",
               "#a0a9a3",
               "#a0a9a3"
             ]
@@ -293,10 +293,10 @@
               "Dry peas"
             ],
             "range": [
-              "#0f3f39",
+              "#2e3532",
               "#a0a9a3",
               "#a0a9a3",
-              "#57625b",
+              "#7a857e",
               "#a0a9a3",
               "#a0a9a3"
             ]
@@ -324,6 +324,125 @@
       }
     },
     {
+      "transform": [
+        {
+          "filter": "indexof([1982, 1994, 2002, 2006, 2019], datum.year) >= 0"
+        }
+      ],
+      "mark": {
+        "type": "circle",
+        "size": 64,
+        "opacity": 1,
+        "stroke": "#fefdf9",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
+        },
+        "color": {
+          "value": "#9c6114"
+        },
+        "tooltip": [
+          {
+            "field": "crop",
+            "type": "nominal",
+            "title": "Crop"
+          },
+          {
+            "field": "year",
+            "type": "quantitative",
+            "title": "Drought year",
+            "format": "d"
+          },
+          {
+            "field": "pct",
+            "type": "quantitative",
+            "title": "Change on previous year (%)",
+            "format": "+.0f"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.crop === 'Wheat' && datum.year === 2002"
+        },
+        {
+          "calculate": "'2002: ' + format(datum.pct, '+.0f') + '%'",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#84520f",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -11
+      },
+      "encoding": {
+        "x": {
+          "field": "pct",
+          "type": "quantitative"
+        },
+        "y": {
+          "field": "crop",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Wheat",
+            "Barley",
+            "Canola",
+            "Sugar cane",
+            "Maize",
+            "Dry peas"
+          ],
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": 600,
+            "labelColor": "#333e38",
+            "labelFontSize": 16
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
       "data": {
         "values": [
           {
@@ -338,7 +457,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 16,
         "fontWeight": 700,
-        "fill": "#0f3f39",
+        "fill": "#2e3532",
         "align": "right",
         "dx": 4,
         "dy": -36
@@ -499,7 +618,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 15,
         "fontWeight": 400,
-        "fill": "#57625b",
+        "fill": "#4a554f",
         "align": "left",
         "dy": 10
       },

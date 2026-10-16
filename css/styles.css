@@ -4,10 +4,14 @@
    Colour tokens mirror tools/palette.py exactly; that file is the source of
    truth and carries the contrast and colour-vision audit. Meanings:
 
-       teal    supply - wheat, barley, harvests, water and land, "enough"
-       violet  canola (a crop identity, used only where crops are compared)
-       ochre   the accent - the one thing to notice, always a shortfall
-       slate   context - everything muted so the accent can read
+       teal      more, or better (above normal, met a guideline, wettest)
+       ochre     less, or worse (short harvest, drought, going without)
+       charcoal  the focus: wheat, and whatever a chart is about
+       violet    canola (a crop identity, used only where crops are compared)
+       slate     context - everything muted so the focus can read
+
+   Nothing else on the page is coloured: kickers, links and controls are in
+   ink, so a reader never has to ask what a colour means.
 
    Typography: the title is set in Big Shoulders Stencil, condensed stencil
    capitals like the lettering stamped on grain sacks and painted on silos -
@@ -26,22 +30,22 @@
   /* inks - all >= 4.5:1 on paper and card */
   --ink:        #161f1b;
   --ink-soft:   #333e38;
-  --muted:      #57625b;
+  --muted:      #4a554f;
 
-  /* teal: supply */
-  --teal-800:   #0f3f39;
-  --teal-700:   #17554c;
-  --teal-500:   #3e9588;
-  --teal-100:   #ddeeea;
-  --teal-050:   #eff7f4;
+  /* teal: more, or better */
+  --teal-600:   #2a7a6e;
+
+  /* ochre: less, or worse */
+  --ochre-700:  #84520f;
+
+  /* charcoal: the focus */
+  --charcoal:   #2e3532;
+  --ochre-600:  #9c6114;
+  --violet-600: #7461a8;
+  --slate-300:  #c3cac5;
 
   /* violet: canola */
   --violet-700: #5a4a8a;
-
-  /* ochre: the accent */
-  --ochre-700:  #84520f;
-  --ochre-600:  #9c6114;
-  --ochre-100:  #f8eedc;
 
   /* slate: context */
   --slate-600:  #57625b;
@@ -59,8 +63,13 @@
   --page-max:   1200px;
 
   /* Reading measure: no more than ten words on any line of any paragraph
-     (tools/check_text.js counts the words on every rendered line). */
-  --measure:    19em;
+     (tools/check_text.js counts the words on every rendered line). The page
+     is laid out in two columns, so this short measure leaves only a small
+     margin inside each column, never a hole of white space beside the text. */
+  --measure:    20em;
+  /* The gap between the two columns INSIDE a full-width card: the right
+     column then starts on the same line as the right-hand cards' text. */
+  --inner-gap:  calc(var(--gutter) + 2 * var(--card-pad));
 
   /* One spacing rhythm between text and charts, in every card. */
   --gap-title:  8px;      /* heading to subtitle */
@@ -89,9 +98,9 @@ body {
 
 .page { max-width: var(--page-max); margin: 0 auto; padding: 0 var(--gutter); }
 
-/* Every reading paragraph keeps to the measure. */
+/* Every reading paragraph fills its column, up to the measure. */
 .standfirst, .intro, .card .sub, .finding, .aside .stat-block p,
-.closing p, .takeaways li, .contents .d, .sources li { max-width: var(--measure); }
+.closing p, .contents .d, .sources li { max-width: var(--measure); }
 
 strong, b { font-weight: 700; }
 
@@ -102,12 +111,12 @@ strong, b { font-weight: 700; }
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--ochre-700);
+  color: var(--muted);
 }
 
 /* ---------- masthead: title and subtitle top-left, per the viewing path ---- */
 
-.masthead { padding: 80px 0 44px; }
+.masthead { padding: 80px 0 0; }
 
 .masthead h1 {
   margin: 0 0 24px;
@@ -120,8 +129,62 @@ strong, b { font-weight: 700; }
   text-transform: uppercase;
   color: var(--ink);
 }
-/* Stencil has no italic: the last word is picked out in the supply teal. */
-.masthead h1 em { font-style: normal; color: var(--teal-700); }
+/* Stencil has no italic: the last word is picked out in the teal of
+   "more" - the surplus the title is about. */
+.masthead h1 em { font-style: normal; color: var(--teal-600); }
+
+/* The story on the left, the key to the page's colours on the right. */
+.masthead-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--gutter);
+  align-items: start;
+  margin-bottom: 44px;
+}
+
+/* The colour key: each colour named once, with what it means on every
+   chart, so a reader decodes the page a single time. */
+.key {
+  padding: 20px var(--card-pad) 22px;
+  background: var(--card);
+  border-radius: 4px;
+}
+.key-title {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.key ul { margin: 0; padding: 0; list-style: none; }
+.key li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0 0 6px;
+  font-size: 1.04rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+.key li b { min-width: 5.4em; color: var(--ink); }
+.key .sw {
+  flex: none;
+  width: 16px;
+  height: 16px;
+  border-radius: 2px;
+  transform: translateY(2px);
+}
+.sw-more   { background: var(--teal-600); }
+.sw-less   { background: var(--ochre-600); }
+.sw-focus  { background: var(--charcoal); }
+.sw-canola { background: var(--violet-600); }
+.sw-none   { background: var(--slate-300); }
+.key-note {
+  margin: 10px 0 0;
+  font-size: 0.98rem;
+  color: var(--muted);
+}
 
 .standfirst {
   margin: 0;
@@ -151,7 +214,7 @@ strong, b { font-weight: 700; }
   transition: background-color 0.15s;
 }
 .contents a:hover,
-.contents a:focus-visible { background: var(--teal-050); }
+.contents a:focus-visible { background: var(--slate-100); }
 .contents .n {
   font-size: 0.9rem;
   font-weight: 700;
@@ -173,12 +236,17 @@ strong, b { font-weight: 700; }
 
 .chapter { padding: 84px 0 0; }
 
+/* Heading on the left, introduction on the right: the two page columns. */
 .chapter-head {
-  max-width: 44em;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--gutter);
+  align-items: end;
   margin-bottom: 30px;
 }
+.chapter-head .kicker { grid-column: 1 / -1; }
 .chapter-head h2 {
-  margin: 0 0 12px;
+  margin: 0;
   font-family: var(--serif);
   font-optical-sizing: auto;
   font-weight: 650;
@@ -217,9 +285,22 @@ strong, b { font-weight: 700; }
 /* Chart hierarchy. Each chapter opens with one lead chart: full width, the
    tallest chart of its chapter, a larger heading and a heavy teal rule
    along its top edge (no label: the size and the rule say it). Supporting charts follow at half width. */
-.card.hero { border-top: 6px solid var(--teal-800); }
+.card.hero { border-top: 6px solid var(--charcoal); }
 .card.hero h3 { min-height: 0; font-size: 1.62rem; line-height: 1.15; }
 .card.hero .sub { min-height: 0; }
+
+/* A lead card's key and finding sit side by side above the chart, on the
+   same two columns as the half-width cards beneath it. */
+.hero-head, .hero-foot {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: var(--inner-gap);
+  align-items: start;
+  margin: 0 0 var(--gap-chart);
+}
+.hero-head .sub, .hero-head .finding { margin: 0; }
+.hero-foot { margin: 0; }
+.hero-foot .viz, .hero-foot .finding { margin: 0; }
 
 /* Every card is built from the same four rows: heading, subtitle, chart,
    finding. With subgrid those rows are shared by the cards beside each
@@ -265,16 +346,16 @@ strong, b { font-weight: 700; }
 
 /* Colour keywords replace detached legends: the word is set in the colour of
    the marks it names. Weight only, never weight AND italic. */
-.k-wheat  { color: var(--teal-800);   font-weight: 700; }
+.k-wheat  { color: var(--charcoal);   font-weight: 700; }
 .k-barley { color: var(--slate-600);  font-weight: 700; }
 .k-canola { color: var(--violet-700); font-weight: 700; }
 .k-other  { color: var(--slate-600);  font-weight: 700; }
-.k-supply { color: var(--teal-700);   font-weight: 700; }
-.k-accent { color: var(--ochre-700);  font-weight: 700; }
+.k-more   { color: var(--teal-600);   font-weight: 700; }
+.k-less   { color: var(--ochre-700);  font-weight: 700; }
 
 .viz { width: 100%; min-height: 180px; margin: 0 0 var(--gap-chart); }
 /* A chart reached by keyboard shows where focus is. */
-.viz:focus-visible { outline: 2px solid var(--teal-700); outline-offset: 4px; }
+.viz:focus-visible { outline: 2px solid var(--charcoal); outline-offset: 4px; }
 
 /* The finding, not a caption: body-size text directly under the chart, with
    the numbers that carry it set in bold. */
@@ -287,10 +368,10 @@ strong, b { font-weight: 700; }
 .finding b { color: var(--ink); }
 /* One colour-matched word or number per finding, in the colour of the mark
    it refers to - text emphasis that also ties the sentence to the chart. */
-.finding .k-wheat  { color: var(--teal-800); }
-.finding .k-supply { color: var(--teal-700); }
+.finding .k-wheat  { color: var(--charcoal); }
+.finding .k-more   { color: var(--teal-600); }
 .finding .k-canola { color: var(--violet-700); }
-.finding .k-accent { color: var(--ochre-700); }
+.finding .k-less   { color: var(--ochre-700); }
 
 /* ---------- callout card -------------------------------------------------- */
 
@@ -299,8 +380,9 @@ strong, b { font-weight: 700; }
    the chart's heading and subtitle lines, its first figure starts on the
    chart's top edge, its last figure ends on the chart's bottom edge, and its
    note starts on the finding line. Tinted, so it reads as commentary rather
-   than as another chart. */
-.card.aside { background: var(--teal-050); }
+   than as another chart (a neutral tint: colour on this page always means
+   something). */
+.card.aside { background: #f2f3ef; }
 .aside .stats {
   display: flex;
   flex-direction: column;
@@ -372,8 +454,11 @@ strong, b { font-weight: 700; }
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: var(--ochre-700);
+  color: var(--muted);
 }
+/* heading and sentence keep to the measure inside the half-width card */
+.takeaways b, .takeaways .t { max-width: var(--measure); }
+.takeaways .t { display: block; }
 .takeaways b {
   display: block;
   margin-bottom: 4px;
@@ -415,12 +500,12 @@ strong, b { font-weight: 700; }
 }
 .sources li b { color: var(--ink); }
 .sources a {
-  color: var(--teal-700);
+  color: var(--ink-soft);
   overflow-wrap: anywhere;
   text-decoration-thickness: 1px;
   text-underline-offset: 2px;
 }
-.sources a:hover, .sources a:focus-visible { color: var(--ochre-700); }
+.sources a:hover, .sources a:focus-visible { color: var(--ink); text-decoration-thickness: 2px; }
 .sources .note {
   margin: 0;
   max-width: var(--measure);
@@ -475,7 +560,7 @@ footer .byline b { color: var(--ink); }
 }
 .viz form.vega-bindings .vega-bind-name { font-weight: 700; margin-right: 6px; }
 .viz form.vega-bindings label { margin-right: 6px; }
-.viz form.vega-bindings input[type="radio"] { accent-color: var(--ochre-600); }
+.viz form.vega-bindings input[type="radio"] { accent-color: var(--charcoal); }
 
 /* Vega tooltip: same typeface as the page. */
 #vg-tooltip-element { font-family: var(--sans); font-size: 16px; }
@@ -490,7 +575,8 @@ footer .byline b { color: var(--ink); }
   html { font-size: 17px; }
   :root { --gutter: 18px; --card-pad: 18px; }
   .masthead { padding-top: 52px; }
-  .closing-cols, .sources-cols { grid-template-columns: 1fr; gap: 14px; }
+  .closing-cols, .sources-cols, .masthead-body, .chapter-head,
+  .hero-head, .hero-foot { grid-template-columns: 1fr; row-gap: 14px; }
   .contents, .takeaways { grid-template-columns: 1fr; }
 }
 

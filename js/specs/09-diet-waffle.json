@@ -22,7 +22,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -69,7 +69,7 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
@@ -97,7 +97,7 @@
   },
   "transform": [
     {
-      "calculate": "datum.short + ': ' + format(datum.met_pct, '.0f') + ' in 100 (need ' + {\"Vegetables\": \"5\\u20136 a day\", \"Lean meat\": \"2\\u00bd\\u20133 a day\", \"Fruit\": \"2 a day\", \"Grains\": \"6 a day\"}[datum.short] + ')'",
+      "calculate": "datum.short + ': ' + format(datum.met_pct, '.1f') + '% (need ' + {\"Vegetables\": \"5\\u20136\", \"Lean meat\": \"2\\u00bd\\u20133\", \"Fruit\": \"2\", \"Grains\": \"6\"}[datum.short] + ' serves a day)'",
       "as": "panel"
     },
     {
@@ -113,7 +113,7 @@
       "as": "r"
     },
     {
-      "calculate": "'Adults need ' + {\"Vegetables\": \"5\\u20136\", \"Lean meat\": \"2\\u00bd\\u20133\", \"Fruit\": \"2\", \"Grains\": \"6\"}[datum.short] + ' serves'",
+      "calculate": "'Adults need ' + {\"Vegetables\": \"5\\u20136\", \"Lean meat\": \"2\\u00bd\\u20133\", \"Fruit\": \"2\", \"Grains\": \"6\"}[datum.short] + ' serves a day'",
       "as": "need"
     }
   ],
@@ -178,7 +178,7 @@
             "Did not meet it"
           ],
           "range": [
-            "#0f3f39",
+            "#2a7a6e",
             "#dee2dd"
           ]
         }

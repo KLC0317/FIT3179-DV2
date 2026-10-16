@@ -7,7 +7,8 @@
      1. give every spec the real pixel width of its card, so nothing is ever
         clipped and nothing overflows on a small laptop screen;
      2. embed the specs;
-     3. keep the two wheat maps showing the same season as each other.
+     3. keep the two wheat maps showing the same season as each other, and
+        the flow map's routes and the ranked buyers under it in step.
    ========================================================================== */
 
 (function () {
@@ -18,6 +19,7 @@
     { el: "viz-boxplot",       spec: "03-volatility-boxplot.json"      },
     { el: "viz-treemap",       spec: "04-crop-value-treemap.json"      },
     { el: "viz-flowmap",       spec: "07-wheat-flow-map.json"          },
+    { el: "viz-buyers",        spec: "07b-wheat-buyers-bars.json"      },
     { el: "viz-choropleth",    spec: "05-wheat-choropleth.json"        },
     { el: "viz-symbolmap",     spec: "06-wheat-symbol-map.json"        },
     { el: "viz-stateslope",    spec: "08-state-slope.json"             },
@@ -164,7 +166,8 @@
           ? 30
           : parseFloat(css.getPropertyValue("--gutter")) +
             2 * parseFloat(css.getPropertyValue("--card-pad"));
-        var cols = cardWidth(el) >= 520 ? 2 : 1;
+        // two panels a row only while each header fits on one line
+        var cols = cardWidth(el) >= 860 ? 2 : 1;
         s.columns = cols;
         s.spacing = { row: 22, column: gap };
         var childW = sizeFacet(
@@ -217,6 +220,24 @@
     bind(vb, va);
   }
 
+  /* Hovering a buyer's bar keeps only its route on the flow map, and
+     hovering a route keeps only its bar: each view sets the other's "pin". */
+  function linkBuyers() {
+    var flow = views["viz-flowmap"], bars = views["viz-buyers"];
+    if (!flow || !bars) return;
+    function picked(value) {
+      var d = value && value.destination;
+      return d ? String(Array.isArray(d) ? d[0] : d) : "";
+    }
+    function forward(from, signal, to) {
+      from.addSignalListener(signal, function (_, value) {
+        try { to.signal("pin", picked(value)).runAsync(); } catch (e) { /* not ready */ }
+      });
+    }
+    forward(bars, "barhover", flow);
+    forward(flow, "hover", bars);
+  }
+
   /* True when the page has collapsed to one column (matches the CSS). */
   function stacked() {
     return window.matchMedia("(max-width: 1040px)").matches;
@@ -250,6 +271,7 @@
   function renderAll() {
     return Promise.all(CHARTS.map(render)).then(function () {
       linkSeasonSignal("viz-choropleth", "viz-symbolmap");
+      linkBuyers();
       alignCallouts();
     });
   }

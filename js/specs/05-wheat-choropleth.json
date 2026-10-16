@@ -18,7 +18,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -65,14 +65,14 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
   },
   "title": {
     "text": "Victoria works its land hardest for wheat",
-    "subtitle": "Tonnes of wheat per square kilometre of state area, classed at 1, 3, 6 and 15.",
+    "subtitle": "Tonnes of wheat per square kilometre of state area, classed at 1, 3, 6 and 15. Dots mark the state capitals.",
     "subtitleLimit": 760
   },
   "padding": {
@@ -127,7 +127,7 @@
       },
       "transform": [
         {
-          "calculate": "datum.properties.STATE_NAME + ': no figure published by the ABS'",
+          "calculate": "datum.properties.STATE_NAME + ': no figure published by the Australian Bureau of Statistics'",
           "as": "note"
         }
       ],
@@ -196,7 +196,7 @@
           "as": "area_km2"
         },
         {
-          "calculate": "isValid(datum.intensity) ? format(datum.intensity, '.1f') + ' t per km²' : 'No figure published by the ABS'",
+          "calculate": "isValid(datum.intensity) ? format(datum.intensity, '.1f') + ' tonnes per square kilometre' : 'No figure published by the Australian Bureau of Statistics'",
           "as": "rate_text"
         }
       ],
@@ -213,7 +213,7 @@
           },
           "field": "intensity",
           "type": "quantitative",
-          "title": "Tonnes of wheat per km² of state area",
+          "title": "Tonnes of wheat per square kilometre",
           "scale": {
             "type": "threshold",
             "domain": [
@@ -235,7 +235,7 @@
             "orient": "none",
             "legendX": 0,
             "legendY": -118,
-            "titleLimit": 340,
+            "titleLimit": 420,
             "symbolType": "square",
             "symbolSize": 190,
             "format": ".0f"
@@ -250,7 +250,7 @@
           {
             "field": "rate_text",
             "type": "nominal",
-            "title": "Wheat per km²"
+            "title": "Wheat per square kilometre"
           },
           {
             "field": "kt",
@@ -261,7 +261,7 @@
           {
             "field": "area_km2",
             "type": "quantitative",
-            "title": "State area (km²)",
+            "title": "State area (square kilometres)",
             "format": ","
           }
         ]
@@ -311,124 +311,33 @@
           "as": "kt"
         },
         {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
-          "as": "abbr"
+          "filter": "!(indexof(['Tasmania','Australian Capital Territory'], datum.state) >= 0) && datum.state !== 'Victoria'"
         },
         {
-          "filter": "indexof(['ACT','TAS'], datum.abbr) < 0"
-        },
-        {
-          "calculate": "datum.abbr === 'VIC' ? 142.5 : datum.longitude",
+          "calculate": "datum.longitude",
           "as": "lab_lon"
         },
         {
-          "calculate": "datum.abbr === 'VIC' ? -36.35 : datum.latitude",
-          "as": "lab_lat"
-        },
-        {
-          "calculate": "datum.abbr",
-          "as": "t"
-        }
-      ],
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 15,
-        "fontWeight": 700,
-        "dy": -10
-      },
-      "encoding": {
-        "longitude": {
-          "field": "lab_lon",
-          "type": "quantitative"
-        },
-        "latitude": {
-          "field": "lab_lat",
-          "type": "quantitative"
-        },
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        },
-        "color": {
-          "condition": {
-            "test": "isValid(datum.intensity) && datum.intensity >= 6",
-            "value": "#ffffff"
-          },
-          "value": "#161f1b"
-        }
-      }
-    },
-    {
-      "data": {
-        "url": "data/state_centroids.csv"
-      },
-      "transform": [
-        {
-          "lookup": "state",
-          "from": {
-            "data": {
-              "url": "data/wheat_state_density.csv",
-              "format": {
-                "type": "csv",
-                "parse": {
-                  "kt_2022_23": "number",
-                  "kt_2023_24": "number",
-                  "kt_2024_25": "number",
-                  "tpk_2022_23": "number",
-                  "tpk_2023_24": "number",
-                  "tpk_2024_25": "number",
-                  "area_km2": "number"
-                }
-              }
-            },
-            "key": "state",
-            "fields": [
-              "area_km2",
-              "kt_2022_23",
-              "kt_2023_24",
-              "kt_2024_25",
-              "tpk_2022_23",
-              "tpk_2023_24",
-              "tpk_2024_25"
-            ]
-          }
-        },
-        {
-          "calculate": "(datum['tpk_' + season] === '' || datum['tpk_' + season] == null) ? null : toNumber(datum['tpk_' + season])",
-          "as": "intensity"
-        },
-        {
-          "calculate": "(datum['kt_' + season] === '' || datum['kt_' + season] == null) ? null : toNumber(datum['kt_' + season])",
-          "as": "kt"
-        },
-        {
-          "calculate": "{'New South Wales':'NSW','Victoria':'VIC','Queensland':'QLD','South Australia':'SA','Western Australia':'WA','Tasmania':'TAS','Northern Territory':'NT','Australian Capital Territory':'ACT'}[datum.state]",
-          "as": "abbr"
-        },
-        {
-          "filter": "indexof(['ACT','TAS'], datum.abbr) < 0"
-        },
-        {
-          "calculate": "datum.abbr === 'VIC' ? 142.5 : datum.longitude",
-          "as": "lab_lon"
-        },
-        {
-          "calculate": "datum.abbr === 'VIC' ? -36.35 : datum.latitude",
+          "calculate": "datum.latitude",
           "as": "lab_lat"
         },
         {
           "calculate": "isValid(datum.intensity) ? format(datum.intensity, '.0f') : 'no figure'",
           "as": "t"
+        },
+        {
+          "calculate": "{'New South Wales':'New South','Victoria':'Victoria','Queensland':'Queensland','South Australia':'South','Western Australia':'Western','Tasmania':'Tasmania','Northern Territory':'Northern','Australian Capital Territory':'Canberra'}[datum.state]",
+          "as": "l1"
+        },
+        {
+          "calculate": "{'New South Wales':'Wales','South Australia':'Australia','Western Australia':'Australia','Northern Territory':'Territory'}[datum.state] || ''",
+          "as": "l2"
+        },
+        {
+          "calculate": "datum.l2 ? [datum.l1, datum.l2] : [datum.l1]",
+          "as": "name_lines"
         }
       ],
-      "mark": {
-        "type": "text",
-        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
-        "fontSize": 15,
-        "fontWeight": 400,
-        "dy": 11
-      },
       "encoding": {
         "longitude": {
           "field": "lab_lon",
@@ -437,17 +346,144 @@
         "latitude": {
           "field": "lab_lat",
           "type": "quantitative"
-        },
-        "text": {
-          "field": "t",
-          "type": "nominal"
-        },
-        "color": {
-          "condition": {
-            "test": "isValid(datum.intensity) && datum.intensity >= 6",
-            "value": "#ffffff"
+        }
+      },
+      "layer": [
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "baseline": "bottom",
+            "dy": -1,
+            "lineHeight": 17
           },
-          "value": "#161f1b"
+          "encoding": {
+            "text": {
+              "field": "name_lines",
+              "type": "nominal"
+            },
+            "color": {
+              "condition": {
+                "test": "isValid(datum.intensity) && datum.intensity >= 6",
+                "value": "#ffffff"
+              },
+              "value": "#161f1b"
+            }
+          },
+          "transform": [
+            {
+              "filter": "!datum.l2"
+            }
+          ]
+        },
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 700,
+            "baseline": "bottom",
+            "dy": -18,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "name_lines",
+              "type": "nominal"
+            },
+            "color": {
+              "condition": {
+                "test": "isValid(datum.intensity) && datum.intensity >= 6",
+                "value": "#ffffff"
+              },
+              "value": "#161f1b"
+            }
+          },
+          "transform": [
+            {
+              "filter": "datum.l2"
+            }
+          ]
+        },
+        {
+          "mark": {
+            "type": "text",
+            "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+            "fontSize": 15,
+            "fontWeight": 400,
+            "baseline": "top",
+            "dy": 3,
+            "lineHeight": 17
+          },
+          "encoding": {
+            "text": {
+              "field": "t",
+              "type": "nominal"
+            },
+            "color": {
+              "condition": {
+                "test": "isValid(datum.intensity) && datum.intensity >= 6",
+                "value": "#ffffff"
+              },
+              "value": "#161f1b"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "city": "Perth",
+            "lon": 115.86,
+            "lat": -31.95
+          },
+          {
+            "city": "Adelaide",
+            "lon": 138.6,
+            "lat": -34.93
+          },
+          {
+            "city": "Melbourne",
+            "lon": 144.96,
+            "lat": -37.81
+          },
+          {
+            "city": "Sydney",
+            "lon": 151.21,
+            "lat": -33.87
+          },
+          {
+            "city": "Brisbane",
+            "lon": 153.03,
+            "lat": -27.47
+          }
+        ]
+      },
+      "mark": {
+        "type": "circle",
+        "size": 34,
+        "color": "#161f1b",
+        "opacity": 1,
+        "stroke": "#fefdf9",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "tooltip": {
+          "field": "city",
+          "type": "nominal",
+          "title": "State capital"
         }
       }
     },
@@ -455,7 +491,382 @@
       "data": {
         "values": [
           {
-            "lon": 141.4,
+            "t": "Perth",
+            "lon": 115.86,
+            "lat": -31.95
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#fefdf9",
+        "align": "right",
+        "dx": -7,
+        "dy": 0,
+        "baseline": "middle",
+        "stroke": "#fefdf9",
+        "strokeWidth": 3.5,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Perth",
+            "lon": 115.86,
+            "lat": -31.95
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "right",
+        "dx": -7,
+        "dy": 0,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Adelaide",
+            "lon": 138.6,
+            "lat": -34.93
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#fefdf9",
+        "align": "right",
+        "dx": -7,
+        "dy": 0,
+        "baseline": "middle",
+        "stroke": "#fefdf9",
+        "strokeWidth": 3.5,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Adelaide",
+            "lon": 138.6,
+            "lat": -34.93
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "right",
+        "dx": -7,
+        "dy": 0,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Melbourne",
+            "lon": 144.96,
+            "lat": -37.81
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#fefdf9",
+        "align": "left",
+        "dx": 5,
+        "dy": 13,
+        "baseline": "middle",
+        "stroke": "#fefdf9",
+        "strokeWidth": 3.5,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Melbourne",
+            "lon": 144.96,
+            "lat": -37.81
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "dx": 5,
+        "dy": 13,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Sydney",
+            "lon": 151.21,
+            "lat": -33.87
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#fefdf9",
+        "align": "left",
+        "dx": 7,
+        "dy": 0,
+        "baseline": "middle",
+        "stroke": "#fefdf9",
+        "strokeWidth": 3.5,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Sydney",
+            "lon": 151.21,
+            "lat": -33.87
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "dx": 7,
+        "dy": 0,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Brisbane",
+            "lon": 153.03,
+            "lat": -27.47
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#fefdf9",
+        "align": "right",
+        "dx": -7,
+        "dy": 0,
+        "baseline": "middle",
+        "stroke": "#fefdf9",
+        "strokeWidth": 3.5,
+        "strokeJoin": "round"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Brisbane",
+            "lon": 153.03,
+            "lat": -27.47
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "right",
+        "dx": -7,
+        "dy": 0,
+        "baseline": "middle"
+      },
+      "encoding": {
+        "longitude": {
+          "field": "lon",
+          "type": "quantitative"
+        },
+        "latitude": {
+          "field": "lat",
+          "type": "quantitative"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "lon": 138.4,
             "lat": -39.25,
             "lon2": 142.6,
             "lat2": -38.15
@@ -544,7 +955,7 @@
           "filter": "datum.state === 'Victoria'"
         },
         {
-          "calculate": "141.4",
+          "calculate": "138.4",
           "as": "lon"
         },
         {
@@ -552,7 +963,7 @@
           "as": "lat"
         },
         {
-          "calculate": "'Victoria: ' + format(datum.intensity / datum.wa_rate, '.1f') + ' times'",
+          "calculate": "'Victoria: ' + format(datum.intensity, '.0f') + ' tonnes, ' + format(datum.intensity / datum.wa_rate, '.1f') + ' times'",
           "as": "t1"
         },
         {
@@ -585,7 +996,7 @@
             "font": "'Source Sans 3', 'Segoe UI', sans-serif",
             "fontSize": 16,
             "fontWeight": 400,
-            "fill": "#57625b",
+            "fill": "#4a554f",
             "align": "right",
             "dx": -3,
             "dy": 26
@@ -623,7 +1034,7 @@
       },
       "encoding": {
         "text": {
-          "value": "Most of WA is desert:"
+          "value": "Most of the west is desert:"
         }
       },
       "data": {

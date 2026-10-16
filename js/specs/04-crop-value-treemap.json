@@ -212,7 +212,7 @@
             "signal": "datum.y0 + 20"
           },
           "text": {
-            "signal": "upper(datum.name) + '  ' + format(datum.total / 1000, '$.1f') + 'b'"
+            "signal": "upper(datum.name) + '  ' + (datum.total >= 1000 ? format(datum.total / 1000, '$.1f') + ' billion' : format(datum.total, '$,.0f') + ' million')"
           },
           "fill": {
             "value": "#333e38"
@@ -255,13 +255,13 @@
             "field": "y1"
           },
           "fill": {
-            "signal": "datum.name === 'Wheat' ? '#0f3f39' : datum.name === 'Barley' ? '#a0a9a3' : datum.name === 'Canola' ? '#7461a8' : '#dee2dd'"
+            "signal": "datum.name === 'Wheat' ? '#2e3532' : datum.name === 'Barley' ? '#a0a9a3' : datum.name === 'Canola' ? '#7461a8' : '#dee2dd'"
           },
           "cursor": {
             "value": "default"
           },
           "tooltip": {
-            "signal": "{'Crop': datum.name, 'Type': datum.crop_type, 'Local value 2024–25': format(datum.value, '$,.0f') + ' million', 'Share of all crops': format(datum.value / datum.grand, '.1%'), 'Made up of': datum.detail ? datum.detail : 'one crop'}"
+            "signal": "{'Crop': datum.name, 'In the hierarchy': 'All crops › ' + datum.crop_type + 's › ' + datum.name, 'Local value 2024–25': format(datum.value, '$,.0f') + ' million', 'Share of all crops': format(datum.value / datum.grand, '.1%'), 'Made up of': datum.detail ? datum.detail : 'one crop'}"
           }
         }
       }
@@ -313,7 +313,7 @@
             "signal": "datum.y0 + 41"
           },
           "text": {
-            "signal": "format(datum.value / 1000, '$.1f') + 'b'"
+            "signal": "(datum.value >= 1000 ? format(datum.value / 1000, '$.1f') + ' billion' : format(datum.value, '$,.0f') + ' million')"
           },
           "fill": {
             "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
@@ -348,7 +348,7 @@
             "signal": "(datum.y0 + datum.y1) / 2"
           },
           "text": {
-            "signal": "datum.name === 'Other pulses' ? 'Others' : datum.name + '  ' + format(datum.value / 1000, '$.1f') + 'b'"
+            "signal": "(datum.x1 - datum.x0 - 16) / 7.6 >= length(datum.name === 'Other pulses' ? 'Others' : datum.name + '  ' + (datum.value >= 1000 ? format(datum.value / 1000, '$.1f') + ' billion' : format(datum.value, '$,.0f') + ' million')) ? datum.name === 'Other pulses' ? 'Others' : datum.name + '  ' + (datum.value >= 1000 ? format(datum.value / 1000, '$.1f') + ' billion' : format(datum.value, '$,.0f') + ' million') : datum.name === 'Other pulses' ? 'Others' : datum.name"
           },
           "fill": {
             "signal": "indexof(['Wheat','Canola'], datum.name) >= 0 ? '#ffffff' : '#161f1b'"
@@ -421,7 +421,7 @@
             "signal": "height - 30"
           },
           "text": {
-            "value": "Chickpeas: $0.4b to $1.7b in a year,"
+            "value": "Chickpeas: $0.4 billion to $1.7 billion in a year,"
           },
           "fill": {
             "value": "#161f1b"

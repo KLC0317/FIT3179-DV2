@@ -18,7 +18,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -65,14 +65,14 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
   },
   "title": {
     "text": "South Australia's harvest more than halved in two seasons",
-    "subtitle": "Wheat sold by each state, 2022–23 against 2024–25. Choose a state to highlight it.",
+    "subtitle": "Wheat sold by each state, 2022–23 against 2024–25. Choose a state to highlight it; the slope shows whether it rose or fell.",
     "subtitleLimit": 760
   },
   "padding": {
@@ -136,7 +136,7 @@
       "as": "label"
     },
     {
-      "calculate": "datum.state !== state ? 'rest' : datum.change < 0 ? 'fell' : 'grew'",
+      "calculate": "datum.state === state ? 'focus' : 'rest'",
       "as": "emph"
     }
   ],
@@ -195,13 +195,11 @@
           "legend": null,
           "scale": {
             "domain": [
-              "fell",
-              "grew",
+              "focus",
               "rest"
             ],
             "range": [
-              "#9c6114",
-              "#0f3f39",
+              "#2e3532",
               "#a0a9a3"
             ]
           }
@@ -290,14 +288,12 @@
           "legend": null,
           "scale": {
             "domain": [
-              "fell",
-              "grew",
+              "focus",
               "rest"
             ],
             "range": [
-              "#84520f",
-              "#0f3f39",
-              "#333e38"
+              "#2e3532",
+              "#4a554f"
             ]
           }
         }
@@ -355,14 +351,12 @@
           "legend": null,
           "scale": {
             "domain": [
-              "fell",
-              "grew",
+              "focus",
               "rest"
             ],
             "range": [
-              "#84520f",
-              "#0f3f39",
-              "#333e38"
+              "#2e3532",
+              "#4a554f"
             ]
           }
         }
@@ -420,14 +414,12 @@
           "legend": null,
           "scale": {
             "domain": [
-              "fell",
-              "grew",
+              "focus",
               "rest"
             ],
             "range": [
-              "#84520f",
-              "#0f3f39",
-              "#333e38"
+              "#2e3532",
+              "#4a554f"
             ]
           }
         }
@@ -448,6 +440,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 16,
         "fontWeight": 700,
+        "fill": "#2e3532",
         "align": "right",
         "baseline": "bottom",
         "x": {
@@ -459,13 +452,6 @@
         "text": {
           "field": "t",
           "type": "nominal"
-        },
-        "color": {
-          "condition": {
-            "test": "datum.change < 0",
-            "value": "#84520f"
-          },
-          "value": "#0f3f39"
         }
       }
     },

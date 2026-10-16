@@ -13,7 +13,7 @@
   "usermeta": {
     "gutter": [
       108,
-      78
+      96
     ]
   },
   "config": {
@@ -22,7 +22,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -69,7 +69,7 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
@@ -186,6 +186,26 @@
                 {
                   "calculate": "(datum.lo + datum.hi) / 2",
                   "as": "mid"
+                },
+                {
+                  "joinaggregate": [
+                    {
+                      "op": "sum",
+                      "field": "kt",
+                      "as": "year_kt"
+                    }
+                  ],
+                  "groupby": [
+                    "year"
+                  ]
+                },
+                {
+                  "calculate": "datum.kt / 1000",
+                  "as": "mt"
+                },
+                {
+                  "calculate": "datum.year_kt / 1000",
+                  "as": "year_mt"
                 }
               ],
               "params": [
@@ -230,7 +250,7 @@
                   "scale": {
                     "domain": [
                       -1000,
-                      84000
+                      88000
                     ]
                   }
                 },
@@ -249,7 +269,7 @@
                       "Other grains and oilseeds"
                     ],
                     "range": [
-                      "#0f3f39",
+                      "#2e3532",
                       "#a0a9a3",
                       "#7461a8",
                       "#dee2dd"
@@ -281,10 +301,16 @@
                     "title": "Crop"
                   },
                   {
-                    "field": "kt",
+                    "field": "mt",
                     "type": "quantitative",
-                    "title": "Thousand tonnes harvested",
-                    "format": ",.0f"
+                    "title": "Million tonnes harvested",
+                    "format": ".1f"
+                  },
+                  {
+                    "field": "year_mt",
+                    "type": "quantitative",
+                    "title": "All crops shown that year (million tonnes)",
+                    "format": ".1f"
                   }
                 ]
               }
@@ -336,6 +362,26 @@
                 {
                   "calculate": "(datum.lo + datum.hi) / 2",
                   "as": "mid"
+                },
+                {
+                  "joinaggregate": [
+                    {
+                      "op": "sum",
+                      "field": "kt",
+                      "as": "year_kt"
+                    }
+                  ],
+                  "groupby": [
+                    "year"
+                  ]
+                },
+                {
+                  "calculate": "datum.kt / 1000",
+                  "as": "mt"
+                },
+                {
+                  "calculate": "datum.year_kt / 1000",
+                  "as": "year_mt"
                 },
                 {
                   "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5))) && datum.group !== 'Other grains and oilseeds'"
@@ -396,7 +442,7 @@
                       "Other grains and oilseeds"
                     ],
                     "range": [
-                      "#0f3f39",
+                      "#2e3532",
                       "#57625b",
                       "#5a4a8a",
                       "#57625b"
@@ -454,6 +500,26 @@
                   "as": "mid"
                 },
                 {
+                  "joinaggregate": [
+                    {
+                      "op": "sum",
+                      "field": "kt",
+                      "as": "year_kt"
+                    }
+                  ],
+                  "groupby": [
+                    "year"
+                  ]
+                },
+                {
+                  "calculate": "datum.kt / 1000",
+                  "as": "mt"
+                },
+                {
+                  "calculate": "datum.year_kt / 1000",
+                  "as": "year_mt"
+                },
+                {
                   "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5))) && datum.group !== 'Other grains and oilseeds'"
                 },
                 {
@@ -465,7 +531,7 @@
                   "as": "edge"
                 },
                 {
-                  "calculate": "format(datum.kt / 1000, '.1f') + ' Mt'",
+                  "calculate": "format(datum.kt / 1000, '.1f') + ' million'",
                   "as": "mt"
                 }
               ],
@@ -474,7 +540,7 @@
                 "font": "'Source Sans 3', 'Segoe UI', sans-serif",
                 "fontSize": 15,
                 "fontWeight": 400,
-                "fill": "#57625b",
+                "fill": "#4a554f",
                 "align": "left",
                 "dx": 8,
                 "dy": 10,
@@ -528,7 +594,7 @@
                   "scale": {
                     "domain": [
                       -1000,
-                      84000
+                      88000
                     ]
                   }
                 },
@@ -542,7 +608,7 @@
                 "values": [
                   {
                     "m": 5000,
-                    "t": "10 Mt"
+                    "t": "10 million"
                   }
                 ]
               },
@@ -574,7 +640,7 @@
                 "values": [
                   {
                     "m": 5000,
-                    "t": "of harvest"
+                    "t": "tonnes"
                   }
                 ]
               },
@@ -583,7 +649,7 @@
                 "font": "'Source Sans 3', 'Segoe UI', sans-serif",
                 "fontSize": 15,
                 "fontWeight": 400,
-                "fill": "#57625b",
+                "fill": "#4a554f",
                 "align": "left",
                 "baseline": "top",
                 "x": -98,
@@ -699,7 +765,7 @@
                 "font": "'Source Sans 3', 'Segoe UI', sans-serif",
                 "fontSize": 16,
                 "fontWeight": 400,
-                "fill": "#57625b",
+                "fill": "#4a554f",
                 "align": "center",
                 "dx": 0,
                 "y": 34,
@@ -730,7 +796,7 @@
                 "values": [
                   {
                     "year": 2022,
-                    "t": "2022: record 41.2 Mt"
+                    "t": "2022: record 41.2"
                   }
                 ]
               },
@@ -747,7 +813,7 @@
                 "fill": "#161f1b",
                 "align": "right",
                 "dx": -6,
-                "y": 32,
+                "y": 36,
                 "baseline": "middle",
                 "clip": false
               },
@@ -775,7 +841,7 @@
                 "values": [
                   {
                     "year": 2022,
-                    "t": "third La Niña year"
+                    "t": "million tonnes, La Niña"
                   }
                 ]
               },
@@ -789,10 +855,10 @@
                 "font": "'Source Sans 3', 'Segoe UI', sans-serif",
                 "fontSize": 16,
                 "fontWeight": 400,
-                "fill": "#57625b",
+                "fill": "#4a554f",
                 "align": "right",
                 "dx": -6,
-                "y": 52,
+                "y": 56,
                 "baseline": "middle",
                 "clip": false
               },
@@ -879,7 +945,7 @@
                 "font": "'Source Sans 3', 'Segoe UI', sans-serif",
                 "fontSize": 16,
                 "fontWeight": 400,
-                "fill": "#57625b",
+                "fill": "#4a554f",
                 "align": "right",
                 "dx": -6,
                 "y": 104,
@@ -945,12 +1011,12 @@
               "encoding": {
                 "x": {
                   "value": {
-                    "expr": "width + 78"
+                    "expr": "width + 96"
                   }
                 },
                 "x2": {
                   "value": {
-                    "expr": "width + 78"
+                    "expr": "width + 96"
                   }
                 },
                 "y": {
@@ -1092,7 +1158,7 @@
                   "#d6a248",
                   "#efeee7",
                   "#5ba79b",
-                  "#0f3f39"
+                  "#2a7a6e"
                 ]
               },
               "legend": {
@@ -1269,7 +1335,7 @@
             "font": "'Source Sans 3', 'Segoe UI', sans-serif",
             "fontSize": 15,
             "fontWeight": 600,
-            "fill": "#57625b",
+            "fill": "#4a554f",
             "align": "left",
             "baseline": "bottom",
             "x": -108,
@@ -1381,12 +1447,12 @@
           "encoding": {
             "x": {
               "value": {
-                "expr": "width + 78"
+                "expr": "width + 96"
               }
             },
             "x2": {
               "value": {
-                "expr": "width + 78"
+                "expr": "width + 96"
               }
             },
             "y": {
@@ -1487,7 +1553,7 @@
               {
                 "field": "total",
                 "type": "quantitative",
-                "title": "All crops shown (kt)",
+                "title": "All crops shown (thousand tonnes)",
                 "format": ",.0f"
               }
             ]
@@ -1540,11 +1606,11 @@
               "filter": "datum.rank === 1"
             },
             {
-              "calculate": "(datum.y0 === datum.y1 ? datum.y0 : datum.y0 + '–' + datum.y1) + ': wheat averaged ' + format(datum.avg / 1000, '.1f') + ' Mt a year'",
+              "calculate": "(datum.y0 === datum.y1 ? datum.y0 : datum.y0 + '–' + datum.y1) + ': wheat averaged ' + format(datum.avg / 1000, '.1f') + ' million tonnes a year'",
               "as": "t1"
             },
             {
-              "calculate": "'Smallest crop: ' + format(datum.production_kt / 1000, '.1f') + ' Mt, in ' + datum.year",
+              "calculate": "'Smallest crop: ' + format(datum.production_kt / 1000, '.1f') + ' million tonnes, in ' + datum.year",
               "as": "t2"
             }
           ],
@@ -1613,11 +1679,11 @@
               "filter": "datum.rank === 1"
             },
             {
-              "calculate": "(datum.y0 === datum.y1 ? datum.y0 : datum.y0 + '–' + datum.y1) + ': wheat averaged ' + format(datum.avg / 1000, '.1f') + ' Mt a year'",
+              "calculate": "(datum.y0 === datum.y1 ? datum.y0 : datum.y0 + '–' + datum.y1) + ': wheat averaged ' + format(datum.avg / 1000, '.1f') + ' million tonnes a year'",
               "as": "t1"
             },
             {
-              "calculate": "'Smallest crop: ' + format(datum.production_kt / 1000, '.1f') + ' Mt, in ' + datum.year",
+              "calculate": "'Smallest crop: ' + format(datum.production_kt / 1000, '.1f') + ' million tonnes, in ' + datum.year",
               "as": "t2"
             }
           ],
@@ -1729,12 +1795,12 @@
           "encoding": {
             "x": {
               "value": {
-                "expr": "width + 78"
+                "expr": "width + 96"
               }
             },
             "x2": {
               "value": {
-                "expr": "width + 78"
+                "expr": "width + 96"
               }
             },
             "y": {

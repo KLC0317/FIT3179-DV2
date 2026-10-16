@@ -10,7 +10,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -57,7 +57,7 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
@@ -159,7 +159,7 @@
                 "nice": false
               },
               "axis": {
-                "title": "Rainfall (mm)",
+                "title": "Rainfall (millimetres)",
                 "titleAngle": 0,
                 "titleAlign": "left",
                 "titleBaseline": "bottom",
@@ -189,7 +189,7 @@
                 ],
                 "range": [
                   "#9c6114",
-                  "#0f3f39",
+                  "#2a7a6e",
                   "#a0a9a3"
                 ]
               }
@@ -211,7 +211,7 @@
               {
                 "field": "area_average_rainfall_mm",
                 "type": "quantitative",
-                "title": "Rainfall (mm)"
+                "title": "Rainfall (millimetres)"
               },
               {
                 "field": "total_water_consumption_GL",
@@ -296,7 +296,7 @@
                 ],
                 "range": [
                   "#84520f",
-                  "#0f3f39"
+                  "#2a7a6e"
                 ]
               }
             }
@@ -568,7 +568,7 @@
                 ],
                 "range": [
                   "#9c6114",
-                  "#0f3f39",
+                  "#2a7a6e",
                   "#a0a9a3"
                 ]
               }
@@ -590,7 +590,7 @@
               {
                 "field": "area_average_rainfall_mm",
                 "type": "quantitative",
-                "title": "Rainfall (mm)"
+                "title": "Rainfall (millimetres)"
               },
               {
                 "field": "total_water_consumption_GL",
@@ -666,7 +666,7 @@
                 ],
                 "range": [
                   "#84520f",
-                  "#0f3f39"
+                  "#2a7a6e"
                 ]
               }
             }

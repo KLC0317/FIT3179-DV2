@@ -18,7 +18,7 @@
     "axis": {
       "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "labelFontSize": 15,
-      "labelColor": "#57625b",
+      "labelColor": "#4a554f",
       "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "titleFontSize": 15,
       "titleFontWeight": 600,
@@ -65,7 +65,7 @@
       "dy": -6,
       "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
       "subtitleFontSize": 16,
-      "subtitleColor": "#57625b",
+      "subtitleColor": "#4a554f",
       "subtitlePadding": 4,
       "subtitleLineHeight": 17
     }
@@ -172,7 +172,7 @@
         "x": {
           "field": "rain",
           "type": "quantitative",
-          "title": "Rainfall across Australia that year (mm)",
+          "title": "Rainfall across Australia that year (millimetres)",
           "scale": {
             "domain": [
               320,
@@ -203,7 +203,7 @@
             "nice": false
           },
           "axis": {
-            "title": "Wheat harvested (Mt)",
+            "title": "Wheat harvested (million tonnes)",
             "titleAngle": 0,
             "titleAlign": "left",
             "titleBaseline": "bottom",
@@ -233,7 +233,7 @@
             ],
             "range": [
               "#9c6114",
-              "#0f3f39",
+              "#2a7a6e",
               "#a0a9a3"
             ]
           }
@@ -269,7 +269,7 @@
         "font": "'Source Sans 3', 'Segoe UI', sans-serif",
         "fontSize": 15,
         "fontWeight": 700,
-        "fill": "#0f3f39",
+        "fill": "#2a7a6e",
         "align": "right",
         "dx": -10,
         "dy": -24
@@ -278,7 +278,7 @@
         "x": {
           "field": "rain",
           "type": "quantitative",
-          "title": "Rainfall across Australia that year (mm)",
+          "title": "Rainfall across Australia that year (millimetres)",
           "scale": {
             "domain": [
               320,
@@ -309,7 +309,7 @@
             "nice": false
           },
           "axis": {
-            "title": "Wheat harvested (Mt)",
+            "title": "Wheat harvested (million tonnes)",
             "titleAngle": 0,
             "titleAlign": "left",
             "titleBaseline": "bottom",
@@ -328,7 +328,7 @@
           }
         },
         "text": {
-          "value": "2022–23: record 41.2 Mt"
+          "value": "2022–23: record 41.2 million"
         }
       }
     },
@@ -352,7 +352,7 @@
         "x": {
           "field": "rain",
           "type": "quantitative",
-          "title": "Rainfall across Australia that year (mm)",
+          "title": "Rainfall across Australia that year (millimetres)",
           "scale": {
             "domain": [
               320,
@@ -383,7 +383,7 @@
             "nice": false
           },
           "axis": {
-            "title": "Wheat harvested (Mt)",
+            "title": "Wheat harvested (million tonnes)",
             "titleAngle": 0,
             "titleAlign": "left",
             "titleBaseline": "bottom",
@@ -402,7 +402,7 @@
           }
         },
         "text": {
-          "value": "third La Niña year"
+          "value": "tonnes, the third La Niña year"
         }
       }
     },
@@ -426,7 +426,7 @@
         "x": {
           "field": "rain",
           "type": "quantitative",
-          "title": "Rainfall across Australia that year (mm)",
+          "title": "Rainfall across Australia that year (millimetres)",
           "scale": {
             "domain": [
               320,
@@ -457,7 +457,7 @@
             "nice": false
           },
           "axis": {
-            "title": "Wheat harvested (Mt)",
+            "title": "Wheat harvested (million tonnes)",
             "titleAngle": 0,
             "titleAlign": "left",
             "titleBaseline": "bottom",
@@ -500,7 +500,7 @@
         "x": {
           "field": "rain",
           "type": "quantitative",
-          "title": "Rainfall across Australia that year (mm)",
+          "title": "Rainfall across Australia that year (millimetres)",
           "scale": {
             "domain": [
               320,
@@ -531,7 +531,7 @@
             "nice": false
           },
           "axis": {
-            "title": "Wheat harvested (Mt)",
+            "title": "Wheat harvested (million tonnes)",
             "titleAngle": 0,
             "titleAlign": "left",
             "titleBaseline": "bottom",
