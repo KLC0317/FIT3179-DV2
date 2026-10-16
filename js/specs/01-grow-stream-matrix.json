@@ -240,7 +240,15 @@
                     "nice": false,
                     "zero": false
                   },
-                  "axis": null
+                  "axis": {
+                    "format": "d",
+                    "grid": false,
+                    "ticks": true,
+                    "domain": true,
+                    "tickMinStep": 1,
+                    "labelFlush": false,
+                    "tickCount": 8
+                  }
                 },
                 "y": {
                   "field": "lo",
@@ -384,10 +392,10 @@
                   "as": "year_mt"
                 },
                 {
-                  "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5))) && datum.group !== 'Other grains and oilseeds'"
+                  "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5)))"
                 },
                 {
-                  "calculate": "datum.mid + (datum.group === 'Canola' ? 4500 : datum.group === 'Barley' ? -2500 : 0)",
+                  "calculate": "datum.mid + (datum.group === 'Canola' ? 4500 : datum.group === 'Barley' ? -2500 : datum.group === 'Other grains and oilseeds' ? 17500 : 0)",
                   "as": "label_y"
                 },
                 {
@@ -395,8 +403,8 @@
                   "as": "edge"
                 },
                 {
-                  "calculate": "(isValid(brush.year) ? brush.year[1] : 2024.5)",
-                  "as": "edge"
+                  "calculate": "datum.group === 'Other grains and oilseeds' ? 'Other crops' : datum.group",
+                  "as": "lab"
                 }
               ],
               "mark": {
@@ -427,7 +435,7 @@
                   "type": "quantitative"
                 },
                 "text": {
-                  "field": "group",
+                  "field": "lab",
                   "type": "nominal"
                 },
                 "color": {
@@ -520,10 +528,10 @@
                   "as": "year_mt"
                 },
                 {
-                  "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5))) && datum.group !== 'Other grains and oilseeds'"
+                  "filter": "datum.year === floor(min(2024, (isValid(brush.year) ? brush.year[1] : 2024.5)))"
                 },
                 {
-                  "calculate": "datum.mid + (datum.group === 'Canola' ? 4500 : datum.group === 'Barley' ? -2500 : 0)",
+                  "calculate": "datum.mid + (datum.group === 'Canola' ? 4500 : datum.group === 'Barley' ? -2500 : datum.group === 'Other grains and oilseeds' ? 17500 : 0)",
                   "as": "label_y"
                 },
                 {
@@ -841,7 +849,7 @@
                 "values": [
                   {
                     "year": 2022,
-                    "t": "million tonnes, La Niña"
+                    "t": "million tonnes (2022–23 season)"
                   }
                 ]
               },

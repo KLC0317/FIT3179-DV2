@@ -192,7 +192,7 @@
       ],
       "mark": {
         "type": "geoshape",
-        "fill": "#dcd5c3",
+        "fill": "#e7e6de",
         "stroke": "#fefdf9",
         "strokeWidth": 0.5,
         "clip": true

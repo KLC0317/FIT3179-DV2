@@ -160,7 +160,7 @@
         "x": {
           "field": "mt",
           "type": "quantitative",
-          "title": null,
+          "title": "Million tonnes of wheat, 2024",
           "scale": {
             "domain": [
               0,
@@ -168,7 +168,19 @@
             ],
             "nice": false
           },
-          "axis": null
+          "axis": {
+            "values": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "format": "d",
+            "grid": true,
+            "domain": false,
+            "ticks": false,
+            "titlePadding": 8
+          }
         },
         "opacity": {
           "condition": [
@@ -253,7 +265,7 @@
         "x": {
           "field": "mt",
           "type": "quantitative",
-          "title": null,
+          "title": "Million tonnes of wheat, 2024",
           "scale": {
             "domain": [
               0,
@@ -261,7 +273,19 @@
             ],
             "nice": false
           },
-          "axis": null
+          "axis": {
+            "values": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "format": "d",
+            "grid": true,
+            "domain": false,
+            "ticks": false,
+            "titlePadding": 8
+          }
         },
         "text": {
           "field": "mt",

@@ -142,6 +142,9 @@
         "extent": 1.5,
         "size": 18,
         "outliers": false,
+        "rule": {
+          "color": "#333e38"
+        },
         "median": {
           "color": "#fefdf9",
           "strokeWidth": 2
@@ -331,10 +334,11 @@
       ],
       "mark": {
         "type": "circle",
-        "size": 64,
+        "size": 52,
         "opacity": 1,
         "stroke": "#fefdf9",
-        "strokeWidth": 1.2
+        "strokeWidth": 1.2,
+        "yOffset": 15
       },
       "encoding": {
         "x": {
@@ -404,9 +408,10 @@
         "fontSize": 15,
         "fontWeight": 700,
         "fill": "#84520f",
-        "align": "center",
-        "baseline": "bottom",
-        "dy": -11
+        "align": "right",
+        "baseline": "middle",
+        "dx": -9,
+        "dy": 15
       },
       "encoding": {
         "x": {

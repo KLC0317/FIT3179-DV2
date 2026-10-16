@@ -43,6 +43,7 @@
   --ochre-600:  #9c6114;
   --violet-600: #7461a8;
   --slate-300:  #c3cac5;
+  --slate-400:  #a0a9a3;
 
   /* violet: canola */
   --violet-700: #5a4a8a;
@@ -167,7 +168,7 @@ strong, b { font-weight: 700; }
   line-height: 1.45;
   color: var(--ink-soft);
 }
-.key li b { min-width: 5.4em; color: var(--ink); }
+.key li b { min-width: 6.2em; color: var(--ink); }
 .key .sw {
   flex: none;
   width: 16px;
@@ -179,7 +180,9 @@ strong, b { font-weight: 700; }
 .sw-less   { background: var(--ochre-600); }
 .sw-focus  { background: var(--charcoal); }
 .sw-canola { background: var(--violet-600); }
-.sw-none   { background: var(--slate-300); }
+.sw-context { background: var(--slate-400); }
+.sw-none   { background: var(--slate-300); outline: 1px solid var(--slate-500);
+             outline-offset: -1px; }
 .key-note {
   margin: 10px 0 0;
   font-size: 0.98rem;
@@ -255,6 +258,13 @@ strong, b { font-weight: 700; }
   letter-spacing: -0.016em;
 }
 .chapter-head .intro { margin: 0; color: var(--ink-soft); font-size: 1.08rem; }
+
+/* Right-column text outside a card starts where the text inside the
+   right-hand cards starts (card edge + card padding), so the right column
+   has one text line from the chapter heads to the sources. */
+.chapter-head .intro,
+.closing-cols > p:nth-child(2),
+.sources-cols > div:nth-child(2) { padding-left: var(--card-pad); }
 .chapter-head .intro strong { color: var(--ink); }
 
 /* ---------- chart grid ---------------------------------------------------- */
@@ -578,6 +588,10 @@ footer .byline b { color: var(--ink); }
   .closing-cols, .sources-cols, .masthead-body, .chapter-head,
   .hero-head, .hero-foot { grid-template-columns: 1fr; row-gap: 14px; }
   .contents, .takeaways { grid-template-columns: 1fr; }
+  /* one column: nothing sits in a right-hand column to align with */
+  .chapter-head .intro,
+  .closing-cols > p:nth-child(2),
+  .sources-cols > div:nth-child(2) { padding-left: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

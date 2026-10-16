@@ -67,12 +67,12 @@ Each chapter answers one question with the idiom that fits it. Data types:
 
 | # | Chart | Idiom | Marks | Channels → data | Task it supports |
 |---|---|---|---|---|---|
-| 1 | Grains and oilseeds, 1961–2024 (lead chart) | Streamgraph | Area | x position → year (Q); band thickness → tonnes (Q), read against a 10-million-tonne scale bar and given on hover; lightness → crop (wheat darkest, N) | See total and composition change together over 64 years |
+| 1 | Grains and oilseeds, 1961–2024 (lead chart) | Streamgraph | Area | x position → year (Q, with a year axis); band thickness → tonnes (Q), read against a 10-million-tonne scale bar (a centred stream has no zero line, so no y-axis) and given on hover; lightness → crop (wheat darkest, N); every band labelled at its right edge | See total and composition change together over 64 years |
 | 2 | Harvest vs its own normal (same figure) | Matrix (heatmap) | Rect | x → year (Q, one column per year); y → crop (N); colour (diverging, 5 classes) → % from 11-year median (Q) | Spot drought years that hit every crop at once |
-| 3 | Year-on-year change | Box plot | Rect, rule, point | x → % change (Q); y → crop (N); lightness → focus crop (N); ochre dots → the five drought years, so the timing a box plot pools is put back | Compare spread and extremes between crops |
+| 3 | Year-on-year change | Box plot | Rect, rule, point | x → % change (Q); y → crop (N); lightness → focus crop (N); ochre dots, in a lane under each box → the five drought years, so the timing a box plot pools is put back | Compare spread and extremes between crops |
 | 4 | Crop value 2024–25 | Treemap, two levels | Rect (area), containment | area → $ value (Q); nesting → crop type → crop (N, hierarchy); hue → crop (N). Every cell labelled; the four smallest pulses are one "Others" cell, listed in its tooltip | Compare parts of a whole, inside a real hierarchy |
 | 5 | Wheat exports by country (lead chart) | Flow map | Line, point (arrowhead), point | path → route from one origin (G); arrowhead → direction; line width → tonnes (Q, proportional, from zero) | See where the crop goes and which buyers matter |
-| 5b | The twelve buyers, ranked (under the flow map) | Bar chart (**basic**) | Bar | x → million tonnes (Q, from zero); y → buyer (N, ranked) | Read the gap line widths cannot show (3.46 vs 3.23 million tonnes); hovering a bar picks out its route |
+| 5b | The twelve buyers, ranked (under the flow map) | Bar chart (**basic**) | Bar | x → million tonnes (Q, from zero, with an axis and the value at each bar's end); y → buyer (N, ranked) | Read the gap line widths cannot show (3.46 vs 3.23 million tonnes); hovering a bar picks out its route |
 | 6 | Wheat per km² by state | Choropleth map | Area (geoshape) | colour (sequential, 5 classes) → tonnes per km² (Q, a rate); region → state (G); grey → no published figure | Compare how intensively each state is farmed |
 | 7 | Wheat tonnes by state | Proportional symbol map | Point (circle) | area → tonnes (Q, area exactly proportional: a linear scale on area from zero); position → state centroid (G); grey state → no published figure. One colour, see-through, labels outside the circles | Compare total production; read the map as totals, not rates |
 | 8 | State harvests, two seasons | Slope chart | Line, point | x → season (O); y → tonnes (Q); darkness → chosen state (N); the slope alone says rise or fall | Compare each state's change between two seasons |
@@ -154,8 +154,10 @@ All of it from the FIT3179 studios, and each answers a question:
   without). **Charcoal** is the focus: wheat, the crop the story follows, and whatever
   a chart is about. Focus is shown by darkness against light slate, never by a hue,
   so it can never be read as good or bad. **Violet** is canola. Mid grey on a map
-  means no published figure. A key beside the introduction names each colour and its
-  meaning once, for the whole page. Nothing else on the page is coloured: kickers, links,
+  means no published figure, and light grey is context. A key beside the
+  introduction names every colour and its meaning once, for the whole page. The
+  flow map's buyer countries are not tinted: a tint would make China, the biggest
+  country, look like the biggest buyer. Nothing else on the page is coloured: kickers, links,
   controls and the callout card are neutral. (Wheat was teal in earlier drafts, which
   gave teal two meanings side by side in the first figure.) Nothing is encoded twice:
   the symbol map's circles are one colour (size alone says "biggest"), and the slope

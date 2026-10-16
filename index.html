@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Australia grows far more food than it eats | FIT3179 Data Visualisation 2</title>
-<meta name="description" content="How Australia's food system grows, ships, eats and sustains: fifteen charts built with Vega-Lite from Australian government and United Nations data.">
+<meta name="description" content="How Australia's food system grows, ships, eats and sustains: charts built with Vega-Lite from Australian government and United Nations data.">
 <meta name="author" content="Kian Lok Chin">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -42,14 +42,16 @@
         <p class="key-title">How to read the colours</p>
         <ul>
           <li><span class="sw sw-more" aria-hidden="true"></span><b>Teal</b>
-            more, or better, than usual</li>
+            more, or better</li>
           <li><span class="sw sw-less" aria-hidden="true"></span><b>Ochre</b>
-            less, or worse, than usual</li>
+            less, or worse</li>
           <li><span class="sw sw-focus" aria-hidden="true"></span><b>Charcoal</b>
             wheat, or what a chart is about</li>
           <li><span class="sw sw-canola" aria-hidden="true"></span><b>Violet</b>
             canola</li>
-          <li><span class="sw sw-none" aria-hidden="true"></span><b>Grey</b>
+          <li><span class="sw sw-context" aria-hidden="true"></span><b>Light grey</b>
+            everything else, kept in the background</li>
+          <li><span class="sw sw-none" aria-hidden="true"></span><b>Grey area</b>
             on a map: no published figure</li>
         </ul>
         <p class="key-note">Hover any chart for exact values and units.</p>
@@ -102,7 +104,8 @@
         <h3>Sixty-four years of harvests, and the droughts that cut them</h3>
         <div class="hero-head">
           <p class="sub">Top: million tonnes harvested each year, with
-            <span class="k-wheat">wheat</span> darkest. Below: each crop
+            <span class="k-wheat">wheat</span> darkest; "other crops" are maize,
+            dry peas and soybeans. Below: each crop
             against its own normal, <span class="k-less">ochre</span> short
             and <span class="k-more">teal</span> surplus. Hover for tonnes;
             drag across the bottom strip to zoom; click a band to isolate a
@@ -161,9 +164,9 @@
         <h3>Most of the wheat goes to Asia, and the biggest buyer is Indonesia</h3>
         <div class="hero-head">
           <p class="sub">Routes from Australia to its twelve largest wheat
-            markets in 2024, which are shaded. Arrows point to the buyer; line
-            width is proportional to tonnes. Hover over a route, or a bar
-            below, to isolate it.</p>
+            markets in 2024. Arrows point to the buyer; line width is
+            proportional to tonnes. Hover over a route, or a bar below, to
+            isolate it.</p>
           <p class="finding">The largest customer is not China but
             <b>Indonesia</b>, at <b>3.46&nbsp;million tonnes</b>, just ahead
             of China on 3.23&nbsp;million. Almost <b>three-quarters</b> of the
@@ -288,10 +291,9 @@
           insecurity.</p>
         <div class="viz" id="viz-insecurity"></div>
         <p class="finding"><b class="k-less">13.2% of households</b> were food
-          insecure in 2023, while farm, fishery and forestry exports earned
-          <b>$73.3&nbsp;billion</b> in 2023&#8288;&ndash;&#8288;24. Growing
-          enough food and everyone having enough are two different
-          problems.</p>
+          insecure in 2023, in a country that exports <b>most of the food it
+          grows</b>. Growing enough food and everyone having enough are two
+          different problems.</p>
       </article>
 
     </div>
@@ -362,7 +364,7 @@
         produce leaves the country</strong>, and the food that stays is priced
         on the same world market as the food that goes. A record crop in
         Western Australia does not lower a grocery bill in western Sydney.</p>
-      <p>What the fifteen charts share is <strong>variability</strong>. The
+      <p>What every chart here shares is <strong>variability</strong>. The
         harvest halves and doubles; the rain arrives or it does not. A system
         that puts <strong>68.3% of the nation's water</strong> into
         <strong>2.2% of its economy</strong> does not guarantee anyone a meal.
