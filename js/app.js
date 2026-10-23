@@ -39,6 +39,15 @@
     tooltip: { theme: "light", offsetX: 8, offsetY: 8 }
   };
 
+  // Bumped on every release, so a returning reader's browser fetches the new
+  // specifications instead of reusing ones it cached for the old page.
+  var VERSION = "2026-10-23b";
+
+  // A floor under every plot width. Without it, a card narrower than a
+  // chart's label column drove the width below zero: Vega failed and drew
+  // the streamgraph 32,000 px wide on a phone.
+  var MIN_PLOT = 120;
+
   var views = {};       // el id -> vega view
   window.vegaViews = views;   // read by the automated layout checks
   var specCache = {};   // file  -> parsed spec
@@ -48,6 +57,18 @@
     // Math.floor keeps the SVG inside the card on fractional layout widths.
     var w = Math.floor(el.getBoundingClientRect().width);
     return w > 0 ? w : 640;
+  }
+
+  /* The width a chart is laid out at. Every chart's labels and annotations
+     are checked for overlaps down to a half-width card 420 px wide and
+     a lead chart about 908 px wide (tools/check_overlaps.js). On a phone,
+     or for a lead chart on a tablet, the card is narrower than that, so the
+     chart keeps that tested layout and scrolls sideways inside its card
+     (.viz in the CSS) instead of squeezing its notes into each other. */
+  var MIN_LAYOUT = { card: 420, hero: 908 };
+  function layoutWidth(el) {
+    var floor = el.closest(".hero") ? MIN_LAYOUT.hero : MIN_LAYOUT.card;
+    return Math.max(cardWidth(el), floor);
   }
 
   function showError(el, file) {
@@ -86,7 +107,7 @@
     var svg = el.querySelector("svg");
     if (!svg || pass > 6) return Promise.resolve(result);
 
-    var cardW = cardWidth(el);
+    var cardW = layoutWidth(el);
     var svgW = svg.getBoundingClientRect().width;
     if (svgW <= cardW) return Promise.resolve(result);
 
@@ -111,9 +132,10 @@
   function fitToCard(el, s, setWidth, plotW, result, pass) {
     var svg = el.querySelector("svg");
     if (!svg || pass > 5) return Promise.resolve(result);
-    var diff = cardWidth(el) - svg.getBoundingClientRect().width;
+    var diff = layoutWidth(el) - svg.getBoundingClientRect().width;
     if (Math.abs(diff) < 1) return Promise.resolve(result);
-    var next = Math.floor(plotW + diff);
+    var next = Math.max(MIN_PLOT, Math.floor(plotW + diff));
+    if (next === plotW) return Promise.resolve(result);   // as narrow as it goes
     setWidth(next);
     return vegaEmbed(el, s, EMBED_OPTIONS).then(function (r) {
       return fitToCard(el, s, setWidth, next, r, pass + 1);
@@ -128,7 +150,7 @@
 
     return (specCache[file]
       ? Promise.resolve(specCache[file])
-      : fetch(file).then(function (r) {
+      : fetch(file + "?v=" + VERSION).then(function (r) {
           if (!r.ok) throw new Error(r.status + " " + r.statusText);
           return r.json();
         }).then(function (json) { specCache[file] = json; return json; })
@@ -143,7 +165,7 @@
 
         // A plain Vega spec (the treemap) draws at exactly the width given.
         if (s.$schema && s.$schema.indexOf("vega-lite") < 0) {
-          s.width = cardWidth(el);
+          s.width = layoutWidth(el);
           return vegaEmbed(el, s, EMBED_OPTIONS);
         }
 
@@ -152,7 +174,7 @@
             ? function (w) { s.vconcat.forEach(function (v) { v.width = w; }); }
             : function (w) { s.width = w; };
           var gutter = (s.usermeta && s.usermeta.gutter) || [0, 0];
-          var plotW = cardWidth(el) - gutter[0] - gutter[1];
+          var plotW = Math.max(MIN_PLOT, layoutWidth(el) - gutter[0] - gutter[1]);
           setWidth(plotW);
           return vegaEmbed(el, s, EMBED_OPTIONS).then(function (result) {
             return fitToCard(el, s, setWidth, plotW, result, 1);
@@ -169,11 +191,11 @@
           : parseFloat(css.getPropertyValue("--gutter")) +
             2 * parseFloat(css.getPropertyValue("--card-pad"));
         // two panels a row only while each header fits on one line
-        var cols = cardWidth(el) >= 860 ? 2 : 1;
+        var cols = layoutWidth(el) >= 860 ? 2 : 1;
         s.columns = cols;
         s.spacing = { row: 22, column: gap };
         var childW = sizeFacet(
-          s, Math.floor((cardWidth(el) - gap * (cols - 1)) / cols));
+          s, Math.floor((layoutWidth(el) - gap * (cols - 1)) / cols));
 
         return vegaEmbed(el, s, EMBED_OPTIONS).then(function (result) {
           return fitFacet(el, s, chart, childW, result);

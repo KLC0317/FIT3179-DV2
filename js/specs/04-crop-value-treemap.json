@@ -5,11 +5,11 @@
     "subtitle": "Local value of broadacre crops, 2024–25, grouped by crop type."
   },
   "width": 600,
-  "height": 397,
+  "height": 399,
   "padding": {
     "left": 0,
     "right": 0,
-    "top": 18,
+    "top": 20,
     "bottom": 0
   },
   "background": null,

@@ -364,6 +364,10 @@ strong, b { font-weight: 700; }
 .k-less   { color: var(--ochre-700);  font-weight: 700; }
 
 .viz { width: 100%; min-height: 180px; margin: 0 0 var(--gap-chart); }
+/* On a phone a chart may be wider than its card even at its narrowest plot
+   (js/app.js, MIN_PLOT): it then scrolls sideways inside the card, and the
+   page itself never scrolls sideways. */
+.viz { overflow-x: auto; overflow-y: hidden; }
 /* A chart reached by keyboard shows where focus is. */
 .viz:focus-visible { outline: 2px solid var(--charcoal); outline-offset: 4px; }
 
