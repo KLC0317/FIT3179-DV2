@@ -1,0 +1,14 @@
+kind,source,target,value_kt,share_pct,x0,x1,sy0,sy1,ty0,ty1,note
+node,Shipped overseas,,29835,70.5,0.97,1.0,0.0,29835.0,,,
+node,Fed to animals,,6733,15.9,0.97,1.0,32287.4,39020.4,,,
+node,Food for people,,2499,5.9,0.97,1.0,41472.8,43971.8,,,
+node,"Seed, industry and losses",,2325,5.5,0.97,1.0,46424.2,48749.2,,,"seed 0.8, industry and other uses 1.1, losses 0.4"
+node,Into storage,,913,2.2,0.97,1.0,51201.6,52114.6,,,
+node,Wheat available,,42304,100.0,0.0,0.03,0.0,42304.0,,,"41.2 harvested, 1.1 imported"
+node,Kept in Australia,,12470,29.5,0.5,0.53,39643.6,52113.6,,,
+band,Wheat available,Shipped overseas,29835,70.5,0.03,0.97,0.0,29835.0,0.0,29835.0,
+band,Wheat available,Kept in Australia,12470,29.5,0.03,0.5,29835.0,42305.0,39643.6,52113.6,
+band,Kept in Australia,Fed to animals,6733,15.9,0.53,0.97,39643.6,46376.6,32287.4,39020.4,
+band,Kept in Australia,Food for people,2499,5.9,0.53,0.97,46376.6,48875.6,41472.8,43971.8,
+band,Kept in Australia,"Seed, industry and losses",2325,5.5,0.53,0.97,48875.6,51200.6,46424.2,48749.2,"seed 0.8, industry and other uses 1.1, losses 0.4"
+band,Kept in Australia,Into storage,913,2.2,0.53,0.97,51200.6,52113.6,51201.6,52114.6,

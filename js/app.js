@@ -26,6 +26,8 @@
     { el: "viz-dietwaffle",    spec: "09-diet-waffle.json", facet: true  },
     { el: "viz-discretionary", spec: "10-discretionary-bars.json"      },
     { el: "viz-insecurity",    spec: "14-food-insecurity-waffle.json"  },
+    { el: "viz-sankey",        spec: "15-wheat-use-sankey.json"        },
+    { el: "viz-foodprices",    spec: "16-food-price-dumbbell.json"     },
     { el: "viz-water",         spec: "11-water-rain-timeline.json"     },
     { el: "viz-rainwheat",     spec: "13-rain-wheat-scatter.json"      },
     { el: "viz-footprint",     spec: "12-footprint-bars.json"          }

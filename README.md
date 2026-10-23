@@ -3,7 +3,7 @@
 FIT3179 Data Visualisation 2, Monash University, Semester 2 2026.
 Domain: Australia's food system.
 
-A single scrolling page of fifteen Vega-Lite and Vega charts, including three
+A single scrolling page of seventeen Vega-Lite and Vega charts, including three
 different map idioms, that follows Australian food from the paddock to the plate
 and asks why a country this productive still has households that go without.
 
@@ -42,6 +42,8 @@ they first appear.
 | *Snapshot of Australian Agriculture 2026* | ABARES | Export share and value; agriculture's share of GDP, jobs, water and land |
 | *FAOSTAT Crops and Livestock Products* | Food and Agriculture Organization of the UN | Crop production 1961–2024 (streamgraph, matrix, box plot, scatterplot) |
 | *FAOSTAT Detailed Trade Matrix* | Food and Agriculture Organization of the UN | Wheat exports by destination, 2024 (flow map) |
+| *FAOSTAT Food Balances* | Food and Agriculture Organization of the UN | Where the wheat went in 2023: exported, fed to animals, eaten (Sankey) |
+| *Consumer Price Index, Australia* | Australian Bureau of Statistics | Food prices by food group, by financial year (dumbbell) |
 | State boundaries | `rowanhogan/australian-states`, derived from the ABS ASGS | Both state maps |
 | Natural Earth 1:110m | Natural Earth (public domain), via the FIT3179 studio files | World base map |
 
@@ -56,7 +58,8 @@ dry, why a number jumped). Each of those facts is cited on the page under *Conte
 the annotations*: the Bureau of Meteorology (El Niño droughts, the 2019 Indian Ocean
 Dipole, the Millennium Drought, the triple La Niña), the Australian Oilseeds
 Federation (herbicide-tolerant canola, 1993), ABC News (India's chickpea duty, 2024;
-South Australia's 2024 season), the ABS (population; the 7.8% inflation peak), USDA
+South Australia's 2024 season), the ABS (population; the 7.8% inflation peak; the
+costs behind the 2022 food price rise), USDA
 (Indonesia grows no wheat), NHMRC *Eat for Health* (daily serves) and ABARES (land
 use).
 
@@ -79,27 +82,35 @@ Each chapter answers one question with the idiom that fits it. Data types:
 | 9 | Meeting the dietary guidelines (lead chart) | Pictogram (ISOTYPE) small multiples, 2 × 2 | Point (SVG person) | count of figures → % of people (Q), with the exact percentage in each panel's header; hue → met / not met (N); panel → food group (N) | Make four percentages countable and concrete |
 | 10 | Discretionary energy | 100% stacked bars (**basic**) | Bar, rule | x → share of daily energy (Q, 0–100%); y → survey (O); hue → discretionary / everything else (N) | Read a share of a whole, and its change, on an honest scale |
 | 11 | Food insecurity | Pictogram (ISOTYPE) | Point (SVG house) | count of houses → % of households (Q); hue → insecure or not (N) | Make one headline rate concrete |
-| 12 | Rain and water use, ten years (lead chart) | Aligned bar panels (**basic**) | Bar | x → financial year (O, shared); y → rainfall (Q) above, water used (Q) below; hue → driest / wettest years and what followed (N) | See that water use follows the previous year's rain |
-| 13 | Rain and the wheat harvest | Scatterplot (**basic**) | Point, line (fit) | x → rainfall (Q); y → wheat harvested (Q); hue → driest / wettest years (N) | See the relationship between two quantities |
-| 14 | Agriculture's footprint | 100% bars (**basic**) | Bar, rule | x → share of a national total (Q, 0–100%); y → measure (N); darkness → natural resource / economy (N); dashed rule → share of the economy | Read six part-to-whole shares against agriculture's economic weight |
+| 12 | Where the wheat went, 2023 | Sankey diagram, two levels | Area (bands), rect (nodes) | band thickness → million tonnes (Q, proportional); flow → from supply to kept or exported to each use (N); darkness → food for people, the focus (N). Node positions computed in Python, as the flow-map routes are; each band is an area between two S-curves made with `sequence`, `flatten` and `calculate` | See how little of the supply becomes food: 2.5 of 42.3 million tonnes |
+| 13 | Food prices in the smallest and biggest harvest | Dumbbell plot | Point, rule | x → rise in prices on the year before (Q, from 0%); y → food group (N), with all prices as a context row; hue → year (O: ochre the 2019–20 drought harvest, teal the 2022–23 record) | Compare two years on every row: prices rose at least as fast in the record year |
+| 14 | Rain and water use, ten years (lead chart) | Aligned bar panels (**basic**) | Bar | x → financial year (O, shared); y → rainfall (Q) above, water used (Q) below; hue → driest / wettest years and what followed (N) | See that water use follows the previous year's rain |
+| 15 | Rain and the wheat harvest | Scatterplot (**basic**) | Point, line (fit) | x → rainfall (Q); y → wheat harvested (Q); hue → driest / wettest years (N) | See the relationship between two quantities |
+| 16 | Agriculture's footprint | 100% bars (**basic**) | Bar, rule | x → share of a national total (Q, 0–100%); y → measure (N); darkness → natural resource / economy (N); dashed rule → share of the economy | Read six part-to-whole shares against agriculture's economic weight |
 
-**Fifteen charts, nine distinct advanced idioms** (the two pictogram charts share
-one idiom), **five basic charts, and three map idioms.**
+**Seventeen charts, eleven distinct advanced idioms** (the two pictogram charts
+share one idiom), **five basic charts, and three map idioms.**
+
+The last two advanced idioms were added for the argument, not for the count. The
+title claims Australia grows far more than it can eat, and the Sankey is the one
+chart that shows it; the conclusion claims a record crop does not lower a grocery
+bill, and the dumbbell tests that on every food group.
 
 ### Why some charts were replaced
 
 Each chart was checked against the question it answers; three did not fit.
 
-- **The dumbbell (chart 14) became 100% bars.** A dumbbell compares two values per
+- **The footprint dumbbell (chart 16) became 100% bars.** A dumbbell compares two values per
   row, but here the left end of every row was the same 2.2% (GDP), so it was really a
-  bar chart with a decoration. Each measure is agriculture's *share of a national
+  bar chart with a decoration. (The food price dumbbell, chart 13, is different:
+  both of its ends change on every row.) Each measure is agriculture's *share of a national
   total*, a part-to-whole, so each row now is that total with agriculture's part
   filled in, and the GDP share is one reference line through every row.
 - **The discretionary line chart (chart 10) became 100% bars.** Two survey values do
   not make a trend, and its 28–38% axis made a four-point fall look like a collapse.
   The finding is about a share of daily energy, so each survey is now drawn as the
   whole day's energy split in two, on a full 0–100% scale.
-- **Parallel coordinates became a scatterplot (chart 13).** Its finding was a trend
+- **Parallel coordinates became a scatterplot (chart 15).** Its finding was a trend
   over time, which parallel coordinates cannot show (time was only a hover). The
   chapter's real question is a relationship between two quantities, whether the
   harvest follows the rain, and a scatterplot is the idiom for exactly that.

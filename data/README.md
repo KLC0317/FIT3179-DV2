@@ -2,7 +2,7 @@
 
 Every file the page reads is in this folder. Nothing is fetched from a third-party
 repository at run time, so the visualisation cannot break because someone else's
-repository moved. The page downloads about 340 KB of data in total; the largest
+repository moved. The page downloads about 350 KB of data in total; the largest
 file is the world base map (270 KB). `au-states.geojson` (650 KB) is kept only as
 the source the derived files were computed from and is not loaded by the page.
 
@@ -20,6 +20,7 @@ the source the derived files were computed from and is not loaded by the page.
 | `farm_system_indicators.csv` | ABARES, *Snapshot of Australian Agriculture 2026* | 2023–24 and 2024–25 |
 | `agriculture_exports_headlines.csv` | ABARES, *Snapshot of Australian Agriculture 2026* | 2004–05 to 2024–25 |
 | `diet_guidelines.csv` | ABS, *National Nutrition and Physical Activity Survey* | 2023 |
+| `food_prices_fy.csv` | ABS, *Consumer Price Index, Australia* (weighted average of the eight capital cities, original series), quarterly index numbers from the ABS Data API, averaged over each financial year; `change_pct` is the change on the previous financial year's average. Eight food groups and all groups. | 2010–11 to 2025–26 |
 
 Blank cells mean the source did not publish a figure for that cell. They are kept blank
 rather than filled with zero, and the choropleth draws those states in grey rather than
@@ -30,6 +31,7 @@ treating them as a low value.
 | File | Source |
 |---|---|
 | `crop_production_long.csv` | FAOSTAT *Crops and Livestock Products* (QCL), Australia only, 1961–2024, seven crops, converted from tonnes to kilotonnes |
+| `wheat_supply_use.csv` | FAOSTAT *Food Balances* (FBS, 2010–), Australia, "Wheat and products", in thousand tonnes: production, imports, stock change, exports, feed, seed, losses, processing, other (non-food) uses, food, and food per person. FAO labels each account by the year the grain is used: the 2023 account's production, 41,199 thousand tonnes, is the 2022–23 harvest. Extracted by `tools/extract_food_data.py`. |
 | `wheat_export_flows.csv` | FAOSTAT *Detailed Trade Matrix* (TM), Australian wheat export quantity by partner country, 2024, top twelve partners. The `city`, `dest_lon`/`dest_lat` and `origin_lon`/`origin_lat` columns are added by `tools/build_flow_arcs.py` (see below). |
 | `au-states.geojson` | State and territory boundaries, from the `rowanhogan/australian-states` repository, derived from the ABS ASGS |
 | `au-states.json` | State and territory boundaries as TopoJSON (object `austates`, 25 KB), made from `au-states.geojson` with mapshaper as taught in the week 8 studio: `-simplify 10% keep-shapes -filter-fields STATE_NAME -rename-layers austates -o format=topojson quantization=100000` |
@@ -43,6 +45,7 @@ treating them as a low value.
 | `crop_value_hierarchy.csv` | `broadacre_value_summary.csv` | 2024–25 local value per crop, in a genuine two-level hierarchy for the treemap: root → {Cereals, Oilseeds, Pulses} → crops. Group rows carry no value of their own; the treemap sums their children. Lentils, faba beans, lupins and field peas ($1,616m together) are one "Other pulses" cell, each too small on its own to hold a label; the `detail` column keeps their separate values for the tooltip. |
 | `wheat_export_arcs.csv` | `wheat_export_flows.csv` | 29 points per route, made by `tools/build_flow_arcs.py`. Every route starts at one origin, the geographic centre of Australia, and ends at the buyer's largest city (Jakarta, Shanghai, Manila, Sana'a, Seoul, Ho Chi Minh City, Tokyo, Kuala Lumpur, Bangkok, Auckland, Johannesburg, Kuwait City). The routes fan out: each leaves the origin at its own angle, at least 22° from its neighbours, then curves onto its city (a quadratic curve drawn in the map's own Equal Earth projection and converted back to longitude and latitude). As great circles, routes to markets in similar directions ran side by side for hundreds of kilometres; fanned out, no two routes touch beyond the origin dot. |
 | `state_centroids.csv` | `au-states.geojson` | Area-weighted centroid of each state's largest polygon. |
+| `wheat_use_sankey.csv` | `wheat_supply_use.csv` (2023 account) | The Sankey's layout, computed by `tools/extract_food_data.py` because Vega-Lite has no Sankey transform. Supply = production + imports (42,304); it splits into exports (29,835) and kept in Australia (12,470), which splits into feed (6,733), food (2,499), seed, industry and losses (2,325: seed 791, processing and other uses 1,122, losses 412) and stock change (913). The flows balance exactly. Node tops and bottoms are in thousand tonnes down one column, with the gaps between nodes also in thousand tonnes, so band thickness stays proportional to tonnes. |
 | `farm_footprint_hierarchy.csv` | `farm_system_indicators.csv` | Same values with a `group` column (economy / natural resources / trade). The footprint bars read the rows whose parent is `root` and drop "output exported" (a share of agricultural output, not of a national total, so it does not belong on the same axis). |
 | `diet_waffle.csv` | `diet_guidelines.csv` | One row per square per food group: 100 squares, the first *n* marked as meeting the guideline. |
 | `food_insecurity_waffle.csv` | ABS food insecurity figure (13.2%) | 100 squares, 13 marked. |
@@ -106,6 +109,9 @@ computed against 2,526,786 km² published).
 - ABARES, Snapshot of Australian Agriculture 2026 — https://www.agriculture.gov.au/abares/products/insights/snapshot-of-australian-agriculture
 - FAOSTAT, Crops and Livestock Products — https://www.fao.org/faostat/en/#data/QCL
 - FAOSTAT, Detailed Trade Matrix — https://www.fao.org/faostat/en/#data/TM
+- FAOSTAT, Food Balances — https://www.fao.org/faostat/en/#data/FBS
+- ABS, Consumer Price Index, Australia — https://www.abs.gov.au/statistics/economy/price-indexes-and-inflation/consumer-price-index-australia
+  (data: https://data.api.abs.gov.au/rest/data/ABS,CPI,2.0.0/1.10001+20001+30001+30002+30003+114120+131179+131180+30007.10.50.Q)
 - Australian state boundaries — https://github.com/rowanhogan/australian-states
 - Natural Earth — https://www.naturalearthdata.com
 - FIT3179 Vega-Lite studio examples (oceans layer) — https://github.com/FIT3179/Vega-Lite

@@ -1,0 +1,752 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 520,
+  "height": 340,
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      0,
+      196
+    ]
+  },
+  "config": {
+    "background": null,
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+    "axis": {
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#4a554f",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": false,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#333e38",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "symbolStrokeWidth": 0,
+      "offset": 8,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
+    },
+    "title": {
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
+      "subtitleColor": "#4a554f",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 17
+    }
+  },
+  "title": {
+    "text": "Only one tonne in seventeen becomes food for Australians",
+    "subtitle": "The 2022–23 harvest plus imports, and where it went in 2023, in million tonnes. Band thickness is proportional to tonnes.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "data": {
+    "url": "data/wheat_use_sankey.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "value_kt": "number",
+        "share_pct": "number",
+        "x0": "number",
+        "x1": "number",
+        "sy0": "number",
+        "sy1": "number",
+        "ty0": "number",
+        "ty1": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "calculate": "datum.value_kt / 1000",
+      "as": "mt"
+    }
+  ],
+  "layer": [
+    {
+      "transform": [
+        {
+          "filter": "datum.kind === 'band'"
+        },
+        {
+          "calculate": "sequence(0, 1.0001, 0.05)",
+          "as": "t"
+        },
+        {
+          "flatten": [
+            "t"
+          ]
+        },
+        {
+          "calculate": "datum.t * datum.t * (3 - 2 * datum.t)",
+          "as": "e"
+        },
+        {
+          "calculate": "datum.x0 + (datum.x1 - datum.x0) * datum.t",
+          "as": "x"
+        },
+        {
+          "calculate": "datum.sy0 + (datum.ty0 - datum.sy0) * datum.e",
+          "as": "top"
+        },
+        {
+          "calculate": "datum.sy1 + (datum.ty1 - datum.sy1) * datum.e",
+          "as": "bottom"
+        }
+      ],
+      "mark": {
+        "type": "area",
+        "stroke": "#fefdf9",
+        "strokeWidth": 1,
+        "opacity": 0.95
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": null,
+          "title": null,
+          "field": "x"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          },
+          "axis": null,
+          "title": null,
+          "field": "top"
+        },
+        "y2": {
+          "field": "bottom"
+        },
+        "detail": {
+          "field": "target"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.target === 'Food for people' || datum.source === 'Food for people'",
+            "value": "#2e3532"
+          },
+          "value": "#c3cac5"
+        },
+        "tooltip": [
+          {
+            "field": "source",
+            "type": "nominal",
+            "title": "From"
+          },
+          {
+            "field": "target",
+            "type": "nominal",
+            "title": "To"
+          },
+          {
+            "field": "mt",
+            "type": "quantitative",
+            "title": "Million tonnes",
+            "format": ".1f"
+          },
+          {
+            "field": "share_pct",
+            "type": "quantitative",
+            "title": "Share of all the wheat (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "note",
+            "type": "nominal",
+            "title": "Made up of"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.kind === 'node'"
+        }
+      ],
+      "mark": {
+        "type": "rect"
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": null,
+          "title": null,
+          "field": "x0"
+        },
+        "x2": {
+          "field": "x1"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          },
+          "axis": null,
+          "title": null,
+          "field": "sy0"
+        },
+        "y2": {
+          "field": "sy1"
+        },
+        "color": {
+          "condition": {
+            "test": "datum.target === 'Food for people' || datum.source === 'Food for people'",
+            "value": "#2e3532"
+          },
+          "value": "#57625b"
+        },
+        "tooltip": [
+          {
+            "field": "source",
+            "type": "nominal",
+            "title": "Wheat"
+          },
+          {
+            "field": "mt",
+            "type": "quantitative",
+            "title": "Million tonnes",
+            "format": ".1f"
+          },
+          {
+            "field": "share_pct",
+            "type": "quantitative",
+            "title": "Share of all the wheat (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "note",
+            "type": "nominal",
+            "title": "Made up of"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.kind === 'node' && datum.x0 > 0.9 && datum.source !== 'Shipped overseas' && (!(datum.target === 'Food for people' || datum.source === 'Food for people'))"
+        },
+        {
+          "calculate": "datum.source + ': ' + format(datum.mt, '.1f')",
+          "as": "t"
+        },
+        {
+          "calculate": "(datum.sy0 + datum.sy1) / 2",
+          "as": "ym"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 8
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": null,
+          "title": null,
+          "field": "x1"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          },
+          "axis": null,
+          "title": null,
+          "field": "ym"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.kind === 'node' && datum.x0 > 0.9 && datum.source !== 'Shipped overseas' && ((datum.target === 'Food for people' || datum.source === 'Food for people'))"
+        },
+        {
+          "calculate": "datum.source + ': ' + format(datum.mt, '.1f')",
+          "as": "t"
+        },
+        {
+          "calculate": "(datum.sy0 + datum.sy1) / 2",
+          "as": "ym"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#2e3532",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 8
+      },
+      "encoding": {
+        "x": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          },
+          "axis": null,
+          "title": null,
+          "field": "x1"
+        },
+        "y": {
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          },
+          "axis": null,
+          "title": null,
+          "field": "ym"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Shipped overseas"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#161f1b",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 8,
+        "dy": -20
+      },
+      "encoding": {
+        "x": {
+          "datum": 1,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          }
+        },
+        "y": {
+          "datum": 14917.5,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "29.8 million tonnes,"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 8,
+        "dy": 0
+      },
+      "encoding": {
+        "x": {
+          "datum": 1,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          }
+        },
+        "y": {
+          "datum": 14917.5,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "70.5% of the total"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "dx": 8,
+        "dy": 20
+      },
+      "encoding": {
+        "x": {
+          "datum": 1,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          }
+        },
+        "y": {
+          "datum": 14917.5,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Kept in Australia"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#333e38",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -37
+      },
+      "encoding": {
+        "x": {
+          "datum": 0.515,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          }
+        },
+        "y": {
+          "datum": 39643.6,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "12.5"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "center",
+        "baseline": "bottom",
+        "dy": -18
+      },
+      "encoding": {
+        "x": {
+          "datum": 0.515,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              1
+            ],
+            "nice": false,
+            "zero": false
+          }
+        },
+        "y": {
+          "datum": 39643.6,
+          "type": "quantitative",
+          "scale": {
+            "domain": [
+              0,
+              52114.6
+            ],
+            "nice": false,
+            "zero": false,
+            "reverse": true
+          }
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Wheat available: 42.3 million tonnes"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "x": 0,
+        "y": -12,
+        "align": "left",
+        "baseline": "bottom"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Food use barely moves: 2.2 to 2.5 million tonnes"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": 0,
+        "y": {
+          "expr": "(height + 62) + 0"
+        },
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "a year since 2018, whatever the size of the harvest"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": 0,
+        "y": {
+          "expr": "(height + 62) + 20"
+        },
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,835 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": 520,
+  "height": 340,
+  "autosize": {
+    "type": "pad",
+    "contains": "padding"
+  },
+  "usermeta": {
+    "gutter": [
+      108,
+      70
+    ]
+  },
+  "config": {
+    "background": null,
+    "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+    "axis": {
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#4a554f",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "titlePadding": 10,
+      "domainColor": "#d9ded6",
+      "tickColor": "#d9ded6",
+      "tickSize": 4,
+      "grid": true,
+      "gridColor": "#eaece8",
+      "gridWidth": 1,
+      "labelPadding": 6
+    },
+    "legend": {
+      "orient": "top",
+      "direction": "horizontal",
+      "titleAnchor": "start",
+      "labelFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "labelFontSize": 15,
+      "labelColor": "#333e38",
+      "titleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "titleFontSize": 15,
+      "titleFontWeight": 600,
+      "titleColor": "#333e38",
+      "symbolStrokeWidth": 0,
+      "offset": 8,
+      "titlePadding": 6,
+      "labelLimit": 240,
+      "rowPadding": 4
+    },
+    "view": {
+      "stroke": null
+    },
+    "text": {
+      "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "fontSize": 16
+    },
+    "title": {
+      "font": "Fraunces, Georgia, serif",
+      "fontSize": 15,
+      "anchor": "start",
+      "color": "#161f1b",
+      "fontWeight": 600,
+      "dy": -6,
+      "subtitleFont": "'Source Sans 3', 'Segoe UI', sans-serif",
+      "subtitleFontSize": 16,
+      "subtitleColor": "#4a554f",
+      "subtitlePadding": 4,
+      "subtitleLineHeight": 17
+    }
+  },
+  "title": {
+    "text": "Food prices rose fastest in the year of the record harvest",
+    "subtitle": "Rise in prices on the year before, by food group, in the year of the smallest wheat harvest since 2010 and of the biggest.",
+    "subtitleLimit": 760
+  },
+  "padding": {
+    "left": 0,
+    "right": 0,
+    "top": 0,
+    "bottom": 0
+  },
+  "data": {
+    "url": "data/food_prices_fy.csv",
+    "format": {
+      "type": "csv",
+      "parse": {
+        "change_pct": "number"
+      }
+    }
+  },
+  "transform": [
+    {
+      "filter": {
+        "field": "year",
+        "oneOf": [
+          "2019-20",
+          "2022-23"
+        ]
+      }
+    },
+    {
+      "filter": {
+        "field": "group",
+        "oneOf": [
+          "Dairy",
+          "Bread and cereals",
+          "Other foods",
+          "Non-alcoholic drinks",
+          "Fruit and vegetables",
+          "Meals out and takeaway",
+          "Meat and seafood",
+          "All prices"
+        ]
+      }
+    },
+    {
+      "calculate": "replace(datum.year, '-', '–')",
+      "as": "fy_label"
+    },
+    {
+      "calculate": "{\"2019-20\": 14.5, \"2022-23\": 41.2}[datum.year]",
+      "as": "harvest"
+    }
+  ],
+  "layer": [
+    {
+      "mark": {
+        "type": "rule",
+        "stroke": "#d9ded6",
+        "strokeWidth": 1,
+        "strokeDash": [
+          4,
+          3
+        ]
+      },
+      "encoding": {
+        "y": {
+          "value": {
+            "expr": "height * 7 / 8"
+          }
+        },
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": {
+            "expr": "width"
+          }
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "aggregate": [
+            {
+              "op": "min",
+              "field": "change_pct",
+              "as": "lo"
+            },
+            {
+              "op": "max",
+              "field": "change_pct",
+              "as": "hi"
+            }
+          ],
+          "groupby": [
+            "group"
+          ]
+        }
+      ],
+      "mark": {
+        "type": "rule",
+        "stroke": "#c3cac5",
+        "strokeWidth": 3
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Dairy",
+            "Bread and cereals",
+            "Other foods",
+            "Non-alcoholic drinks",
+            "Fruit and vegetables",
+            "Meals out and takeaway",
+            "Meat and seafood",
+            "All prices"
+          ],
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": {
+              "condition": {
+                "test": "datum.value === 'All prices'",
+                "value": 400
+              },
+              "value": 600
+            },
+            "labelColor": {
+              "condition": {
+                "test": "datum.value === 'Bread and cereals'",
+                "value": "#2e3532"
+              },
+              "value": "#333e38"
+            },
+            "labelFontSize": 15,
+            "grid": false,
+            "labelLineHeight": 17,
+            "labelExpr": "{\"Bread and cereals\": [\"Bread and\", \"cereals\"], \"Non-alcoholic drinks\": [\"Non-alcoholic\", \"drinks\"], \"Fruit and vegetables\": [\"Fruit and\", \"vegetables\"], \"Meals out and takeaway\": [\"Meals out and\", \"takeaway\"], \"Meat and seafood\": [\"Meat and\", \"seafood\"]}[datum.label] || datum.label",
+            "labelOffset": {
+              "condition": {
+                "test": "indexof([\"Bread and cereals\", \"Non-alcoholic drinks\", \"Fruit and vegetables\", \"Meals out and takeaway\", \"Meat and seafood\"], datum.value) >= 0",
+                "value": -8.5
+              },
+              "value": 0
+            }
+          }
+        },
+        "x": {
+          "type": "quantitative",
+          "title": "Rise in prices on the year before",
+          "scale": {
+            "domain": [
+              0,
+              16
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              4,
+              8,
+              12,
+              16
+            ],
+            "grid": true,
+            "labelExpr": "datum.value + '%'"
+          },
+          "field": "lo"
+        },
+        "x2": {
+          "field": "hi"
+        }
+      }
+    },
+    {
+      "mark": {
+        "type": "circle",
+        "size": 150,
+        "opacity": 1,
+        "stroke": "#fefdf9",
+        "strokeWidth": 1.2
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Dairy",
+            "Bread and cereals",
+            "Other foods",
+            "Non-alcoholic drinks",
+            "Fruit and vegetables",
+            "Meals out and takeaway",
+            "Meat and seafood",
+            "All prices"
+          ],
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": {
+              "condition": {
+                "test": "datum.value === 'All prices'",
+                "value": 400
+              },
+              "value": 600
+            },
+            "labelColor": {
+              "condition": {
+                "test": "datum.value === 'Bread and cereals'",
+                "value": "#2e3532"
+              },
+              "value": "#333e38"
+            },
+            "labelFontSize": 15,
+            "grid": false,
+            "labelLineHeight": 17,
+            "labelExpr": "{\"Bread and cereals\": [\"Bread and\", \"cereals\"], \"Non-alcoholic drinks\": [\"Non-alcoholic\", \"drinks\"], \"Fruit and vegetables\": [\"Fruit and\", \"vegetables\"], \"Meals out and takeaway\": [\"Meals out and\", \"takeaway\"], \"Meat and seafood\": [\"Meat and\", \"seafood\"]}[datum.label] || datum.label",
+            "labelOffset": {
+              "condition": {
+                "test": "indexof([\"Bread and cereals\", \"Non-alcoholic drinks\", \"Fruit and vegetables\", \"Meals out and takeaway\", \"Meat and seafood\"], datum.value) >= 0",
+                "value": -8.5
+              },
+              "value": 0
+            }
+          }
+        },
+        "x": {
+          "type": "quantitative",
+          "title": "Rise in prices on the year before",
+          "scale": {
+            "domain": [
+              0,
+              16
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              4,
+              8,
+              12,
+              16
+            ],
+            "grid": true,
+            "labelExpr": "datum.value + '%'"
+          },
+          "field": "change_pct"
+        },
+        "color": {
+          "field": "year",
+          "type": "nominal",
+          "legend": null,
+          "scale": {
+            "domain": [
+              "2019-20",
+              "2022-23"
+            ],
+            "range": [
+              "#9c6114",
+              "#2a7a6e"
+            ]
+          }
+        },
+        "order": {
+          "field": "year",
+          "sort": "ascending"
+        },
+        "tooltip": [
+          {
+            "field": "group",
+            "type": "nominal",
+            "title": "Food group"
+          },
+          {
+            "field": "fy_label",
+            "type": "nominal",
+            "title": "Year"
+          },
+          {
+            "field": "change_pct",
+            "type": "quantitative",
+            "title": "Rise in prices (%)",
+            "format": ".1f"
+          },
+          {
+            "field": "harvest",
+            "type": "quantitative",
+            "title": "Wheat harvested that season (million tonnes)",
+            "format": ".1f"
+          },
+          {
+            "field": "abs_series",
+            "type": "nominal",
+            "title": "Price index"
+          }
+        ]
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group === 'Bread and cereals'"
+        },
+        {
+          "filter": "datum.year === '2019-20'"
+        },
+        {
+          "calculate": "format(datum.change_pct, '.1f') + '%'",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#84520f",
+        "align": "right",
+        "dx": -11
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Dairy",
+            "Bread and cereals",
+            "Other foods",
+            "Non-alcoholic drinks",
+            "Fruit and vegetables",
+            "Meals out and takeaway",
+            "Meat and seafood",
+            "All prices"
+          ],
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": {
+              "condition": {
+                "test": "datum.value === 'All prices'",
+                "value": 400
+              },
+              "value": 600
+            },
+            "labelColor": {
+              "condition": {
+                "test": "datum.value === 'Bread and cereals'",
+                "value": "#2e3532"
+              },
+              "value": "#333e38"
+            },
+            "labelFontSize": 15,
+            "grid": false,
+            "labelLineHeight": 17,
+            "labelExpr": "{\"Bread and cereals\": [\"Bread and\", \"cereals\"], \"Non-alcoholic drinks\": [\"Non-alcoholic\", \"drinks\"], \"Fruit and vegetables\": [\"Fruit and\", \"vegetables\"], \"Meals out and takeaway\": [\"Meals out and\", \"takeaway\"], \"Meat and seafood\": [\"Meat and\", \"seafood\"]}[datum.label] || datum.label",
+            "labelOffset": {
+              "condition": {
+                "test": "indexof([\"Bread and cereals\", \"Non-alcoholic drinks\", \"Fruit and vegetables\", \"Meals out and takeaway\", \"Meat and seafood\"], datum.value) >= 0",
+                "value": -8.5
+              },
+              "value": 0
+            }
+          }
+        },
+        "x": {
+          "type": "quantitative",
+          "title": "Rise in prices on the year before",
+          "scale": {
+            "domain": [
+              0,
+              16
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              4,
+              8,
+              12,
+              16
+            ],
+            "grid": true,
+            "labelExpr": "datum.value + '%'"
+          },
+          "field": "change_pct"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group === 'Bread and cereals'"
+        },
+        {
+          "filter": "datum.year === '2022-23'"
+        },
+        {
+          "calculate": "format(datum.change_pct, '.1f') + '%'",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 700,
+        "fill": "#2a7a6e",
+        "align": "left",
+        "dx": 11
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Dairy",
+            "Bread and cereals",
+            "Other foods",
+            "Non-alcoholic drinks",
+            "Fruit and vegetables",
+            "Meals out and takeaway",
+            "Meat and seafood",
+            "All prices"
+          ],
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": {
+              "condition": {
+                "test": "datum.value === 'All prices'",
+                "value": 400
+              },
+              "value": 600
+            },
+            "labelColor": {
+              "condition": {
+                "test": "datum.value === 'Bread and cereals'",
+                "value": "#2e3532"
+              },
+              "value": "#333e38"
+            },
+            "labelFontSize": 15,
+            "grid": false,
+            "labelLineHeight": 17,
+            "labelExpr": "{\"Bread and cereals\": [\"Bread and\", \"cereals\"], \"Non-alcoholic drinks\": [\"Non-alcoholic\", \"drinks\"], \"Fruit and vegetables\": [\"Fruit and\", \"vegetables\"], \"Meals out and takeaway\": [\"Meals out and\", \"takeaway\"], \"Meat and seafood\": [\"Meat and\", \"seafood\"]}[datum.label] || datum.label",
+            "labelOffset": {
+              "condition": {
+                "test": "indexof([\"Bread and cereals\", \"Non-alcoholic drinks\", \"Fruit and vegetables\", \"Meals out and takeaway\", \"Meat and seafood\"], datum.value) >= 0",
+                "value": -8.5
+              },
+              "value": 0
+            }
+          }
+        },
+        "x": {
+          "type": "quantitative",
+          "title": "Rise in prices on the year before",
+          "scale": {
+            "domain": [
+              0,
+              16
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              4,
+              8,
+              12,
+              16
+            ],
+            "grid": true,
+            "labelExpr": "datum.value + '%'"
+          },
+          "field": "change_pct"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "transform": [
+        {
+          "filter": "datum.group === 'Meat and seafood'"
+        },
+        {
+          "filter": "datum.year === '2022-23'"
+        },
+        {
+          "calculate": "format(datum.change_pct, '.1f') + '% in both years'",
+          "as": "t"
+        }
+      ],
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "dx": 11
+      },
+      "encoding": {
+        "y": {
+          "field": "group",
+          "type": "nominal",
+          "title": null,
+          "sort": [
+            "Dairy",
+            "Bread and cereals",
+            "Other foods",
+            "Non-alcoholic drinks",
+            "Fruit and vegetables",
+            "Meals out and takeaway",
+            "Meat and seafood",
+            "All prices"
+          ],
+          "scale": {
+            "padding": 0.5
+          },
+          "axis": {
+            "ticks": false,
+            "domain": false,
+            "labelAlign": "left",
+            "labelPadding": 108,
+            "labelLimit": 102,
+            "labelFontWeight": {
+              "condition": {
+                "test": "datum.value === 'All prices'",
+                "value": 400
+              },
+              "value": 600
+            },
+            "labelColor": {
+              "condition": {
+                "test": "datum.value === 'Bread and cereals'",
+                "value": "#2e3532"
+              },
+              "value": "#333e38"
+            },
+            "labelFontSize": 15,
+            "grid": false,
+            "labelLineHeight": 17,
+            "labelExpr": "{\"Bread and cereals\": [\"Bread and\", \"cereals\"], \"Non-alcoholic drinks\": [\"Non-alcoholic\", \"drinks\"], \"Fruit and vegetables\": [\"Fruit and\", \"vegetables\"], \"Meals out and takeaway\": [\"Meals out and\", \"takeaway\"], \"Meat and seafood\": [\"Meat and\", \"seafood\"]}[datum.label] || datum.label",
+            "labelOffset": {
+              "condition": {
+                "test": "indexof([\"Bread and cereals\", \"Non-alcoholic drinks\", \"Fruit and vegetables\", \"Meals out and takeaway\", \"Meat and seafood\"], datum.value) >= 0",
+                "value": -8.5
+              },
+              "value": 0
+            }
+          }
+        },
+        "x": {
+          "type": "quantitative",
+          "title": "Rise in prices on the year before",
+          "scale": {
+            "domain": [
+              0,
+              16
+            ],
+            "nice": false
+          },
+          "axis": {
+            "values": [
+              0,
+              4,
+              8,
+              12,
+              16
+            ],
+            "grid": true,
+            "labelExpr": "datum.value + '%'"
+          },
+          "field": "change_pct"
+        },
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "● 2019–20: smallest harvest"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#84520f",
+        "align": "left",
+        "baseline": "bottom",
+        "x": -108,
+        "y": -12
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "● 2022–23: record harvest"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#2a7a6e",
+        "align": "left",
+        "baseline": "bottom",
+        "x": 97,
+        "y": -12
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Australian Bureau of Statistics, December 2022: the"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": -108,
+        "y": {
+          "expr": "(height + 62) + 0"
+        },
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "rise reflected higher costs for farmers and food makers"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 16,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "x": -108,
+        "y": {
+          "expr": "(height + 62) + 20"
+        },
+        "align": "left",
+        "baseline": "top"
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rule",
+        "opacity": 0
+      },
+      "encoding": {
+        "x": {
+          "value": -108
+        },
+        "x2": {
+          "value": -108
+        },
+        "y": {
+          "value": 0
+        },
+        "y2": {
+          "value": 1
+        }
+      }
+    }
+  ],
+  "resolve": {
+    "scale": {
+      "color": "independent"
+    }
+  }
+}
