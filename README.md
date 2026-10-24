@@ -48,7 +48,9 @@ they first appear.
 | Natural Earth 1:110m | Natural Earth (public domain), via the FIT3179 studio files | World base map |
 
 Three independent agencies (ABS, ABARES, FAO), cross-checked where they overlap: FAO
-and ABS give identical wheat, barley and canola tonnages for 2022–23. Creation
+and ABS give identical wheat, barley and canola tonnages for 2022–23 and 2023–24. For
+2024–25 FAO's are lower (wheat 34.1 against 34.8 million tonnes), so the 2024–25
+headline uses the ABS figure and the streamgraph's subtitle states both. Creation
 process, derivations and scope decisions are in [`data/README.md`](data/README.md);
 nothing is fabricated or modelled, and blank cells in source tables stay blank (the
 maps shade them grey as "no figure").

@@ -963,7 +963,7 @@
           "as": "lat"
         },
         {
-          "calculate": "'Victoria: ' + format(datum.intensity, '.0f') + ' tonnes, ' + format(datum.intensity / datum.wa_rate, '.1f') + ' times'",
+          "calculate": "'Victoria: ' + format(datum.intensity, '.0f') + ' tonnes, ' + format(round(datum.intensity) / round(datum.wa_rate), '.1f') + ' times'",
           "as": "t1"
         },
         {

@@ -52,11 +52,15 @@ treating them as a low value.
 
 ## Two checks worth knowing about
 
-**The two production sources agree.** FAO reports Australian crops on a calendar year
-that matches the start of the Australian financial year. Where the FAO and ABS series
-overlap they reconcile exactly: both give wheat as 41,199 kilotonnes for 2022–23,
-barley as 13,491 and canola as 8,918. That is why the long FAO series and the detailed
-ABS tables can sit in the same story without a seam.
+**The two production sources agree, except in the latest year.** FAO reports
+Australian crops on a calendar year that matches the start of the Australian financial
+year. For 2022–23 and 2023–24 the FAO and ABS series reconcile exactly: wheat 41,199
+and 28,028 kilotonnes, barley 13,491 and 10,962, canola 8,918 and 7,505. For 2024–25
+they do not: FAO gives wheat as 34,110, barley 13,265 and canola 6,396, against the
+ABS's 34,779, 13,733 and 6,813 sold. So the page keeps each source where it belongs
+and says so: the 2024–25 headline ("almost 35 million", "34.8 million") and the state
+maps are the ABS's; the 64-year series (streamgraph, matrix, box plot, scatterplot)
+is FAO's, and the streamgraph's subtitle gives both 2024 wheat figures.
 
 **Water use follows the previous year's rain.** Across the ten water-account years,
 rainfall and water use in the same year are only loosely related (correlation 0.52),
