@@ -2,7 +2,7 @@
   "$schema": "https://vega.github.io/schema/vega/v5.json",
   "title": {
     "text": "Wheat alone is worth almost half the crop",
-    "subtitle": "Local value of broadacre crops, 2024–25, grouped by crop type."
+    "subtitle": "What the crops were worth to farmers, 2024–25, grouped by crop type."
   },
   "width": 600,
   "height": 399,
@@ -261,7 +261,7 @@
             "value": "default"
           },
           "tooltip": {
-            "signal": "{'Crop': datum.name, 'In the hierarchy': 'All crops › ' + datum.crop_type + 's › ' + datum.name, 'Local value 2024–25': format(datum.value, '$,.0f') + ' million', 'Share of all crops': format(datum.value / datum.grand, '.1%'), 'Made up of': datum.detail ? datum.detail : 'one crop'}"
+            "signal": "{'Crop': datum.name, 'In the hierarchy': 'All crops › ' + datum.crop_type + 's › ' + datum.name, 'Worth to farmers, 2024–25': format(datum.value, '$,.0f') + ' million', 'Share of all crops': format(datum.value / datum.grand, '.1%'), 'Made up of': datum.detail ? datum.detail : 'one crop'}"
           }
         }
       }

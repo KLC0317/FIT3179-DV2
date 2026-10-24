@@ -59,7 +59,7 @@ The annotations add outside context the data cannot show by itself (why a year w
 dry, why a number jumped). Each of those facts is cited on the page under *Context in
 the annotations*: the Bureau of Meteorology (El Niño droughts, the 2019 Indian Ocean
 Dipole, the Millennium Drought, the triple La Niña), the Australian Oilseeds
-Federation (herbicide-tolerant canola, 1993), ABC News (India's chickpea duty, 2024;
+Federation (weedkiller-resistant canola, 1993), ABC News (India's chickpea duty, 2024;
 South Australia's 2024 season), the ABS (population; the 7.8% inflation peak; the
 costs behind the 2022 food price rise), USDA
 (Indonesia grows no wheat), NHMRC *Eat for Health* (daily serves) and ABARES (land
@@ -78,7 +78,7 @@ Each chapter answers one question with the idiom that fits it. Data types:
 | 4 | Crop value 2024–25 | Treemap, two levels | Rect (area), containment | area → $ value (Q); nesting → crop type → crop (N, hierarchy); hue → crop (N). Every cell labelled; the four smallest pulses are one "Others" cell, listed in its tooltip | Compare parts of a whole, inside a real hierarchy |
 | 5 | Wheat exports by country (lead chart) | Flow map | Line, point (arrowhead), point | path → route from one origin (G); arrowhead → direction; line width → tonnes (Q, proportional, from zero) | See where the crop goes and which buyers matter |
 | 5b | The twelve buyers, ranked (under the flow map) | Bar chart (**basic**) | Bar | x → million tonnes (Q, from zero, with an axis and the value at each bar's end); y → buyer (N, ranked) | Read the gap line widths cannot show (3.46 vs 3.23 million tonnes); hovering a bar picks out its route |
-| 6 | Wheat per km² by state | Choropleth map | Area (geoshape) | colour (sequential, 5 classes) → tonnes per km² (Q, a rate); region → state (G); grey → no published figure | Compare how intensively each state is farmed |
+| 6 | Wheat per km² by state | Choropleth map | Area (geoshape) | colour (sequential, 5 classes) → tonnes per km² (Q, a rate); region → state (G); grey → no published figure | Compare how much wheat each state grows for its size |
 | 7 | Wheat tonnes by state | Proportional symbol map | Point (circle) | area → tonnes (Q, area exactly proportional: a linear scale on area from zero); position → state centroid (G); grey state → no published figure. One colour, see-through, labels outside the circles | Compare total production; read the map as totals, not rates |
 | 8 | State harvests, two seasons | Slope chart | Line, point | x → season (O); y → tonnes (Q); darkness → chosen state (N); the slope alone says rise or fall | Compare each state's change between two seasons |
 | 9 | Meeting the dietary guidelines (lead chart) | Pictogram (ISOTYPE) small multiples, 2 × 2 | Point (SVG person) | count of figures → % of people (Q), with the exact percentage in each panel's header; hue → met / not met (N); panel → food group (N) | Make four percentages countable and concrete |
