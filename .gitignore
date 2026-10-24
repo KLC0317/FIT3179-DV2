@@ -9,6 +9,7 @@ tools/*.png
 # out of the repository keeps it well inside the "a few megabytes" limit.
 *.pdf
 !5DS/*.pdf
+!sketch.pdf
 
 # Python bytecode
 __pycache__/
