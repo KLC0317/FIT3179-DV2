@@ -68,7 +68,9 @@ use).
 ## How: idioms, marks and channels
 
 Each chapter answers one question with the idiom that fits it. Data types:
-**Q** quantitative, **O** ordinal, **N** nominal (categorical), **G** geographic.
+**Q** quantitative, **O** ordinal, **N** nominal (categorical). On the maps, state
+shapes, centroids and routes are position data: they place the marks but encode no
+attribute, so they are not listed as channels.
 
 | # | Chart | Idiom | Marks | Channels → data | Task it supports |
 |---|---|---|---|---|---|
@@ -76,10 +78,10 @@ Each chapter answers one question with the idiom that fits it. Data types:
 | 2 | Harvest vs its own normal (same figure) | Matrix (heatmap) | Rect | x → year (Q, one column per year); y → crop (N); colour (diverging, 5 classes) → % from 11-year median (Q) | Spot drought years that hit every crop at once |
 | 3 | Year-on-year change | Box plot | Rect, rule, point | x → % change (Q); y → crop (N); lightness → focus crop (N); ochre dots, in a lane under each box → the five drought years, so the timing a box plot pools is put back | Compare spread and extremes between crops |
 | 4 | Crop value 2024–25 | Treemap, two levels | Rect (area), containment | area → $ value (Q); nesting → crop type → crop (N, hierarchy); hue → crop (N). Every cell labelled; the four smallest pulses are one "Others" cell, listed in its tooltip | Compare parts of a whole, inside a real hierarchy |
-| 5 | Wheat exports by country (lead chart) | Flow map | Line, point (arrowhead), point | path → route from one origin (G); arrowhead → direction; line width → tonnes (Q, proportional, from zero) | See where the crop goes and which buyers matter |
+| 5 | Wheat exports by country (lead chart) | Flow map | Line, point (arrowhead), point | line width → tonnes (Q, proportional, from zero, with a key for 1, 2 and 3 million tonnes); arrowheads → direction to each buyer (N) | See where the crop goes and which buyers matter |
 | 5b | The twelve buyers, ranked (under the flow map) | Bar chart (**basic**) | Bar | x → million tonnes (Q, from zero, with an axis and the value at each bar's end); y → buyer (N, ranked) | Read the gap line widths cannot show (3.46 vs 3.23 million tonnes); hovering a bar picks out its route |
-| 6 | Wheat per km² by state | Choropleth map | Area (geoshape) | colour (sequential, 5 classes) → tonnes per km² (Q, a rate); region → state (G); grey → no published figure | Compare how much wheat each state grows for its size |
-| 7 | Wheat tonnes by state | Proportional symbol map | Point (circle) | area → tonnes (Q, area exactly proportional: a linear scale on area from zero); position → state centroid (G); grey state → no published figure. One colour, see-through, labels outside the circles | Compare total production; read the map as totals, not rates |
+| 6 | Wheat per km² by state | Choropleth map | Area (geoshape) | colour luminance (sequential, 5 classes) → tonnes per km² (Q, a rate); grey = no published figure | Compare how much wheat each state grows for its size |
+| 7 | Wheat tonnes by state | Proportional symbol map | Point (circle) | area → tonnes (Q, area exactly proportional: a linear scale on area from zero); a state with no published figure is grey, with no circle. One colour, see-through, labels outside the circles | Compare total production; read the map as totals, not rates |
 | 8 | State harvests, two seasons | Slope chart | Line, point | x → season (O); y → tonnes (Q); darkness → chosen state (N); the slope alone says rise or fall | Compare each state's change between two seasons |
 | 9 | Meeting the dietary guidelines (lead chart) | Pictogram (ISOTYPE) small multiples, 2 × 2 | Point (SVG person) | count of figures → % of people (Q), with the exact percentage in each panel's header; hue → met / not met (N); panel → food group (N) | Make four percentages countable and concrete |
 | 10 | Discretionary energy | 100% stacked bars (**basic**) | Bar, rule | x → share of daily energy (Q, 0–100%); y → survey (O); hue → discretionary / everything else (N) | Read a share of a whole, and its change, on an honest scale |

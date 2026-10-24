@@ -1759,6 +1759,188 @@
           "type": "nominal"
         }
       }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "Line width: wheat exported"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 600,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "top",
+        "x": 0,
+        "y": -62
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#2e3532",
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {
+          "value": 0
+        },
+        "x2": {
+          "value": 34
+        },
+        "y": {
+          "value": -23.445
+        },
+        "y2": {
+          "value": -20.555
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "1"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 42,
+        "y": -22
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#2e3532",
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {
+          "value": 73
+        },
+        "x2": {
+          "value": 107
+        },
+        "y": {
+          "value": -24.895
+        },
+        "y2": {
+          "value": -19.105
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "2"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 115,
+        "y": -22
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {}
+        ]
+      },
+      "mark": {
+        "type": "rect",
+        "color": "#2e3532",
+        "opacity": 0.8
+      },
+      "encoding": {
+        "x": {
+          "value": 146
+        },
+        "x2": {
+          "value": 180
+        },
+        "y": {
+          "value": -26.34
+        },
+        "y2": {
+          "value": -17.66
+        }
+      }
+    },
+    {
+      "data": {
+        "values": [
+          {
+            "t": "3 million tonnes"
+          }
+        ]
+      },
+      "mark": {
+        "type": "text",
+        "font": "'Source Sans 3', 'Segoe UI', sans-serif",
+        "fontSize": 15,
+        "fontWeight": 400,
+        "fill": "#333e38",
+        "align": "left",
+        "baseline": "middle",
+        "x": 188,
+        "y": -22
+      },
+      "encoding": {
+        "text": {
+          "field": "t",
+          "type": "nominal"
+        }
+      }
     }
   ],
   "params": [

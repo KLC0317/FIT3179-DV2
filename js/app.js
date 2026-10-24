@@ -41,7 +41,7 @@
 
   // Bumped on every release, so a returning reader's browser fetches the new
   // specifications instead of reusing ones it cached for the old page.
-  var VERSION = "2026-10-24d";
+  var VERSION = "2026-10-25";
 
   // A floor under every plot width. Without it, a card narrower than a
   // chart's label column drove the width below zero: Vega failed and drew
