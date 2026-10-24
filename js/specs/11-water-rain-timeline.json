@@ -735,7 +735,8 @@
             "fontWeight": 600,
             "fill": "#333e38",
             "baseline": "bottom",
-            "dy": -24
+            "dy": -24,
+            "align": "right"
           },
           "encoding": {
             "x": {
@@ -752,7 +753,8 @@
                 "2021-22",
                 "2022-23",
                 "2023-24"
-              ]
+              ],
+              "bandPosition": 1
             },
             "y": {
               "field": "v",

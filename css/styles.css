@@ -528,10 +528,14 @@ strong, b { font-weight: 700; }
   color: var(--muted);
 }
 
+/* The byline strip has the cards' width and padding, so its edges and its
+   text sit on the same two lines as every card above it (it used to bleed
+   out into the page margin: two extra vertical lines at the foot). */
 footer {
-  margin: 28px calc(var(--gutter) * -1) 0;
-  padding: 16px var(--gutter);
+  margin: 28px 0 0;
+  padding: 16px var(--card-pad);
   background: var(--card);
+  border-radius: 4px;
 }
 footer .byline {
   display: flex;
