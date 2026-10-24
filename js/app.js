@@ -41,7 +41,7 @@
 
   // Bumped on every release, so a returning reader's browser fetches the new
   // specifications instead of reusing ones it cached for the old page.
-  var VERSION = "2026-10-23b";
+  var VERSION = "2026-10-24";
 
   // A floor under every plot width. Without it, a card narrower than a
   // chart's label column drove the width below zero: Vega failed and drew
@@ -67,7 +67,12 @@
      (.viz in the CSS) instead of squeezing its notes into each other. */
   var MIN_LAYOUT = { card: 420, hero: 908 };
   function layoutWidth(el) {
-    var floor = el.closest(".hero") ? MIN_LAYOUT.hero : MIN_LAYOUT.card;
+    // The ranked bars sit in one column of a lead card's footer, not across
+    // the card, so they take a half-width card's floor, not a lead chart's.
+    // On a laptop their column is always wider than that floor, so they
+    // never scroll sideways there.
+    var lead = el.closest(".hero") && !el.closest(".hero-foot");
+    var floor = lead ? MIN_LAYOUT.hero : MIN_LAYOUT.card;
     return Math.max(cardWidth(el), floor);
   }
 
